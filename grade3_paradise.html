@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三年级乐园 - Catherine的英语课堂</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --primary-bg: #FFF9C4;
+            --card-cn: #FFCDD2; /* Chinese */
+            --card-en: #C8E6C9; /* English */
+            --card-math: #BBDEFB; /* Math */
+            --card-sci: #E1BEE7; /* Science */
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            font-family: 'PingFang SC', sans-serif;
+            padding-bottom: 50px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #FFEB3B, #FBC02D);
+            padding: 60px 0;
+            text-align: center;
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subject-card {
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            height: 100%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .subject-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .card-cn { background-color: var(--card-cn); }
+        .card-en { background-color: var(--card-en); }
+        .card-math { background-color: var(--card-math); }
+        .card-sci { background-color: var(--card-sci); }
+
+        .subject-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 5px 20px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Mini Game Overlay */
+        .game-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .game-content {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            background: white;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .option-btn:hover {
+            background: #f8f9fa;
+            border-color: #FBC02D;
+        }
+
+        .score-badge {
+            font-size: 1.5rem;
+            color: #FBC02D;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="btn-back">← 返回首页</a>
+
+<div class="hero-section animate__animated animate__fadeIn">
+    <h1 class="display-4 fw-bold">🌈 三年级乐园</h1>
+    <p class="lead">快乐学习，全科大挑战！</p>
+</div>
+
+<div class="container">
+    <div class="row g-4">
+        <!-- 语文 -->
+        <div class="col-md-3">
+            <div class="subject-card card-cn animate__animated animate__fadeInUp" onclick="startChallenge('cn')">
+                <span class="subject-icon">🏮</span>
+                <h3>趣味语文</h3>
+                <p>古诗词、成语接龙大闯关</p>
+                <button class="btn btn-light rounded-pill">开始挑战</button>
+            </div>
+        </div>
+        <!-- 英语 -->
+        <div class="col-md-3">
+            <div class="subject-card card-en animate__animated animate__fadeInUp animate__delay-1s" onclick="startChallenge('en')">
+                <span class="subject-icon">🔤</span>
+                <h3>快乐英语</h3>
+                <p>字母、单词大变身</p>
+                <button class="btn btn-light rounded-pill">开始挑战</button>
+            </div>
+        </div>
+        <!-- 数学 -->
+        <div class="col-md-3">
+            <div class="subject-card card-math animate__animated animate__fadeInUp animate__delay-2s" onclick="startChallenge('math')">
+                <span class="subject-icon">🧮</span>
+                <h3>魔力数学</h3>
+                <p>口算、逻辑数字迷宫</p>
+                <button class="btn btn-light rounded-pill">开始挑战</button>
+            </div>
+        </div>
+        <!-- 科学 -->
+        <div class="col-md-3">
+            <div class="subject-card card-sci animate__animated animate__fadeInUp animate__delay-3s" onclick="startChallenge('sci')">
+                <span class="subject-icon">🧪</span>
+                <h3>科学奥秘</h3>
+                <p>自然、宇宙、奇妙实验</p>
+                <button class="btn btn-light rounded-pill">开始挑战</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Game Overlay -->
+<div id="gameOverlay" class="game-overlay">
+    <div class="game-content">
+        <div class="d-flex justify-content-between mb-3">
+            <span id="gameTitle" class="h4">挑战开始</span>
+            <button class="btn-close" onclick="closeGame()"></button>
+        </div>
+        <div id="questionContainer">
+            <p id="questionText" class="h5 mb-4"></p>
+            <div id="options"></div>
+        </div>
+        <div id="resultArea" style="display:none">
+            <h2 class="mb-4">🎉 挑战完成！</h2>
+            <p class="lead">你的得分是：<span id="finalScore" class="score-badge">0</span></p>
+            <button class="btn btn-warning rounded-pill px-5" onclick="closeGame()">回乐园</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = {
+        cn: [
+            { q: "‘锄禾日当午’的下一句是？", a: ["汗滴禾下土", "谁知盘中餐", "春种一粒粟"], correct: 0 },
+            { q: "‘亡羊补牢’中的‘牢’指的是？", a: ["牢房", "羊圈", "绳子"], correct: 1 }
+        ],
+        en: [
+            { q: "‘Apple’ 是什么颜色的？", a: ["Yellow", "Red/Green", "Blue"], correct: 1 },
+            { q: "‘Hello’ 的中文意思是？", a: ["谢谢", "你好", "再见"], correct: 1 }
+        ],
+        math: [
+            { q: "25 + 17 = ?", a: ["42", "32", "52"], correct: 0 },
+            { q: "一个正方形有几个角？", a: ["3", "4", "5"], correct: 1 }
+        ],
+        sci: [
+            { q: "植物生长需要什么？", a: ["阳光和水", "可乐", "石头"], correct: 0 },
+            { q: "月亮本身会发光吗？", a: ["会", "不会", "只有晚上会"], correct: 1 }
+        ]
+    };
+
+    let currentSubject = '';
+    let currentIdx = 0;
+    let score = 0;
+
+    function startChallenge(subject) {
+        currentSubject = subject;
+        currentIdx = 0;
+        score = 0;
+        const titles = { cn: '🏮 语文大挑战', en: '🔤 英语大挑战', math: '🧮 数学大挑战', sci: '🧪 科学大挑战' };
+        document.getElementById('gameTitle').innerText = titles[subject];
+        document.getElementById('gameOverlay').style.display = 'block';
+        document.getElementById('questionContainer').style.display = 'block';
+        document.getElementById('resultArea').style.display = 'none';
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const qData = questions[currentSubject][currentIdx];
+        document.getElementById('questionText').innerText = qData.q;
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+        qData.a.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(i);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(idx) {
+        const qData = questions[currentSubject][currentIdx];
+        if (idx === qData.correct) {
+            score += 50;
+            alert("✨ 太棒了！答对了！");
+        } else {
+            alert("❌ 差一点点，加油！");
+        }
+        
+        currentIdx++;
+        if (currentIdx < questions[currentSubject].length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('questionContainer').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('finalScore').innerText = score;
+    }
+
+    function closeGame() {
+        document.getElementById('gameOverlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
