@@ -156,14 +156,14 @@
             transform: translateX(5px);
         }
         .option-btn.correct {
-            background-color: #C8E6C9 !important;
+            background-color: var(--success-color) !important;
+            color: white !important;
             border-color: var(--success-color) !important;
-            color: #2E7D32 !important;
         }
         .option-btn.wrong {
-            background-color: #FFCDD2 !important;
+            background-color: var(--danger-color) !important;
+            color: white !important;
             border-color: var(--danger-color) !important;
-            color: #C62828 !important;
         }
         .feedback-pop {
             position: fixed;
@@ -180,6 +180,112 @@
             border-radius: 25px !important;
             border: 2px solid #E3F2FD !important;
         }
+        .writing-card {
+            background: #FFF9C4;
+            padding: 25px;
+            border-radius: 25px;
+            border: none;
+            border-left: 10px solid var(--secondary-color);
+        }
+        .writing-tips span {
+            background: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: #F57C00;
+            border: 1px solid #FFE082;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .puzzle-box {
+            background: rgba(255,255,255,0.5);
+            padding: 15px;
+            border-radius: 15px;
+            min-height: 100px;
+        }
+        .puzzle-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px dashed var(--secondary-color);
+            transition: all 0.2s;
+        }
+        .puzzle-item:hover { background: #FFF3E0; transform: scale(1.02); }
+        .puzzle-item.used { opacity: 0.5; cursor: not-allowed; text-decoration: line-through; }
+        .spell-input {
+            border: 2px solid #E3F2FD;
+            border-radius: 10px;
+            padding: 5px 10px;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .spell-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+        .spell-feedback {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            height: 20px;
+        }
+        .phonics-game {
+            background: #F1F8E9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #C5E1A5;
+        }
+        .phonics-btn {
+            background: white;
+            border: 1px solid #AED581;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            transition: all 0.2s;
+        }
+        .phonics-btn:hover {
+            background: #DCEDC8;
+            transform: translateY(-2px);
+        }
+        .maruko-mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .maruko-mascot:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .maruko-bubble {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            width: 150px;
+            display: none;
+            border: 2px solid var(--primary-color);
+        }
+        .maruko-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent transparent;
+        }
     
     </style>
 </head>
@@ -188,8 +294,8 @@
 <div id="feedback-pop" class="feedback-pop animate__animated">🎉</div>
 
 <div class="header">
-    <h1 class="animate__animated animate__bounceIn">📚 PEP英语五年级上册复习助手</h1>
-    <p>—— 单词背诵 + 句型通关 + 烟花大赏 ——</p>
+    <h1 class="animate__animated animate__bounceIn">📚 Catherine的英语课堂</h1>
+    <p>—— PEP英语五年级上册复习助手 ——</p>
 </div>
 
 <div class="container">
@@ -207,6 +313,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: y -> /i/</span>
                             <span class="ms-2 text-muted">例词: baby, happy, windy, sunny, sorry</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-1">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(1, ["baby", "happy", "windy", "sunny", "sorry"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-1" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,10 +334,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                老的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('old')">🔊</button>
-                            老的
+                            old
                         </div>
-                        <div class="flashcard-back">old</div>
                     </div>
                 </div>
             </div>
@@ -231,10 +350,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                年轻的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('young')">🔊</button>
-                            年轻的
+                            young
                         </div>
-                        <div class="flashcard-back">young</div>
                     </div>
                 </div>
             </div>
@@ -243,10 +366,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                滑稽的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('funny')">🔊</button>
-                            滑稽的
+                            funny
                         </div>
-                        <div class="flashcard-back">funny</div>
                     </div>
                 </div>
             </div>
@@ -255,10 +382,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                和蔼的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('kind')">🔊</button>
-                            和蔼的
+                            kind
                         </div>
-                        <div class="flashcard-back">kind</div>
                     </div>
                 </div>
             </div>
@@ -267,10 +398,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                严厉的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('strict')">🔊</button>
-                            严厉的
+                            strict
                         </div>
-                        <div class="flashcard-back">strict</div>
                     </div>
                 </div>
             </div>
@@ -279,10 +414,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                有礼貌的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('polite')">🔊</button>
-                            有礼貌的
+                            polite
                         </div>
-                        <div class="flashcard-back">polite</div>
                     </div>
                 </div>
             </div>
@@ -291,10 +430,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                努力工作的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('hard-working')">🔊</button>
-                            努力工作的
+                            hard-working
                         </div>
-                        <div class="flashcard-back">hard-working</div>
                     </div>
                 </div>
             </div>
@@ -303,10 +446,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                有帮助的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('helpful')">🔊</button>
-                            有帮助的
+                            helpful
                         </div>
-                        <div class="flashcard-back">helpful</div>
                     </div>
                 </div>
             </div>
@@ -315,10 +462,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                聪明的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('clever')">🔊</button>
-                            聪明的
+                            clever
                         </div>
-                        <div class="flashcard-back">clever</div>
                     </div>
                 </div>
             </div>
@@ -327,10 +478,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('shy')">🔊</button>
-                            害羞的
+                            <div class="w-100">
+                                害羞的
+                            </div>
                         </div>
-                        <div class="flashcard-back">shy</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('shy')">🔊</button>
+                            shy
+                        </div>
                     </div>
                 </div>
             </div>
@@ -405,7 +560,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-1">
                         
@@ -451,6 +606,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Teacher</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>Who's your...?</span><span>What's he/she like?</span><span>Is he/she...?</span><span>He/She is...</span><span>kind/strict/helpful</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-1">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">Her name is Ms Wang.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">We all like her very much.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is very kind to us.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">Sometimes she is strict.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She has long hair and big eyes.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I have a new art teacher.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is young and beautiful.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is very hard-working.</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-1"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(1)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(1)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-1" style="display:none; line-height: 1.8;">
+                                    I have a new art teacher. Her name is Ms Wang. She is young and beautiful. She has long hair and big eyes. She is very kind to us. Sometimes she is strict. She is very hard-working. We all like her very much.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I have a new art teacher. Her name is Ms Wang. She is young and beautiful. She has long hair and big eyes. She is very kind to us. Sometimes she is strict. She is very hard-working. We all like her very much.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -462,6 +645,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: ee, ea -> /i:/</span>
                             <span class="ms-2 text-muted">例词: feet, beef, meet, tea, read, eat</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-2">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(2, ["feet", "beef", "meet", "tea", "read", "eat"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-2" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -474,10 +666,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期一
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Monday')">🔊</button>
-                            星期一
+                            Monday
                         </div>
-                        <div class="flashcard-back">Monday</div>
                     </div>
                 </div>
             </div>
@@ -486,10 +682,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期二
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Tuesday')">🔊</button>
-                            星期二
+                            Tuesday
                         </div>
-                        <div class="flashcard-back">Tuesday</div>
                     </div>
                 </div>
             </div>
@@ -498,10 +698,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期三
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Wednesday')">🔊</button>
-                            星期三
+                            Wednesday
                         </div>
-                        <div class="flashcard-back">Wednesday</div>
                     </div>
                 </div>
             </div>
@@ -510,10 +714,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期四
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Thursday')">🔊</button>
-                            星期四
+                            Thursday
                         </div>
-                        <div class="flashcard-back">Thursday</div>
                     </div>
                 </div>
             </div>
@@ -522,10 +730,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期五
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Friday')">🔊</button>
-                            星期五
+                            Friday
                         </div>
-                        <div class="flashcard-back">Friday</div>
                     </div>
                 </div>
             </div>
@@ -534,10 +746,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期六
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Saturday')">🔊</button>
-                            星期六
+                            Saturday
                         </div>
-                        <div class="flashcard-back">Saturday</div>
                     </div>
                 </div>
             </div>
@@ -546,10 +762,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                星期日
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('Sunday')">🔊</button>
-                            星期日
+                            Sunday
                         </div>
-                        <div class="flashcard-back">Sunday</div>
                     </div>
                 </div>
             </div>
@@ -558,10 +778,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('weekend')">🔊</button>
-                            周末
+                            <div class="w-100">
+                                周末
+                            </div>
                         </div>
-                        <div class="flashcard-back">weekend</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('weekend')">🔊</button>
+                            weekend
+                        </div>
                     </div>
                 </div>
             </div>
@@ -624,7 +848,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-2">
                         
@@ -670,6 +894,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Week</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>What do you have on...?</span><span>What do you do on...?</span><span>I have...</span><span>I often...</span><span>busy/happy</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-2">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often play football on Sundays.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I am very happy.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">Sometimes I watch TV with my parents.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">My week is very colorful.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like Thursdays because I have music.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">On the weekend, I often read books.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm very busy from Monday to Friday.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I have English and maths every day.</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-2"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(2)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(2)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-2" style="display:none; line-height: 1.8;">
+                                    I'm very busy from Monday to Friday. I have English and maths every day. I like Thursdays because I have music. On the weekend, I often read books. Sometimes I watch TV with my parents. I often play football on Sundays. My week is very colorful. I am very happy.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I\'m very busy from Monday to Friday. I have English and maths every day. I like Thursdays because I have music. On the weekend, I often read books. Sometimes I watch TV with my parents. I often play football on Sundays. My week is very colorful. I am very happy.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -681,6 +933,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: ow -> /au/ or /əu/</span>
                             <span class="ms-2 text-muted">例词: cow, flower, down, slow, snow, yellow</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-3">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(3, ["cow", "flower", "down", "slow", "snow", "yellow"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-3" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -693,10 +954,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                三明治
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('sandwich')">🔊</button>
-                            三明治
+                            sandwich
                         </div>
-                        <div class="flashcard-back">sandwich</div>
                     </div>
                 </div>
             </div>
@@ -705,10 +970,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                沙拉
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('salad')">🔊</button>
-                            沙拉
+                            salad
                         </div>
-                        <div class="flashcard-back">salad</div>
                     </div>
                 </div>
             </div>
@@ -717,10 +986,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                汉堡包
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('hamburger')">🔊</button>
-                            汉堡包
+                            hamburger
                         </div>
-                        <div class="flashcard-back">hamburger</div>
                     </div>
                 </div>
             </div>
@@ -729,10 +1002,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                冰淇淋
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('ice cream')">🔊</button>
-                            冰淇淋
+                            ice cream
                         </div>
-                        <div class="flashcard-back">ice cream</div>
                     </div>
                 </div>
             </div>
@@ -741,10 +1018,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                新鲜的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('fresh')">🔊</button>
-                            新鲜的
+                            fresh
                         </div>
-                        <div class="flashcard-back">fresh</div>
                     </div>
                 </div>
             </div>
@@ -753,10 +1034,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                健康的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('healthy')">🔊</button>
-                            健康的
+                            healthy
                         </div>
-                        <div class="flashcard-back">healthy</div>
                     </div>
                 </div>
             </div>
@@ -765,10 +1050,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                美味的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('delicious')">🔊</button>
-                            美味的
+                            delicious
                         </div>
-                        <div class="flashcard-back">delicious</div>
                     </div>
                 </div>
             </div>
@@ -777,10 +1066,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sweet')">🔊</button>
-                            甜的
+                            <div class="w-100">
+                                甜的
+                            </div>
                         </div>
-                        <div class="flashcard-back">sweet</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sweet')">🔊</button>
+                            sweet
+                        </div>
                     </div>
                 </div>
             </div>
@@ -855,7 +1148,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-3">
                         
@@ -901,6 +1194,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Favourite Food</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>What's your favourite...?</span><span>I like...</span><span>It's/They are...</span><span>healthy/delicious</span><span>sweet/fresh</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-3">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like salad, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">I don't like beef but chicken is OK.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like grapes best.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">My favourite food is sandwich.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">It is very fresh.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">What's your favourite food and drink?</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">It's healthy and delicious.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">They are sweet and purple.</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-3"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(3)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(3)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-3" style="display:none; line-height: 1.8;">
+                                    My favourite food is sandwich. It's healthy and delicious. I like salad, too. It is very fresh. I don't like beef but chicken is OK. I like grapes best. They are sweet and purple. What's your favourite food and drink?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('My favourite food is sandwich. It\'s healthy and delicious. I like salad, too. It is very fresh. I don\'t like beef but chicken is OK. I like grapes best. They are sweet and purple. What\'s your favourite food and drink?')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -912,6 +1233,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: oo -> /u/ or /u:/</span>
                             <span class="ms-2 text-muted">例词: book, look, good, balloon, food, zoo</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-4">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(4, ["book", "look", "good", "balloon", "food", "zoo"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-4" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -924,10 +1254,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                跳舞
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('dance')">🔊</button>
-                            跳舞
+                            dance
                         </div>
-                        <div class="flashcard-back">dance</div>
                     </div>
                 </div>
             </div>
@@ -936,10 +1270,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                唱歌
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('sing')">🔊</button>
-                            唱歌
+                            sing
                         </div>
-                        <div class="flashcard-back">sing</div>
                     </div>
                 </div>
             </div>
@@ -948,10 +1286,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                练武术
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('do kung fu')">🔊</button>
-                            练武术
+                            do kung fu
                         </div>
-                        <div class="flashcard-back">do kung fu</div>
                     </div>
                 </div>
             </div>
@@ -960,10 +1302,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                画漫画
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('draw cartoons')">🔊</button>
-                            画漫画
+                            draw cartoons
                         </div>
-                        <div class="flashcard-back">draw cartoons</div>
                     </div>
                 </div>
             </div>
@@ -972,10 +1318,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                游泳
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('swim')">🔊</button>
-                            游泳
+                            swim
                         </div>
-                        <div class="flashcard-back">swim</div>
                     </div>
                 </div>
             </div>
@@ -984,10 +1334,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                说英语
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('speak English')">🔊</button>
-                            说英语
+                            speak English
                         </div>
-                        <div class="flashcard-back">speak English</div>
                     </div>
                 </div>
             </div>
@@ -996,10 +1350,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                打篮球
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('play basketball')">🔊</button>
-                            打篮球
+                            play basketball
                         </div>
-                        <div class="flashcard-back">play basketball</div>
                     </div>
                 </div>
             </div>
@@ -1008,10 +1366,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('play ping-pong')">🔊</button>
-                            打乒乓球
+                            <div class="w-100">
+                                打乒乓球
+                            </div>
                         </div>
-                        <div class="flashcard-back">play ping-pong</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('play ping-pong')">🔊</button>
+                            play ping-pong
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1086,7 +1448,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-4">
                         
@@ -1132,6 +1494,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：What I Can Do</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>I can...</span><span>Can you...?</span><span>Yes, I can.</span><span>helpful/great</span><span>play the pipa/do kung fu</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-4">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can do some kung fu, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can clean the room and wash my clothes.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I am helpful at home.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can speak English and Chinese.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can cook delicious food for my parents.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">But I can't swim.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I want to be great.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">Can you help me?</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-4"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(4)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(4)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-4" style="display:none; line-height: 1.8;">
+                                    I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can't swim. Can you help me? I want to be great.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can\'t swim. Can you help me? I want to be great.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1143,6 +1533,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: ai, ay -> /ei/</span>
                             <span class="ms-2 text-muted">例词: rainy, paint, wait, say, way, today</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-5">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(5, ["rainy", "paint", "wait", "say", "way", "today"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-5" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1155,10 +1554,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                时钟
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('clock')">🔊</button>
-                            时钟
+                            clock
                         </div>
-                        <div class="flashcard-back">clock</div>
                     </div>
                 </div>
             </div>
@@ -1167,10 +1570,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                植物
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('plant')">🔊</button>
-                            植物
+                            plant
                         </div>
-                        <div class="flashcard-back">plant</div>
                     </div>
                 </div>
             </div>
@@ -1179,10 +1586,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                水瓶
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('water bottle')">🔊</button>
-                            水瓶
+                            water bottle
                         </div>
-                        <div class="flashcard-back">water bottle</div>
                     </div>
                 </div>
             </div>
@@ -1191,10 +1602,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                照片
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('photo')">🔊</button>
-                            照片
+                            photo
                         </div>
-                        <div class="flashcard-back">photo</div>
                     </div>
                 </div>
             </div>
@@ -1203,10 +1618,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                在...前面
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('in front of')">🔊</button>
-                            在...前面
+                            in front of
                         </div>
-                        <div class="flashcard-back">in front of</div>
                     </div>
                 </div>
             </div>
@@ -1215,10 +1634,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                在...中间
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('between')">🔊</button>
-                            在...中间
+                            between
                         </div>
-                        <div class="flashcard-back">between</div>
                     </div>
                 </div>
             </div>
@@ -1227,10 +1650,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                在...上面
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('above')">🔊</button>
-                            在...上面
+                            above
                         </div>
-                        <div class="flashcard-back">above</div>
                     </div>
                 </div>
             </div>
@@ -1239,10 +1666,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                在...旁边
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('beside')">🔊</button>
-                            在...旁边
+                            beside
                         </div>
-                        <div class="flashcard-back">beside</div>
                     </div>
                 </div>
             </div>
@@ -1251,10 +1682,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('behind')">🔊</button>
-                            在...后面
+                            <div class="w-100">
+                                在...后面
+                            </div>
                         </div>
-                        <div class="flashcard-back">behind</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('behind')">🔊</button>
+                            behind
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1317,7 +1752,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-5">
                         
@@ -1363,6 +1798,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Room</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>There is/are...</span><span>in front of/beside/between</span><span>clock/plant/photo</span><span>tidy/nice</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-5">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There are two plants on the desk.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">I like my room very much.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a big bed.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">This is my room.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">My computer is on the desk, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a clock above the bed.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">It is small but very nice.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">Beside the bed, there is a desk.</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-5"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(5)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(5)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-5" style="display:none; line-height: 1.8;">
+                                    This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1374,6 +1837,15 @@
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: ou -> /au/</span>
                             <span class="ms-2 text-muted">例词: house, mouse, sound, count, about</span>
+                            <div class="phonics-game mt-3">
+                                <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
+                                <div class="mt-2">
+                                    <div id="phonics-quiz-container-6">
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(6, ["house", "mouse", "sound", "count", "about"])'>开始挑战 🔊</button>
+                                    </div>
+                                    <div id="phonics-options-6" class="mt-2" style="display:none;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1386,10 +1858,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                森林
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('forest')">🔊</button>
-                            森林
+                            forest
                         </div>
-                        <div class="flashcard-back">forest</div>
                     </div>
                 </div>
             </div>
@@ -1398,10 +1874,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                河流
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('river')">🔊</button>
-                            河流
+                            river
                         </div>
-                        <div class="flashcard-back">river</div>
                     </div>
                 </div>
             </div>
@@ -1410,10 +1890,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                湖泊
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('lake')">🔊</button>
-                            湖泊
+                            lake
                         </div>
-                        <div class="flashcard-back">lake</div>
                     </div>
                 </div>
             </div>
@@ -1422,10 +1906,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                高山
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('mountain')">🔊</button>
-                            高山
+                            mountain
                         </div>
-                        <div class="flashcard-back">mountain</div>
                     </div>
                 </div>
             </div>
@@ -1434,10 +1922,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                小山
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('hill')">🔊</button>
-                            小山
+                            hill
                         </div>
-                        <div class="flashcard-back">hill</div>
                     </div>
                 </div>
             </div>
@@ -1446,10 +1938,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                桥
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('bridge')">🔊</button>
-                            桥
+                            bridge
                         </div>
-                        <div class="flashcard-back">bridge</div>
                     </div>
                 </div>
             </div>
@@ -1458,10 +1954,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
+                            <div class="w-100">
+                                建筑物
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
                             <button class="btn-speak" onclick="event.stopPropagation(); speak('building')">🔊</button>
-                            建筑物
+                            building
                         </div>
-                        <div class="flashcard-back">building</div>
                     </div>
                 </div>
             </div>
@@ -1470,10 +1970,14 @@
                 <div class="flashcard" onclick="this.classList.toggle('flipped')">
                     <div class="flashcard-inner">
                         <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('village')">🔊</button>
-                            村庄
+                            <div class="w-100">
+                                村庄
+                            </div>
                         </div>
-                        <div class="flashcard-back">village</div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('village')">🔊</button>
+                            village
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1536,7 +2040,7 @@
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 mb-5">
                     <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-6">
                         
@@ -1565,9 +2069,9 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="3">
-                <p class="fw-bold">4. —Are there any mountains? —Yes, ________.</p>
+                <p class="fw-bold">4. —Are there any mountains? —________.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 6, 5)">A. there is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 6, 5)">B. there are</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 6, 5)">C. they are</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 6, 5)">A. Yes, there is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 6, 5)">B. Yes, there are</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 6, 5)">C. No, they are</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1582,6 +2086,34 @@
             
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Nature Park</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>There is/are...</span><span>Where is...</span><span>Is there...</span><span>Are there any...</span><span>beautiful/clean</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-6">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a high mountain near the lake.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a lake in the park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many trees in the park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">The water is clean.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many ducks on the lake.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">Do you like my nature park?</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">This is my nature park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">It is so big and beautiful.</div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-6"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(6)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(6)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-6" style="display:none; line-height: 1.8;">
+                                    Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1589,7 +2121,7 @@
 </div>
 
 <footer class="text-center mt-5 mb-4 text-muted">
-    <p>© 2026 胡老师的英语课堂 · 小丸子助攻版</p>
+    <p>© 2026 Catherine的英语课堂</p>
 </footer>
 
 <!-- 音效资源 -->
@@ -1611,6 +2143,82 @@
             msg.rate = 0.8;
             window.speechSynthesis.speak(msg);
         }
+    }
+
+    const phonicsQuizState = {};
+
+    function startPhonicsQuiz(unitId, words) {
+        phonicsQuizState[unitId] = {
+            words: words,
+            currentStep: 0,
+            correctCount: 0,
+            targetWords: []
+        };
+        
+        // 随机选3个不重复的词
+        const shuffled = [...words].sort(() => 0.5 - Math.random());
+        phonicsQuizState[unitId].targetWords = shuffled.slice(0, 3);
+        
+        showPhonicsStep(unitId);
+    }
+
+    function showPhonicsStep(unitId) {
+        const state = phonicsQuizState[unitId];
+        const container = document.getElementById('phonics-options-' + unitId);
+        const quizContainer = document.getElementById('phonics-quiz-container-' + unitId);
+        
+        if (state.currentStep >= 3) {
+            quizContainer.innerHTML = `<div class="alert alert-success py-2 mb-0 animate__animated animate__fadeIn">完成挑战！正确率: ${state.correctCount}/3 🌟</div>`;
+            container.style.display = 'none';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            return;
+        }
+
+        const targetWord = state.targetWords[state.currentStep];
+        quizContainer.innerHTML = `<span class="badge bg-info text-dark me-2">第 ${state.currentStep + 1} 题</span> 正在播放，请仔细听...`;
+        container.innerHTML = '';
+        container.style.display = 'block';
+
+        setTimeout(() => {
+            speak(targetWord);
+            
+            // 生成选项（包含正确选项和干扰项）
+            const options = [...state.words].sort(() => 0.5 - Math.random()).slice(0, 4);
+            if (!options.includes(targetWord)) {
+                options[0] = targetWord;
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            options.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'phonics-btn animate__animated animate__bounceIn';
+                btn.innerText = word;
+                btn.onclick = () => {
+                    const buttons = container.querySelectorAll('.phonics-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    
+                    if (word === targetWord) {
+                        btn.style.background = '#C8E6C9';
+                        btn.innerText = '✅ ' + word;
+                        state.correctCount++;
+                        document.getElementById('audio-correct').play();
+                    } else {
+                        btn.style.background = '#FFCDD2';
+                        btn.innerText = '❌ ' + word;
+                        // 高亮正确答案
+                        buttons.forEach(b => {
+                            if (b.innerText === targetWord) b.style.background = '#C8E6C9';
+                        });
+                    }
+                    
+                    setTimeout(() => {
+                        state.currentStep++;
+                        showPhonicsStep(unitId);
+                    }, 1500);
+                };
+                container.appendChild(btn);
+            });
+        }, 500);
     }
 
     function checkAnswer(btn, selected, correct, unitId, totalQuiz) {
@@ -1667,6 +2275,34 @@
         feedback.style.display = "block";
     }
 
+    function toggleModel(unitId) {
+        const model = document.getElementById('model-' + unitId);
+        model.style.display = model.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addToPuzzle(item, unitId) {
+        const box = document.getElementById('box-' + unitId);
+        if (!item.classList.contains('used')) {
+            const newItem = document.createElement('div');
+            newItem.className = 'puzzle-item animate__animated animate__fadeIn';
+            newItem.innerText = item.innerText;
+            box.appendChild(newItem);
+            item.classList.add('used');
+            
+            // 简单的完成反馈
+            const total = document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item').length;
+            const used = document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item.used').length;
+            if (total === used) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+    }
+
+    function resetPuzzle(unitId) {
+        document.getElementById('box-' + unitId).innerHTML = '';
+        document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item').forEach(i => i.classList.remove('used'));
+    }
+
     function triggerFireworks() {
         var duration = 3 * 1000;
         var animationEnd = Date.now() + duration;
@@ -1692,4 +2328,3 @@
 
 </body>
 </html>
-    
