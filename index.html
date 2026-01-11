@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>胡老师的小课堂 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --primary-color: #64B5F6;
+            --secondary-color: #FFB74D;
+            --success-color: #81C784;
+            --accent-color: #BA68C8;
+            --bg-color: #F8F9FA;
+            --card-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            --header-gradient: linear-gradient(135deg, #4FC3F7, #64B5F6);
+        }
+
+        body {
+            background-color: #E3F2FD;
+            background-image: radial-gradient(#BBDEFB 1px, transparent 1px);
+            background-size: 25px 25px;
+            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            color: #455A64;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 5rem 0 4rem;
+            text-align: center;
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.2);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '✿';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 30px;
+            color: #1976D2;
+            padding: 12px 25px;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: white;
+            margin: 0 8px;
+            border: 2px solid transparent;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3);
+            border-color: #4FC3F7;
+        }
+
+        .classroom-card {
+            border: none;
+            border-radius: 30px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            background: white;
+            box-shadow: var(--card-shadow);
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .classroom-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 15px 35px rgba(33, 150, 243, 0.15);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .classroom-card:hover .card-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .footer-badge {
+            background-color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            color: #90A4AE;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .quick-link-btn {
+            border-radius: 15px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #E3F2FD;
+            text-align: center;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #455A64;
+            display: block;
+        }
+
+        .quick-link-btn:hover {
+            background: #E3F2FD;
+            border-color: var(--primary-color);
+            color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🏠 胡老师的小课堂</h1>
+        <p class="lead animate__animated animate__fadeInUp animate__delay-1s">寓教于乐，在这里发现学习的乐趣</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center mb-5">
+        <div class="col-auto">
+            <ul class="nav nav-pills p-2 bg-white rounded-pill shadow-sm sticky-top" style="top: 20px; z-index: 1000;" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button">全部资源</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="pills-english-tab" data-bs-toggle="pill" data-bs-target="#pills-english" type="button">英语天地</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="pills-math-tab" data-bs-toggle="pill" data-bs-target="#pills-math" type="button">趣味数学</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="pills-tabContent">
+        <!-- 全部资源 -->
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
+                        <div class="card-icon">📚</div>
+                        <h3>PEP 5 英语复习</h3>
+                        <p class="text-muted">五年级上册英语核心词汇与句型闯关，助力期末冲刺。</p>
+                        <a href="pep5_english.html" class="btn btn-outline-primary rounded-pill mt-3">立即开始</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s">
+                        <div class="card-icon">🧠</div>
+                        <h3>思维训练营</h3>
+                        <p class="text-muted">通过趣味小游戏锻炼逻辑思维，让大脑转起来。</p>
+                        <button class="btn btn-outline-secondary rounded-pill mt-3 disabled">即将上线</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-2s">
+                        <div class="card-icon">✍️</div>
+                        <h3>每日练字</h3>
+                        <p class="text-muted">书法基础教学，记录每天的一点点进步。</p>
+                        <button class="btn btn-outline-secondary rounded-pill mt-3 disabled">筹备中</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 英语天地 -->
+        <div class="tab-pane fade" id="pills-english" role="tabpanel">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <a href="pep5_english.html" class="quick-link-btn">
+                        <h4>📖 PEP 英语五年级上册复习助手</h4>
+                        <p class="mb-0 text-muted">单词、句型、小测试一站式搞定</p>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <div class="quick-link-btn opacity-50">
+                        <h4>🎧 英语听力训练</h4>
+                        <p class="mb-0 text-muted">精选课文音频与跟读练习</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 趣味数学 -->
+        <div class="tab-pane fade" id="pills-math" role="tabpanel">
+            <div class="text-center py-5">
+                <div class="display-1 mb-4">🚧</div>
+                <h3>数学频道正在建设中...</h3>
+                <p class="text-muted">敬请期待更多精彩内容</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <div class="footer-badge">
+            Powered by Teacher Hu & SanMei Assistant
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 简单的统计或交互逻辑可以写在这里
+    console.log("胡老师的小课堂已加载！");
+</script>
+
+</body>
+</html>
