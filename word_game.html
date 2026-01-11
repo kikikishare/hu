@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词消消乐 - Catherine的英语课堂</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --primary-color: #64B5F6;
+            --success-color: #81C784;
+            --error-color: #E57373;
+            --bg-color: #E3F2FD;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'PingFang SC', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .card-item {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border: 3px solid #e3f2fd;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            padding: 10px;
+        }
+
+        .card-item:hover {
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .card-item.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: #42A5F5;
+        }
+
+        .card-item.matched {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            border-radius: 50px;
+        }
+
+        #message {
+            height: 30px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .win-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.9);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="btn btn-outline-primary btn-back">← 返回首页</a>
+
+<div class="game-container animate__animated animate__fadeIn">
+    <h1 class="mb-4">🧩 单词消消乐</h1>
+    <p class="text-muted">点击英文单词和对应的中文意思进行消除！</p>
+    
+    <div class="stats">
+        <div>得分: <span id="score">0</span></div>
+        <div>用时: <span id="timer">0</span>s</div>
+    </div>
+
+    <div id="message"></div>
+
+    <div class="grid" id="gameGrid">
+        <!-- Cards will be generated here -->
+    </div>
+
+    <button class="btn btn-primary mt-5 px-5 rounded-pill" onclick="initGame()">重新开始</button>
+</div>
+
+<div id="winOverlay" class="win-overlay animate__animated animate__fadeIn">
+    <h1 class="display-1">🎉 太棒了！</h1>
+    <p class="lead">你完成了所有挑战！</p>
+    <div class="h3 mb-4">最终得分: <span id="finalScore">0</span></div>
+    <button class="btn btn-primary btn-lg rounded-pill px-5" onclick="closeWin()">再玩一次</button>
+</div>
+
+<script>
+    const wordData = [
+        {en: 'old', cn: '老的'},
+        {en: 'young', cn: '年轻的'},
+        {en: 'funny', cn: '滑稽的'},
+        {en: 'kind', cn: '和蔼的'},
+        {en: 'strict', cn: '严厉的'},
+        {en: 'polite', cn: '有礼貌的'},
+        {en: 'clever', cn: '聪明的'},
+        {en: 'shy', cn: '害羞的'}
+    ];
+
+    let selectedCards = [];
+    let score = 0;
+    let matchedPairs = 0;
+    let seconds = 0;
+    let timerInterval;
+
+    function initGame() {
+        clearInterval(timerInterval);
+        seconds = 0;
+        score = 0;
+        matchedPairs = 0;
+        selectedCards = [];
+        document.getElementById('score').innerText = '0';
+        document.getElementById('timer').innerText = '0';
+        document.getElementById('message').innerText = '';
+        document.getElementById('winOverlay').style.display = 'none';
+
+        const grid = document.getElementById('gameGrid');
+        grid.innerHTML = '';
+
+        // Create cards (both English and Chinese)
+        let cards = [];
+        wordData.forEach((pair, index) => {
+            cards.push({text: pair.en, type: 'en', pairId: index});
+            cards.push({text: pair.cn, type: 'cn', pairId: index});
+        });
+
+        // Shuffle cards
+        cards.sort(() => Math.random() - 0.5);
+
+        cards.forEach(card => {
+            const div = document.createElement('div');
+            div.className = 'card-item animate__animated animate__zoomIn';
+            div.innerText = card.text;
+            div.dataset.pairId = card.pairId;
+            div.dataset.type = card.type;
+            div.onclick = () => handleCardClick(div);
+            grid.appendChild(div);
+        });
+
+        startTimer();
+    }
+
+    function handleCardClick(cardDiv) {
+        if (cardDiv.classList.contains('matched') || cardDiv.classList.contains('selected')) return;
+
+        cardDiv.classList.add('selected');
+        selectedCards.push(cardDiv);
+
+        if (selectedCards.length === 2) {
+            const [card1, card2] = selectedCards;
+            
+            if (card1.dataset.pairId === card2.dataset.pairId && card1.dataset.type !== card2.dataset.type) {
+                // Match found
+                setTimeout(() => {
+                    card1.classList.add('matched', 'animate__animated', 'animate__fadeOut');
+                    card2.classList.add('matched', 'animate__animated', 'animate__fadeOut');
+                    score += 10;
+                    matchedPairs++;
+                    document.getElementById('score').innerText = score;
+                    document.getElementById('message').innerText = '✅ 正确！';
+                    document.getElementById('message').style.color = 'var(--success-color)';
+                    
+                    if (matchedPairs === wordData.length) {
+                        endGame();
+                    }
+                }, 300);
+            } else {
+                // No match
+                setTimeout(() => {
+                    card1.classList.remove('selected');
+                    card2.classList.remove('selected');
+                    document.getElementById('message').innerText = '❌ 再试一次';
+                    document.getElementById('message').style.color = 'var(--error-color)';
+                }, 500);
+            }
+            selectedCards = [];
+        }
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            seconds++;
+            document.getElementById('timer').innerText = seconds;
+        }, 1000);
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        setTimeout(() => {
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('winOverlay').style.display = 'flex';
+        }, 500);
+    }
+
+    function closeWin() {
+        initGame();
+    }
+
+    // Initialize on load
+    window.onload = initGame;
+</script>
+
+</body>
+</html>
