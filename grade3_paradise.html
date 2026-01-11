@@ -115,11 +115,40 @@
             color: #FBC02D;
             font-weight: bold;
         }
+
+        /* Non-blocking feedback */
+        .feedback-toast {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            display: none;
+            z-index: 3000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .feedback-success { background: #66BB6A; }
+        .feedback-error { background: #EF5350; }
+
+        .reading-text {
+            background: #fff9c4;
+            padding: 15px;
+            border-radius: 10px;
+            font-style: italic;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 5px solid #fbc02d;
+        }
     </style>
 </head>
 <body>
 
 <a href="index.html" class="btn-back">← 返回首页</a>
+
+<div id="feedbackToast" class="feedback-toast animate__animated"></div>
 
 <div class="hero-section animate__animated animate__fadeIn">
     <h1 class="display-4 fw-bold">🌳 元气森林</h1>
@@ -189,20 +218,68 @@
 <script>
     const questions = {
         cn: [
-            { q: "‘锄禾日当午’的下一句是？", a: ["汗滴禾下土", "谁知盘中餐", "春种一粒粟"], correct: 0 },
-            { q: "‘亡羊补牢’中的‘牢’指的是？", a: ["牢房", "羊圈", "绳子"], correct: 1 }
+            { 
+                type: 'text',
+                q: "文言文初探：‘鹅，鹅，鹅，曲项向天歌。’中的‘曲项’是什么意思？", 
+                a: ["弯着脖子", "红色的脚掌", "大声唱歌"], 
+                correct: 0 
+            },
+            { 
+                type: 'text',
+                q: "《小儿垂钓》中‘路人借问遥招手’，小孩子为什么要招手？", 
+                a: ["没礼貌", "怕吓跑了鱼", "想让路人过来"], 
+                correct: 1 
+            },
+            {
+                type: 'text',
+                q: "成语辨析：‘掩耳盗铃’这个故事告诉我们什么道理？",
+                a: ["偷铃铛要捂住耳朵", "不能自欺欺人", "耳朵比铃铛重要"],
+                correct: 1
+            }
         ],
         en: [
-            { q: "‘Apple’ 是什么颜色的？", a: ["Yellow", "Red/Green", "Blue"], correct: 1 },
-            { q: "‘Hello’ 的中文意思是？", a: ["谢谢", "你好", "再见"], correct: 1 }
+            { 
+                type: 'reading',
+                text: "I have a friend. Her name is Lily. She is a thin girl. She likes reading books. She has a big cat. It's white and fat.",
+                q: "绘本阅读：What color is Lily's cat?", 
+                a: ["Thin", "White", "Fat"], 
+                correct: 1 
+            },
+            { 
+                type: 'reading',
+                text: "The sun is up. The birds are singing. A little rabbit is looking for carrots. He finds a big one under the tree.",
+                q: "绘本阅读：Where does the rabbit find a carrot?", 
+                a: ["In the sky", "Under the tree", "At home"], 
+                correct: 1 
+            }
         ],
         math: [
-            { q: "25 + 17 = ?", a: ["42", "32", "52"], correct: 0 },
-            { q: "一个正方形有几个角？", a: ["3", "4", "5"], correct: 1 }
+            { 
+                type: 'text',
+                q: "逻辑挑战：一个小组有8个人，每两个人握一次手，一共要握几次？", 
+                a: ["8次", "28次", "16次"], 
+                correct: 1 
+            },
+            { 
+                type: 'text',
+                q: "找规律：2, 4, 8, 16, ( )", 
+                a: ["20", "24", "32"], 
+                correct: 2 
+            }
         ],
         sci: [
-            { q: "植物生长需要什么？", a: ["阳光和水", "可乐", "石头"], correct: 0 },
-            { q: "月亮本身会发光吗？", a: ["会", "不会", "只有晚上会"], correct: 1 }
+            { 
+                type: 'text',
+                q: "科学实验：在水里加入什么，可以让鸡蛋浮起来？", 
+                a: ["白糖", "食盐", "面粉"], 
+                correct: 1 
+            },
+            { 
+                type: 'text',
+                q: "自然常识：为什么北极熊不怕冷？", 
+                a: ["它们穿了衣服", "厚厚的脂肪和毛发", "它们会生火"], 
+                correct: 1 
+            }
         ]
     };
 
@@ -224,33 +301,61 @@
 
     function showQuestion() {
         const qData = questions[currentSubject][currentIdx];
-        document.getElementById('questionText').innerText = qData.q;
         const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
+        const container = document.getElementById('questionContainer');
+        
+        // Clear previous
+        container.innerHTML = `<p id="questionText" class="h5 mb-4"></p><div id="options"></div>`;
+        const qText = document.getElementById('questionText');
+        const opts = document.getElementById('options');
+
+        if (qData.type === 'reading') {
+            const readingDiv = document.createElement('div');
+            readingDiv.className = 'reading-text animate__animated animate__fadeIn';
+            readingDiv.innerText = qData.text;
+            container.insertBefore(readingDiv, qText);
+        }
+
+        qText.innerText = qData.q;
         qData.a.forEach((opt, i) => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn';
+            btn.className = 'option-btn animate__animated animate__fadeInUp';
+            btn.style.animationDelay = (i * 0.1) + 's';
             btn.innerText = opt;
             btn.onclick = () => checkAnswer(i);
-            optionsDiv.appendChild(btn);
+            opts.appendChild(btn);
         });
+    }
+
+    function showToast(msg, isSuccess) {
+        const toast = document.getElementById('feedbackToast');
+        toast.innerText = msg;
+        toast.className = `feedback-toast animate__animated animate__fadeInDown ${isSuccess ? 'feedback-success' : 'feedback-error'}`;
+        toast.style.display = 'block';
+        
+        setTimeout(() => {
+            toast.className = `feedback-toast animate__animated animate__fadeOutUp ${isSuccess ? 'feedback-success' : 'feedback-error'}`;
+            setTimeout(() => { toast.style.display = 'none'; }, 500);
+        }, 1500);
     }
 
     function checkAnswer(idx) {
         const qData = questions[currentSubject][currentIdx];
         if (idx === qData.correct) {
             score += 50;
-            alert("✨ 太棒了！答对了！");
+            showToast("✨ 太棒了！探险值 +50", true);
         } else {
-            alert("❌ 差一点点，加油！");
+            showToast("❌ 线索找错啦，再观察一下！", false);
         }
         
-        currentIdx++;
-        if (currentIdx < questions[currentSubject].length) {
-            showQuestion();
-        } else {
-            showResult();
-        }
+        setTimeout(() => {
+            currentIdx++;
+            if (currentIdx < questions[currentSubject].length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }, 1000);
     }
 
     function showResult() {
