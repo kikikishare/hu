@@ -151,98 +151,72 @@
 </div>
 
 <div class="container">
-    <div class="row justify-content-center mb-5">
-        <div class="col-auto">
-            <ul class="nav nav-pills p-2 bg-white rounded-pill shadow-sm sticky-top" style="top: 20px; z-index: 1000;" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button">全部资源</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" id="pills-english-tab" data-bs-toggle="pill" data-bs-target="#pills-english" type="button">英语天地</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" id="pills-math-tab" data-bs-toggle="pill" data-bs-target="#pills-math" type="button">趣味数学</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" id="pills-grade3-tab" data-bs-toggle="pill" data-bs-target="#pills-grade3" type="button">🌳 元气森林</button>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="tab-content" id="pills-tabContent">
-        <!-- 全部资源 -->
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-md-4">
+    <div class="row g-4 mb-5">
+        <!-- 五年级板块 -->
+        <div class="col-lg-6">
+            <div class="section-title h2 mb-4">🏆 五年级·高效复习区</div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="classroom-card p-4 animate__animated animate__fadeInLeft">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon me-4">📚</div>
+                            <div>
+                                <h3>PEP 5 英语复习助手</h3>
+                                <p class="text-muted mb-0">词汇句型闯关、小作文拼图、语音互动</p>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <a href="pep5_english.html" class="btn btn-primary rounded-pill px-4">立即进入</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
                     <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
-                        <div class="card-icon">📚</div>
-                        <h3>PEP 5 英语复习</h3>
-                        <p class="text-muted">五年级上册英语核心词汇与句型闯关，助力期末冲刺。</p>
-                        <a href="pep5_english.html" class="btn btn-outline-primary rounded-pill mt-3">立即开始</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s">
                         <div class="card-icon">🧩</div>
-                        <h3>单词消消乐</h3>
-                        <p class="text-muted">趣味连连看，通过消掉中英文匹配单词，看谁速度最快！</p>
-                        <a href="word_game.html" class="btn btn-outline-success rounded-pill mt-3">开始游戏</a>
+                        <h4>单词消消乐</h4>
+                        <a href="word_game.html" class="btn btn-sm btn-outline-success rounded-pill mt-2">开始游戏</a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="col-md-6">
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s">
                         <div class="card-icon">🧠</div>
-                        <h3>思维训练营</h3>
-                        <p class="text-muted">挑战英语逻辑推理，找出隐藏的真相，锻炼你的“大侦探”头脑！</p>
-                        <a href="thinking_camp.html" class="btn btn-outline-info rounded-pill mt-3">立即挑战</a>
+                        <h4>思维训练营</h4>
+                        <a href="thinking_camp.html" class="btn btn-sm btn-outline-info rounded-pill mt-2">立即挑战</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 英语天地 -->
-        <div class="tab-pane fade" id="pills-english" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <a href="pep5_english.html" class="quick-link-btn">
-                        <h4>📖 PEP 英语五年级上册复习助手</h4>
-                        <p class="mb-0 text-muted">单词、句型、小测试一站式搞定</p>
-                    </a>
-                </div>
-                <div class="col-md-6">
-                    <div class="quick-link-btn opacity-50">
-                        <h4>🎧 英语听力训练</h4>
-                        <p class="mb-0 text-muted">精选课文音频与跟读练习</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 趣味数学 -->
-        <div class="tab-pane fade" id="pills-math" role="tabpanel">
-            <div class="text-center py-5">
-                <div class="display-1 mb-4">🚧</div>
-                <h3>数学频道正在建设中...</h3>
-                <p class="text-muted">敬请期待更多精彩内容</p>
-            </div>
-        </div>
-
-        <!-- 元气森林·全科梦工厂 -->
-        <div class="tab-pane fade" id="pills-grade3" role="tabpanel">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="classroom-card p-4 text-center">
-                        <div class="card-icon">🎡</div>
-                        <h3>元气森林·全科梦工厂</h3>
-                        <p class="text-muted">探索知识的森林，开启全科梦幻之旅！专为低年级打造。</p>
-                        <a href="grade3_paradise.html" class="btn btn-primary rounded-pill mt-3">立即探索</a>
+        <!-- 三年级板块 -->
+        <div class="col-lg-6">
+            <div class="section-title h2 mb-4">🌳 三年级·元气森林</div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="classroom-card p-4 animate__animated animate__fadeInRight" style="background: linear-gradient(135deg, #FFF9C4, #FFF59D);">
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon me-4">🎡</div>
+                            <div>
+                                <h3>全科梦工厂</h3>
+                                <p class="text-muted mb-0">海豚读本、必背古诗词、科学实验、魔力数学</p>
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <a href="grade3_paradise.html" class="btn btn-warning rounded-pill px-4">开启冒险</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="quick-link-btn opacity-75">
-                        <h4>🎨 创意美术/科学课</h4>
-                        <p class="mb-0 text-muted">发现生活中的美与科学奥秘</p>
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
+                        <div class="card-icon">📖</div>
+                        <h4>海豚读本馆</h4>
+                        <a href="grade3_paradise.html" class="btn btn-sm btn-outline-success rounded-pill mt-2">进入阅读</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s">
+                        <div class="card-icon">🏮</div>
+                        <h4>古诗词秘境</h4>
+                        <a href="grade3_paradise.html" class="btn btn-sm btn-outline-warning rounded-pill mt-2">开始背诵</a>
                     </div>
                 </div>
             </div>
@@ -251,7 +225,7 @@
 
     <div class="text-center mt-5">
         <div class="footer-badge">
-            Powered by Teacher Hu & SanMei Assistant
+            Powered by Catherine Hu & SanMei Assistant
         </div>
     </div>
 </div>

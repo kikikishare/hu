@@ -198,6 +198,33 @@
             display: inline-block;
             margin-bottom: 5px;
         }
+        .grammar-spotlight {
+            background: #F3E5F5;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 8px solid var(--accent-color);
+        }
+        .grammar-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .big-idea-banner {
+            background: linear-gradient(90deg, #FFF9C4, #FFF176);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px dashed #FBC02D;
+            display: flex;
+            align-items: center;
+        }
+        .big-idea-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
         .puzzle-box {
             background: rgba(255,255,255,0.5);
             padding: 15px;
@@ -286,10 +313,50 @@
             border-style: solid;
             border-color: white transparent transparent;
         }
-    
+
+        /* 高效复习区样式 */
+        .revision-zone {
+            background: #E8F5E9;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #C8E6C9;
+        }
+        .revision-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #2E7D32;
+        }
+        .revision-header i { font-size: 1.5rem; margin-right: 10px; }
+
+        /* 挑战竞技场样式 */
+        .arena-card {
+            background: #FFF3E0;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #FFE0B2;
+        }
+        .arena-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #E65100;
+        }
+        .arena-header i { font-size: 1.5rem; margin-right: 10px; }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+        }
     </style>
 </head>
 <body>
+
+<div class="toast-container" id="toast-container"></div>
 
 <div id="feedback-pop" class="feedback-pop animate__animated">🎉</div>
 
@@ -308,8 +375,27 @@
         <div class="tab-pane fade show active" id="unit-1" role="tabpanel">
             <div class="row">
                 <div class="col-12 mb-4">
+                    <div class="big-idea-banner animate__animated animate__fadeIn">
+                        <div class="big-idea-icon">💡</div>
+                        <div>
+                            <h5 class="mb-1 text-dark">UbD 大概念: Understanding and Describing People</h5>
+                            <p class="mb-0 text-muted small">我们如何通过性格和外貌特征来认识和介绍新朋友？</p>
+                        </div>
+                    </div>
+                    
                     <div class="card p-4 border-0 shadow-sm">
                         <h3 class="text-primary">Unit 1: What's he like?</h3>
+                        <div class="grammar-spotlight mt-3">
+                            <h5 class="text-purple"><i class="bi bi-stars"></i> 语法聚焦 (Grammar Spotlight)</h5>
+                            <div class="grammar-item">
+                                <strong>1. 询问性格或外貌:</strong> What's he/she like? (他/她什么样？) <br>
+                                <small class="text-muted">回答: He's/She's + 形容词. (如: He's kind.)</small>
+                            </div>
+                            <div class="grammar-item">
+                                <strong>2. 一般疑问句:</strong> Is he/she + 形容词? (他/她...吗？) <br>
+                                <small class="text-muted">回答: Yes, he/she is. / No, he/she isn't.</small>
+                            </div>
+                        </div>
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: y -> /i/</span>
                             <span class="ms-2 text-muted">例词: baby, happy, windy, sunny, sorry</span>
@@ -489,7 +575,83 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">知道;了解</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('know')">🔊</button>
+                            know
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">机器人</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('robot')">🔊</button>
+                            robot
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">有时;间或</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sometimes')">🔊</button>
+                            sometimes
+                        </div>
+                    </div>
+                </div>
+            </div>
             
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">形容词变身：old ↔ young, funny ↔ strict</li>
+                                    <li class="list-group-item bg-transparent">性格词汇：kind, polite, hard-working, helpful</li>
+                                    <li class="list-group-item bg-transparent">特殊：Ms (女士), robot (机器人), clever (聪明的)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">询问：What's he/she like?</li>
+                                    <li class="list-group-item bg-transparent">回答：He/She is very kind.</li>
+                                    <li class="list-group-item bg-transparent">疑问：Is she strict? (Yes, she is. / No, she isn't.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-1" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(1)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -608,18 +770,18 @@
                 </div>
 
                 <div class="col-12">
-                    <h4 class="mb-3 text-warning">📝 主题小作文：My Teacher</h4>
+                    <h4 class="mb-3 text-warning">📝 主题小作文：Introducing Myself (交友)</h4>
                     <div class="card writing-card shadow-sm">
                         <div class="writing-tips mb-3">
                             <strong>💡 写作锦囊：</strong>
-                            <span>Who's your...?</span><span>What's he/she like?</span><span>Is he/she...?</span><span>He/She is...</span><span>kind/strict/helpful</span>
+                            <span>I'm... (tall/thin)</span><span>I'm... (hard-working)</span><span>I can...</span><span>My favourite food/drink is...</span>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-1">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">Her name is Ms Wang.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">We all like her very much.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is very kind to us.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">Sometimes she is strict.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She has long hair and big eyes.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I have a new art teacher.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is young and beautiful.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">She is very hard-working.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm eleven years old.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">How about you?</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm tall and thin.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite drink is tea.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I want to be your friend.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm Jim.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm hard-working.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite food is dumplings.</div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-1"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(1)">🔄 重置拼图</button>
@@ -627,8 +789,8 @@
                             <div class="col-md-6">
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(1)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-1" style="display:none; line-height: 1.8;">
-                                    I have a new art teacher. Her name is Ms Wang. She is young and beautiful. She has long hair and big eyes. She is very kind to us. Sometimes she is strict. She is very hard-working. We all like her very much.
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I have a new art teacher. Her name is Ms Wang. She is young and beautiful. She has long hair and big eyes. She is very kind to us. Sometimes she is strict. She is very hard-working. We all like her very much.')">🔊</button>
+                                    I want to be your friend. I'm Jim. I'm eleven years old. I'm tall and thin. I'm hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -640,16 +802,35 @@
         <div class="tab-pane fade " id="unit-2" role="tabpanel">
             <div class="row">
                 <div class="col-12 mb-4">
+                    <div class="big-idea-banner animate__animated animate__fadeIn">
+                        <div class="big-idea-icon">📅</div>
+                        <div>
+                            <h5 class="mb-1 text-dark">UbD 大概念: Managing Time and Lifestyle</h5>
+                            <p class="mb-0 text-muted small">我们如何描述日常生活和周末活动，并养成良好的生活习惯？</p>
+                        </div>
+                    </div>
+
                     <div class="card p-4 border-0 shadow-sm">
                         <h3 class="text-primary">Unit 2: My week</h3>
+                        <div class="grammar-spotlight mt-3">
+                            <h5 class="text-purple"><i class="bi bi-stars"></i> 语法聚焦 (Grammar Spotlight)</h5>
+                            <div class="grammar-item">
+                                <strong>1. 询问课程/活动:</strong> What do you have on + 星期? (你星期...有什么课？) <br>
+                                <small class="text-muted">回答: I have + 课程. (如: I have maths and music.)</small>
+                            </div>
+                            <div class="grammar-item">
+                                <strong>2. 询问日常活动:</strong> Do you often + 动词短语? (你经常...吗？) <br>
+                                <small class="text-muted">回答: Yes, I do. / No, I don't.</small>
+                            </div>
+                        </div>
                         <div class="phonics-section mt-2">
-                            <span class="phonics-badge">🔍 语音考点: ee, ea -> /i:/</span>
-                            <span class="ms-2 text-muted">例词: feet, beef, meet, tea, read, eat</span>
+                            <span class="phonics-badge">🔍 语音考点: ee/ea -> /i:/</span>
+                            <span class="ms-2 text-muted">例词: feet, beef, meet, see, tea, read, eat</span>
                             <div class="phonics-game mt-3">
                                 <strong>🎮 语音小挑战 (3道题)：</strong> 听发音，选单词
                                 <div class="mt-2">
                                     <div id="phonics-quiz-container-2">
-                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(2, ["feet", "beef", "meet", "tea", "read", "eat"])'>开始挑战 🔊</button>
+                                        <button class="btn btn-sm btn-primary rounded-pill px-3" onclick='startPhonicsQuiz(2, ["feet", "beef", "meet", "see", "tea", "read", "eat"])'>开始挑战 🔊</button>
                                     </div>
                                     <div id="phonics-options-2" class="mt-2" style="display:none;"></div>
                                 </div>
@@ -657,257 +838,326 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-12 mb-5">
                     <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
                     <div class="row">
-                        
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期一
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期一</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Monday')">🔊</button>
+                                        Monday
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Monday')">🔊</button>
-                            Monday
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期二</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Tuesday')">🔊</button>
+                                        Tuesday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期三</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Wednesday')">🔊</button>
+                                        Wednesday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期四</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Thursday')">🔊</button>
+                                        Thursday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期五</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Friday')">🔊</button>
+                                        Friday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期六</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Saturday')">🔊</button>
+                                        Saturday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期日</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Sunday')">🔊</button>
+                                        Sunday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">周末</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('weekend')">🔊</button>
+                                        weekend
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">洗衣服</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('wash my clothes')">🔊</button>
+                                        wash my clothes
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">看电视</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('watch TV')">🔊</button>
+                                        watch TV
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">做作业</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('do homework')">🔊</button>
+                                        do homework
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">看书</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('read books')">🔊</button>
+                                        read books
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">踢足球</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('play football')">🔊</button>
+                                        play football
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期二
+
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">星期词汇：首字母大写 (Monday...Sunday)</li>
+                                    <li class="list-group-item bg-transparent">动词短语：wash my clothes, watch TV, do homework, read books, play football</li>
+                                    <li class="list-group-item bg-transparent">时间频度：often (经常), every day (每天), on the weekend (在周末)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">问课程：What do you have on Mondays?</li>
+                                    <li class="list-group-item bg-transparent">答课程：I have English and art.</li>
+                                    <li class="list-group-item bg-transparent">问习惯：Do you often read books here?</li>
+                                    <li class="list-group-item bg-transparent">答习惯：Yes, I do. / No, I don't.</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Tuesday')">🔊</button>
-                            Tuesday
-                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期三
-                            </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
                         </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Wednesday')">🔊</button>
-                            Wednesday
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-2" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(2)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期四
-                            </div>
-                        </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Thursday')">🔊</button>
-                            Thursday
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期五
-                            </div>
-                        </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Friday')">🔊</button>
-                            Friday
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期六
-                            </div>
-                        </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Saturday')">🔊</button>
-                            Saturday
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                星期日
-                            </div>
-                        </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Sunday')">🔊</button>
-                            Sunday
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-6 col-md-3">
-                <div class="flashcard" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="w-100">
-                                周末
-                            </div>
-                        </div>
-                        <div class="flashcard-back">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('weekend')">🔊</button>
-                            weekend
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
                     </div>
                 </div>
 
                 <div class="col-12 mb-5">
                     <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
                     <div class="row">
-                        
-            <div class="col-12 col-md-6">
-                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What do you have on Thursdays?')">🔊</button>
-                            星期四你们有什么课？
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('What do you have on Thursdays?')">🔊</button>
+                                        你星期四有什么课？
+                                    </div>
+                                    <div class="flashcard-back">What do you have on Thursdays?</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flashcard-back">What do you have on Thursdays?</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-12 col-md-6">
-                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('I have maths, English and music.')">🔊</button>
-                            我有数学、英语和音乐。
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('I have maths, English and music.')">🔊</button>
+                                        我有数学、英语和音乐课。
+                                    </div>
+                                    <div class="flashcard-back">I have maths, English and music.</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flashcard-back">I have maths, English and music.</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-12 col-md-6">
-                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What do you do on the weekend?')">🔊</button>
-                            你周末做什么？
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Do you often read books in this park?')">🔊</button>
+                                        你经常在这个公园看书吗？
+                                    </div>
+                                    <div class="flashcard-back">Do you often read books in this park?</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flashcard-back">What do you do on the weekend?</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-12 col-md-6">
-                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <button class="btn-speak" onclick="event.stopPropagation(); speak('I often read books.')">🔊</button>
-                            我经常看书。
-                        </div>
-                        <div class="flashcard-back">I often read books.</div>
-                    </div>
-                </div>
-            </div>
-            
                     </div>
                 </div>
 
                 <div class="col-12 mb-5">
-                    <h4 class="mb-3 text-success">✍️ 单元巩固练习 <small class="text-muted" style="font-size: 0.8rem">(完成后有惊喜烟花哦！)</small></h4>
+                    <h4 class="mb-3 text-success">✍️ 单元巩固练习</h4>
                     <div class="quiz-section shadow-sm" id="quiz-container-2">
-                        
-            <div class="quiz-item" data-quiz-id="0">
-                <p class="fw-bold">1. What do you have ________ Tuesdays?</p>
-                <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 5)">A. in</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 5)">B. on</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 5)">C. at</button>
+                        <div class="quiz-item" data-quiz-id="0">
+                            <p class="fw-bold">1. —What do you have on ________? —I have English and art.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 3)">A. weekend</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 3)">B. Mondays</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 3)">C. often</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="1">
+                            <p class="fw-bold">2. —Do you often play football on Sundays? —________.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 3)">A. Yes, I do</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 3)">B. Yes, I am</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 3)">C. No, I don't often</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="2">
+                            <p class="fw-bold">3. I often ________ on the weekend. My clothes are clean now.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 2, 3)">A. watch TV</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 2, 3)">B. read books</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 2, 3)">C. wash my clothes</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="feedback mt-2" style="display:none;"></div>
-            </div>
-            
-            <div class="quiz-item" data-quiz-id="1">
-                <p class="fw-bold">2. —Do you often play football? —________. I like it very much.</p>
-                <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 5)">A. Yes, I do</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 5)">B. No, I don't</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 5)">C. Yes, I am</button>
-                </div>
-                <div class="feedback mt-2" style="display:none;"></div>
-            </div>
-            
-            <div class="quiz-item" data-quiz-id="2">
-                <p class="fw-bold">3. Saturday and Sunday are the ________.</p>
-                <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 2, 5)">A. week</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 2, 5)">B. day</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 2, 5)">C. weekend</button>
-                </div>
-                <div class="feedback mt-2" style="display:none;"></div>
-            </div>
-            
-            <div class="quiz-item" data-quiz-id="3">
-                <p class="fw-bold">4. —What do you ________ on Mondays? —I have English and PE.</p>
-                <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 5)">A. do</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 5)">B. have</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 5)">C. play</button>
-                </div>
-                <div class="feedback mt-2" style="display:none;"></div>
-            </div>
-            
-            <div class="quiz-item" data-quiz-id="4">
-                <p class="fw-bold">5. I often ________ on the weekend.</p>
-                <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 5)">A. watch TV</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 5)">B. watching TV</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 5)">C. watches TV</button>
-                </div>
-                <div class="feedback mt-2" style="display:none;"></div>
-            </div>
-            
+
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">星期词汇：Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</li>
+                                    <li class="list-group-item bg-transparent">活动词汇：play football, watch TV, do homework, read books, wash my clothes</li>
+                                    <li class="list-group-item bg-transparent">特征词汇：weekend (周末), often (经常), sometimes (有时)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">询问课程：What do you have on Mondays?</li>
+                                    <li class="list-group-item bg-transparent">询问活动：Do you often read books on the weekend?</li>
+                                    <li class="list-group-item bg-transparent">回答：Yes, I do. / No, I don't.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-2" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(2)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <h4 class="mb-3 text-warning">📝 主题小作文：My Week</h4>
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My weekend (周末活动)</h4>
                     <div class="card writing-card shadow-sm">
                         <div class="writing-tips mb-3">
                             <strong>💡 写作锦囊：</strong>
-                            <span>What do you have on...?</span><span>What do you do on...?</span><span>I have...</span><span>I often...</span><span>busy/happy</span>
+                            <span>On Saturdays...</span><span>On Sundays...</span><span>I often...</span><span>I usually...</span><span>busy/happy</span>
                         </div>
-                        
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-2">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often play football on Sundays.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I am very happy.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">Sometimes I watch TV with my parents.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">My week is very colorful.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like Thursdays because I have music.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">On the weekend, I often read books.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm very busy from Monday to Friday.</div><div class="puzzle-item" onclick="addToPuzzle(this, 2)">I have English and maths every day.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm always busy on the weekend.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Saturdays, I often do my homework in the morning.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">In the afternoon, I often play football with my friends.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Sundays, I usually visit my grandparents.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often watch TV with my parents in the afternoon.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like my weekends.</div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-2"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(2)">🔄 重置拼图</button>
@@ -915,8 +1165,8 @@
                             <div class="col-md-6">
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(2)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-2" style="display:none; line-height: 1.8;">
-                                    I'm very busy from Monday to Friday. I have English and maths every day. I like Thursdays because I have music. On the weekend, I often read books. Sometimes I watch TV with my parents. I often play football on Sundays. My week is very colorful. I am very happy.
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I\'m very busy from Monday to Friday. I have English and maths every day. I like Thursdays because I have music. On the weekend, I often read books. Sometimes I watch TV with my parents. I often play football on Sundays. My week is very colorful. I am very happy.')">🔊</button>
+                                    I'm always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -928,8 +1178,26 @@
         <div class="tab-pane fade " id="unit-3" role="tabpanel">
             <div class="row">
                 <div class="col-12 mb-4">
+                    <div class="big-idea-banner animate__animated animate__fadeIn">
+                        <div class="big-idea-icon">🍔</div>
+                        <div>
+                            <h5 class="mb-1 text-dark">UbD 大概念: Healthy Choices and Preferences</h5>
+                            <p class="mb-0 text-muted small">我们如何表达饮食偏好，并理解什么是健康的饮食习惯？</p>
+                        </div>
+                    </div>
                     <div class="card p-4 border-0 shadow-sm">
                         <h3 class="text-primary">Unit 3: What would you like?</h3>
+                        <div class="grammar-spotlight mt-3">
+                            <h5 class="text-purple"><i class="bi bi-stars"></i> 语法聚焦 (Grammar Spotlight)</h5>
+                            <div class="grammar-item">
+                                <strong>1. 询问想吃/喝什么:</strong> What would you like to eat/drink? <br>
+                                <small class="text-muted">回答: I'd like... / A sandwich, please.</small>
+                            </div>
+                            <div class="grammar-item">
+                                <strong>2. 询问最喜欢的食物:</strong> What's your favourite food? <br>
+                                <small class="text-muted">回答: Noodles. They are delicious.</small>
+                            </div>
+                        </div>
                         <div class="phonics-section mt-2">
                             <span class="phonics-badge">🔍 语音考点: ow -> /au/ or /əu/</span>
                             <span class="ms-2 text-muted">例词: cow, flower, down, slow, snow, yellow</span>
@@ -1192,6 +1460,46 @@
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
             
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">食物：sandwich, salad, hamburger, ice cream</li>
+                                    <li class="list-group-item bg-transparent">形容词：fresh (新鲜), healthy (健康), delicious (美味), sweet (甜)</li>
+                                    <li class="list-group-item bg-transparent">饮料：tea, juice, milk, water</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">点餐：What would you like to eat/drink?</li>
+                                    <li class="list-group-item bg-transparent">最爱：What's your favourite food? (They are...)</li>
+                                    <li class="list-group-item bg-transparent">单复数：It is... (单数) / They are... (复数)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-3" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(3)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1492,6 +1800,46 @@
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
             
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">能力词汇：dance, sing, swim, do kung fu, draw cartoons</li>
+                                    <li class="list-group-item bg-transparent">乐器词汇：play the pipa, play the erhu</li>
+                                    <li class="list-group-item bg-transparent">特征词汇：helpful (有帮助的), can't = can not</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">询问能力：What can you do?</li>
+                                    <li class="list-group-item bg-transparent">回答能力：I can... / I can't...</li>
+                                    <li class="list-group-item bg-transparent">一般疑问：Can you swim? (Yes, I can. / No, I can't.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-4" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(4)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1799,6 +2147,46 @@
                     </div>
                 </div>
 
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">家具词汇：clock, plant, water bottle, bike, photo</li>
+                                    <li class="list-group-item bg-transparent">位置词汇：in front of, beside, between, behind, above</li>
+                                    <li class="list-group-item bg-transparent">形容词：tidy (整洁的), everywhere (到处)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">询问位置：Where is the ball?</li>
+                                    <li class="list-group-item bg-transparent">There be 句型：There is a big bed.</li>
+                                    <li class="list-group-item bg-transparent">复数句型：There are many pictures.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-5" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(5)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-12">
                     <h4 class="mb-3 text-warning">📝 主题小作文：My Room</h4>
                     <div class="card writing-card shadow-sm">
@@ -2087,8 +2475,48 @@
                     </div>
                 </div>
 
+                <div class="col-12 mb-5">
+                    <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
+                        <div class="revision-header">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success fw-bold"><i class="bi bi-check-all"></i> 必背单词考点</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">自然词汇：forest, river, lake, mountain, hill, tree, flower</li>
+                                    <li class="list-group-item bg-transparent">地点词汇：park, village, city, farm</li>
+                                    <li class="list-group-item bg-transparent">形容词：beautiful (美丽的), high (高的)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary fw-bold"><i class="bi bi-pencil-square"></i> 必记句型结构</h6>
+                                <ul class="small list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">存在句(单)：Is there a lake?</li>
+                                    <li class="list-group-item bg-transparent">存在句(复)：Are there any mountains?</li>
+                                    <li class="list-group-item bg-transparent">回答：Yes, there are. / No, there aren't.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arena-card shadow-sm animate__animated animate__fadeInUp mt-4">
+                        <div class="arena-header">
+                            <i class="bi bi-trophy-fill"></i>
+                            <h4 class="mb-0">挑战竞技场 (Challenge Arena)</h4>
+                        </div>
+                        <p class="text-muted small">准备好了吗？点击下方按钮开始限时挑战！</p>
+                        <div id="arena-quiz-6" class="text-center">
+                            <button class="btn btn-warning rounded-pill px-5 py-2 fw-bold" onclick="startArenaQuiz(6)">
+                                <i class="bi bi-play-fill"></i> 立即进入挑战
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-12">
-                    <h4 class="mb-3 text-warning">📝 主题小作文：My Nature Park</h4>
+                    <h4 class="mb-3 text-warning">📝 主题小作文：In a Nature Park</h4>
                     <div class="card writing-card shadow-sm">
                         <div class="writing-tips mb-3">
                             <strong>💡 写作锦囊：</strong>
@@ -2133,6 +2561,99 @@
 <script>
     const unitProgress = {};
     const encouragingWords = ["太棒了！", "真聪明！", "你太牛了！", "继续加油！", "完美！", "英语小达人！"];
+
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type} animate__animated animate__fadeInRight`;
+        toast.style.marginBottom = '10px';
+        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}-fill me-2"></i> ${message}`;
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.replace('animate__fadeInRight', 'animate__fadeOutRight');
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+
+    const arenaData = {
+        1: [
+            { q: "Sarah is very ____. She always says 'hello' to teachers.", a: ["A. polite", "B. shy", "C. strict"], c: "A" },
+            { q: "Our English teacher is ____. He makes us laugh.", a: ["A. old", "B. funny", "C. kind"], c: "B" },
+            { q: "Is your robot ____? Yes, he is.", a: ["A. clever", "B. helpful", "C. both A and B"], c: "C" }
+        ],
+        2: [
+            { q: "What do you have ____ Tuesdays?", a: ["A. in", "B. on", "C. at"], c: "B" },
+            { q: "I often ____ my clothes on Saturdays.", a: ["A. wash", "B. watch", "C. do"], c: "A" },
+            { q: "You should ____ every day.", a: ["A. play sports", "B. watch TV", "C. play football"], c: "A" }
+        ],
+        3: [
+            { q: "What would you like ____ eat?", a: ["A. to", "B. for", "C. with"], c: "A" },
+            { q: "My favourite ____ is sandwich. It's delicious.", a: ["A. drink", "B. food", "C. fruit"], c: "B" },
+            { q: "I'd like some ____. I am thirsty.", a: ["A. salad", "B. water", "C. beef"], c: "B" }
+        ],
+        4: [
+            { q: "Can you ____ some kung fu?", a: ["A. play", "B. do", "C. make"], c: "B" },
+            { q: "I can play ____ pipa for the party.", a: ["A. /", "B. a", "C. the"], c: "C" },
+            { q: "What ____ you do? I can dance.", a: ["A. are", "B. do", "C. can"], c: "C" }
+        ],
+        5: [
+            { q: "There ____ a clock and two plants in my room.", a: ["A. is", "B. are", "C. be"], c: "A" },
+            { q: "The ball is ____ the dog. The dog is behind it.", a: ["A. in front of", "B. behind", "C. beside"], c: "A" },
+            { q: "My computer is ____ the desk.", a: ["A. in", "B. on", "C. under"], c: "B" }
+        ],
+        6: [
+            { q: "Is there a ____ in the nature park?", a: ["A. lake", "B. trees", "C. mountains"], c: "A" },
+            { q: "Are there ____ buildings in the city?", a: ["A. some", "B. any", "C. a"], c: "B" },
+            { q: "There ____ many trees in the forest.", a: ["A. is", "B. are", "C. be"], c: "B" }
+        ]
+    };
+
+    function startArenaQuiz(unitId) {
+        const container = document.getElementById(`arena-quiz-${unitId}`);
+        const questions = arenaData[unitId];
+        if (!questions) return;
+
+        let html = '<div class="mt-3">';
+        questions.forEach((q, idx) => {
+            html += `
+                <div class="mb-4 p-3 bg-white rounded shadow-sm border-start border-warning border-4">
+                    <p class="fw-bold mb-2">${idx + 1}. ${q.q}</p>
+                    <div class="d-grid gap-2">
+                        ${q.a.map(opt => `
+                            <button class="btn btn-outline-warning text-start" onclick="checkArenaAnswer(this, '${opt[0]}', '${q.c}', ${unitId})">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        showToast("挑战开始！加油！🚀");
+    }
+
+    function checkArenaAnswer(btn, selected, correct, unitId) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('button');
+        buttons.forEach(b => b.disabled = true);
+
+        if (selected === correct) {
+            btn.className = 'btn btn-success text-start text-white';
+            showToast("回答正确！🎉", "success");
+            document.getElementById('audio-correct').play();
+        } else {
+            btn.className = 'btn btn-danger text-start text-white';
+            buttons.forEach(b => {
+                if (b.innerText.startsWith(correct)) {
+                    b.className = 'btn btn-success text-start text-white';
+                }
+            });
+            showToast("再接再厉哦！💪", "warning");
+        }
+    }
 
     function speak(text) {
         if ('speechSynthesis' in window) {
@@ -2259,7 +2780,7 @@
                 setTimeout(() => {
                     triggerFireworks();
                     document.getElementById('audio-clapping').play();
-                    alert("恭喜你完成了 Unit " + unitId + " 的全部练习！太棒了！👏");
+                    showToast("恭喜你完成了全部练习！太棒了！👏", "success");
                 }, 500);
             }
         } else {
