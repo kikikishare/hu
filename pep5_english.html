@@ -760,9 +760,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(1, [{en:'old',cn:'老的'},{en:'young',cn:'年轻的'},{en:'funny',cn:'滑稽的'},{en:'kind',cn:'和蔼的'},{en:'strict',cn:'严厉的'},{en:'polite',cn:'有礼貌的'},{en:'hard-working',cn:'勤奋的'},{en:'helpful',cn:'有帮助的'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -872,7 +878,7 @@
             <div class="quiz-item" data-quiz-id="0">
                 <p class="fw-bold">1. —What's your sister like? —________ is very kind.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 5, event)">A. He</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 5, event)">B. She</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 5, event)">C. It</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. He</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. She</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. It</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -880,7 +886,7 @@
             <div class="quiz-item" data-quiz-id="1">
                 <p class="fw-bold">2. My math teacher is ________. He makes us laugh.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 1, 5, event)">A. strict</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 1, 5, event)">B. old</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 1, 5, event)">C. funny</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 1, 8, event)">A. strict</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 1, 8, event)">B. old</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 1, 8, event)">C. funny</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -888,7 +894,7 @@
             <div class="quiz-item" data-quiz-id="2">
                 <p class="fw-bold">3. Oliver is ________. He always helps his mother.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 1, 5, event)">A. helpful</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 1, 5, event)">B. shy</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 1, 5, event)">C. polite</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 1, 8, event)">A. helpful</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 1, 8, event)">B. shy</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 1, 8, event)">C. polite</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -896,7 +902,7 @@
             <div class="quiz-item" data-quiz-id="3">
                 <p class="fw-bold">4. —Is your art teacher young? —________. She is 60 years old.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 5, event)">A. Yes, she is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 5, event)">B. No, she isn't</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 5, event)">C. No, she is</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. Yes, she is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. No, she isn't</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. No, she is</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -904,7 +910,31 @@
             <div class="quiz-item" data-quiz-id="4">
                 <p class="fw-bold">5. I have a ________ brother. He is only 3 years old.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 5, event)">A. old</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 5, event)">B. young</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 5, event)">C. kind</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. old</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. young</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. kind</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="5">
+                <p class="fw-bold">6. [学霸挑战] Ms. Wang is very ________. She works from morning to night.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 1, 8, event)">A. hard-working</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 1, 8, event)">B. helpful</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 1, 8, event)">C. polite</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="6">
+                <p class="fw-bold">7. [学霸挑战] Our new PE teacher is very strong, ________ he is very kind.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. and</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. but</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. or</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="7">
+                <p class="fw-bold">8. [学霸挑战] —Who is your favorite teacher? —________ Mr. Li. He is very funny.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. She is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. He is</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. It is</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1133,9 +1163,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(2, [{en:'Monday',cn:'星期一'},{en:'Tuesday',cn:'星期二'},{en:'Wednesday',cn:'星期三'},{en:'Thursday',cn:'星期四'},{en:'Friday',cn:'星期五'},{en:'Saturday',cn:'星期六'},{en:'Sunday',cn:'星期日'},{en:'weekend',cn:'周末'},{en:'wash my clothes',cn:'洗衣服'},{en:'watch TV',cn:'看电视'},{en:'do homework',cn:'做作业'},{en:'read books',cn:'看书'},{en:'play football',cn:'踢足球'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -1217,27 +1253,72 @@
                         <div class="quiz-item" data-quiz-id="0">
                             <p class="fw-bold">1. —What do you have on ________? —I have English and art.</p>
                             <div class="options">
-                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 3, event)">A. weekend</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 3, event)">B. Mondays</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 3, event)">C. often</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 8, event)">A. weekend</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 8, event)">B. Mondays</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 8, event)">C. often</button>
                             </div>
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="1">
                             <p class="fw-bold">2. —Do you often play football on Sundays? —________.</p>
                             <div class="options">
-                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 3, event)">A. Yes, I do</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 3, event)">B. Yes, I am</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 3, event)">C. No, I don't often</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. Yes, I do</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. Yes, I am</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 8, event)">C. No, I don't often</button>
                             </div>
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="2">
                             <p class="fw-bold">3. I often ________ on the weekend. My clothes are clean now.</p>
                             <div class="options">
-                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 2, 3, event)">A. watch TV</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 2, 3, event)">B. read books</button>
-                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 2, 3, event)">C. wash my clothes</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 2, 8, event)">A. watch TV</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 2, 8, event)">B. read books</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 2, 8, event)">C. wash my clothes</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="3">
+                            <p class="fw-bold">4. [学霸挑战] —What ________ you ________ on Sundays? —I often watch TV.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. do, do</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. are, doing</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 8, event)">C. does, do</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="4">
+                            <p class="fw-bold">5. [学霸挑战] We ________ have a football match on Wednesdays.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. sometimes</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. some times</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 8, event)">C. some time</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="5">
+                            <p class="fw-bold">6. [学霸挑战] I often play football ________ my friends on Saturdays.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. with</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. and</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 8, event)">C. in</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="6">
+                            <p class="fw-bold">7. [学霸挑战] —What do you do ________ the weekend? —I often wash my clothes.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 8, event)">A. in</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 8, event)">B. on</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 2, 8, event)">C. at</button>
+                            </div>
+                            <div class="feedback mt-2" style="display:none;"></div>
+                        </div>
+                        <div class="quiz-item" data-quiz-id="7">
+                            <p class="fw-bold">8. [学霸挑战] —Do you often read books in this park? —________. I like reading very much.</p>
+                            <div class="options">
+                                <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. Yes, I do</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. No, I don't</button>
+                                <button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 2, 8, event)">C. Yes, I am</button>
                             </div>
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
@@ -1246,9 +1327,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(3, [{en:'sandwich',cn:'三明治'},{en:'salad',cn:'沙拉'},{en:'hamburger',cn:'汉堡包'},{en:'ice cream',cn:'冰淇淋'},{en:'tea',cn:'茶'},{en:'fresh',cn:'新鲜的'},{en:'healthy',cn:'健康的'},{en:'delicious',cn:'美味的'},{en:'hot',cn:'辣的/热的'},{en:'sweet',cn:'甜的'},{en:'hungry',cn:'饿的'},{en:'thirsty',cn:'渴的'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -1566,7 +1653,7 @@
             <div class="quiz-item" data-quiz-id="0">
                 <p class="fw-bold">1. I'd like some ________. I'm thirsty.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 5, event)">A. tea</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 5, event)">B. bread</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 5, event)">C. salad</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. tea</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. bread</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. salad</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1574,7 +1661,7 @@
             <div class="quiz-item" data-quiz-id="1">
                 <p class="fw-bold">2. Vegetables are ________ for us.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 3, 5, event)">A. hot</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 3, 5, event)">B. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 3, 5, event)">C. healthy</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 3, 8, event)">A. hot</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 3, 8, event)">B. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 3, 8, event)">C. healthy</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1582,7 +1669,7 @@
             <div class="quiz-item" data-quiz-id="2">
                 <p class="fw-bold">3. —What ________ you like to eat? —A hamburger, please.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 5, event)">A. do</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 5, event)">B. would</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 5, event)">C. are</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 8, event)">A. do</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 8, event)">B. would</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 8, event)">C. are</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1590,7 +1677,7 @@
             <div class="quiz-item" data-quiz-id="3">
                 <p class="fw-bold">4. The ice cream is very ________.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 5, event)">A. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 5, event)">B. hot</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 5, event)">C. fresh</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. hot</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. fresh</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1598,7 +1685,31 @@
             <div class="quiz-item" data-quiz-id="4">
                 <p class="fw-bold">5. —What's your favourite ________? —Orange juice.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 5, event)">A. food</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 5, event)">B. drink</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 5, event)">C. fruit</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 8, event)">A. food</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 8, event)">B. drink</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 8, event)">C. fruit</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="5">
+                <p class="fw-bold">6. [学霸挑战] I'd like some ________. They are very healthy.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. vegetables</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. sandwich</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. water</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="6">
+                <p class="fw-bold">7. [学霸挑战] My favorite food is ice cream. It's ________.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 8, event)">A. hot</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 8, event)">B. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 8, event)">C. salty</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="7">
+                <p class="fw-bold">8. [学霸挑战] —What would you like to drink? —________ some grape juice, please.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. I'd like</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. I like</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. I have</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1608,9 +1719,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(4, [{en:'dance',cn:'跳舞'},{en:'sing English songs',cn:'唱英文歌'},{en:'play the pipa',cn:'弹琵琶'},{en:'do kung fu',cn:'打功夫'},{en:'draw cartoons',cn:'画漫画'},{en:'cook',cn:'烹饪'},{en:'swim',cn:'游泳'},{en:'play basketball',cn:'打篮球'},{en:'play ping-pong',cn:'打乒乓球'},{en:'speak English',cn:'说英语'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -1925,7 +2042,7 @@
             <div class="quiz-item" data-quiz-id="0">
                 <p class="fw-bold">1. I can play ________ pipa.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 4, 5, event)">A. /</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 4, 5, event)">B. a</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 4, 5, event)">C. the</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 4, 8, event)">A. /</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 4, 8, event)">B. a</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 4, 8, event)">C. the</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1933,7 +2050,7 @@
             <div class="quiz-item" data-quiz-id="1">
                 <p class="fw-bold">2. —Can you swim? —________. But I can dance.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 5, event)">A. Yes, I can</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 5, event)">B. No, I can't</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 5, event)">C. No, I don't</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 8, event)">A. Yes, I can</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 8, event)">B. No, I can't</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 8, event)">C. No, I don't</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1941,7 +2058,7 @@
             <div class="quiz-item" data-quiz-id="2">
                 <p class="fw-bold">3. What can you do ________ the party?</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 5, event)">A. for</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 5, event)">B. at</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 5, event)">C. on</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 8, event)">A. for</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 8, event)">B. at</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 8, event)">C. on</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1949,7 +2066,7 @@
             <div class="quiz-item" data-quiz-id="3">
                 <p class="fw-bold">4. I can ________ kung fu.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 5, event)">A. play</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 5, event)">B. do</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 5, event)">C. make</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 8, event)">A. play</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 8, event)">B. do</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 8, event)">C. make</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1957,7 +2074,31 @@
             <div class="quiz-item" data-quiz-id="4">
                 <p class="fw-bold">5. Robin ________ speak English and Chinese.</p>
                 <div class="options">
-                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 5, event)">A. is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 5, event)">B. can</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 5, event)">C. do</button>
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 8, event)">A. is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 8, event)">B. can</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 8, event)">C. do</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="5">
+                <p class="fw-bold">6. [学霸挑战] —Can you play ________ pipa? —Yes, I can.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 8, event)">A. the</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 8, event)">B. a</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 8, event)">C. /</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="6">
+                <p class="fw-bold">7. [学霸挑战] I can dance, ________ I can't draw cartoons.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 8, event)">A. and</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 8, event)">B. but</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 8, event)">C. so</button>
+                </div>
+                <div class="feedback mt-2" style="display:none;"></div>
+            </div>
+            
+            <div class="quiz-item" data-quiz-id="7">
+                <p class="fw-bold">8. [学霸挑战] —________ can you do for the party? —I can sing English songs.</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 8, event)">A. What</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 8, event)">B. Who</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 8, event)">C. Where</button>
                 </div>
                 <div class="feedback mt-2" style="display:none;"></div>
             </div>
@@ -1967,9 +2108,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(5, [{en:'clock',cn:'时钟'},{en:'plant',cn:'植物'},{en:'water bottle',cn:'水瓶'},{en:'bike',cn:'自行车'},{en:'photo',cn:'照片'},{en:'front',cn:'前面'},{en:'between',cn:'在...之间'},{en:'above',cn:'在...上方'},{en:'beside',cn:'在...旁边'},{en:'behind',cn:'在...后面'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -2353,9 +2500,15 @@
 
                 <div class="col-12 mb-5">
                     <div class="revision-zone shadow-sm animate__animated animate__fadeInUp">
-                        <div class="revision-header">
-                            <i class="bi bi-lightbulb-fill"></i>
-                            <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                        <div class="revision-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <h4 class="mb-0">高效复习区 (Efficient Revision Zone)</h4>
+                            </div>
+                            <button class="btn btn-sm btn-light rounded-pill px-3 fw-bold text-success" 
+                                    onclick="startVocabTest(6, [{en:'forest',cn:'森林'},{en:'river',cn:'河流'},{en:'lake',cn:'湖泊'},{en:'mountain',cn:'高山'},{en:'hill',cn:'小山'},{en:'tree',cn:'树木'},{en:'bridge',cn:'桥梁'},{en:'building',cn:'建筑物'},{en:'village',cn:'村庄'},{en:'house',cn:'房屋'}])">
+                                <i class="bi bi-patch-check"></i> 词汇达人挑战
+                            </button>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -2982,6 +3135,21 @@
 <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
 <audio id="audio-clapping" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
+<!-- 词汇测试模态框 -->
+<div class="modal fade" id="vocabModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success">🏆 词汇达人挑战</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4" id="vocabTestBody">
+                <!-- 测试内容将由 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 姓名设置模态框 -->
 <div class="modal fade" id="nameModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -3107,6 +3275,118 @@
     function updateScoreDisplay() {
         const scoreEl = document.getElementById('current-session-score');
         if (scoreEl) scoreEl.innerText = currentScore;
+    }
+
+    // --- 词汇测试功能 ---
+    let vocabTestState = {
+        currentUnit: 0,
+        questions: [],
+        currentIndex: 0,
+        score: 0
+    };
+
+    function startVocabTest(unitId, vocabList) {
+        vocabTestState.currentUnit = unitId;
+        // 从词汇表中随机选取 5 个单词进行测试
+        const shuffled = shuffleArray([...vocabList]);
+        vocabTestState.questions = shuffled.slice(0, 5).map(wordObj => {
+            // 生成干扰项
+            const distractors = vocabList
+                .filter(w => w.en !== wordObj.en)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 2);
+            
+            const options = shuffleArray([wordObj.en, ...distractors.map(d => d.en)]);
+            return {
+                cn: wordObj.cn,
+                en: wordObj.en,
+                options: options
+            };
+        });
+        vocabTestState.currentIndex = 0;
+        vocabTestState.score = 0;
+
+        const modal = new bootstrap.Modal(document.getElementById('vocabModal'));
+        modal.show();
+        showVocabQuestion();
+    }
+
+    function showVocabQuestion() {
+        const q = vocabTestState.questions[vocabTestState.currentIndex];
+        const body = document.getElementById('vocabTestBody');
+        
+        let optionsHtml = q.options.map(opt => `
+            <button class="btn btn-outline-success w-100 mb-2 py-2 rounded-pill vocab-option" 
+                    onclick="checkVocabAnswer(this, '${opt}', '${q.en}')">${opt}</button>
+        `).join('');
+
+        body.innerHTML = `
+            <div class="text-center mb-4">
+                <span class="badge bg-success-soft text-success mb-2">Question ${vocabTestState.currentIndex + 1}/5</span>
+                <h3 class="fw-bold mb-0">${q.cn}</h3>
+                <p class="text-muted small mt-2">请选择对应的英文单词</p>
+            </div>
+            <div class="vocab-options-container">
+                ${optionsHtml}
+            </div>
+            <div id="vocabFeedback" class="text-center mt-3" style="min-height: 24px;"></div>
+        `;
+    }
+
+    function checkVocabAnswer(btn, selected, correct) {
+        const feedback = document.getElementById('vocabFeedback');
+        const options = document.querySelectorAll('.vocab-option');
+        
+        // 禁用所有按钮
+        options.forEach(opt => opt.disabled = true);
+
+        if (selected === correct) {
+            btn.classList.replace('btn-outline-success', 'btn-success');
+            feedback.innerHTML = '<span class="text-success fw-bold">✨ 太棒了！正确！</span>';
+            vocabTestState.score += 20;
+            addScore(20, event); // 给总分加分
+        } else {
+            btn.classList.replace('btn-outline-success', 'btn-danger');
+            feedback.innerHTML = `<span class="text-danger fw-bold">❌ 记错了哦，正确答案是: ${correct}</span>`;
+            // 高亮正确答案
+            options.forEach(opt => {
+                if (opt.innerText === correct) opt.classList.replace('btn-outline-success', 'btn-success');
+            });
+        }
+
+        setTimeout(() => {
+            vocabTestState.currentIndex++;
+            if (vocabTestState.currentIndex < 5) {
+                showVocabQuestion();
+            } else {
+                showVocabResult();
+            }
+        }, 1500);
+    }
+
+    function showVocabResult() {
+        const body = document.getElementById('vocabTestBody');
+        let title = "继续加油哦！";
+        let icon = "📝";
+        if (vocabTestState.score === 100) { title = "词汇小达人！"; icon = "🏆"; }
+        else if (vocabTestState.score >= 60) { title = "表现不错！"; icon = "⭐"; }
+
+        body.innerHTML = `
+            <div class="text-center py-3">
+                <div class="display-1 mb-3">${icon}</div>
+                <h2 class="fw-bold text-success">${vocabTestState.score} 分</h2>
+                <h4 class="mb-4">${title}</h4>
+                <button class="btn btn-success rounded-pill px-5" data-bs-dismiss="modal">完成测试</button>
+            </div>
+        `;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
     
     function updateLeaderboard(name, score) {
