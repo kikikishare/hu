@@ -405,6 +405,64 @@
             right: 20px;
             z-index: 3000;
         }
+
+        /* 荣誉榜样式 */
+        .leaderboard-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            border: 3px solid #FFD54F;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        .leaderboard-table tr {
+            background: #FFFDE7;
+            transition: all 0.3s;
+        }
+        .leaderboard-table tr:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .leaderboard-table td {
+            padding: 15px;
+            border: none;
+        }
+        .leaderboard-table td:first-child {
+            border-radius: 15px 0 0 15px;
+            font-weight: bold;
+            width: 60px;
+            text-align: center;
+        }
+        .leaderboard-table td:last-child {
+            border-radius: 0 15px 15px 0;
+            text-align: right;
+            color: #F57C00;
+            font-weight: bold;
+        }
+        .rank-1 { background: linear-gradient(90deg, #FFD700, #FFF9C4) !important; }
+        .rank-2 { background: linear-gradient(90deg, #C0C0C0, #F5F5F5) !important; }
+        .rank-3 { background: linear-gradient(90deg, #CD7F32, #FFE0B2) !important; }
+        
+        .score-badge {
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        #student-name-display {
+            font-weight: bold;
+            color: #1976D2;
+            cursor: pointer;
+            text-decoration: underline dotted;
+        }
     </style>
 </head>
 <body>
@@ -422,6 +480,7 @@
     <ul class="nav nav-pills mb-4 justify-content-center bg-white p-2 rounded-pill shadow-sm sticky-top" style="top: 20px; z-index: 1000;" id="unitTabs" role="tablist">
         <li class="nav-item"><button class="nav-link active" id="tab-1" data-bs-toggle="pill" data-bs-target="#unit-1" type="button">Unit 1</button></li><li class="nav-item"><button class="nav-link " id="tab-2" data-bs-toggle="pill" data-bs-target="#unit-2" type="button">Unit 2</button></li><li class="nav-item"><button class="nav-link " id="tab-3" data-bs-toggle="pill" data-bs-target="#unit-3" type="button">Unit 3</button></li><li class="nav-item"><button class="nav-link " id="tab-4" data-bs-toggle="pill" data-bs-target="#unit-4" type="button">Unit 4</button></li><li class="nav-item"><button class="nav-link " id="tab-5" data-bs-toggle="pill" data-bs-target="#unit-5" type="button">Unit 5</button></li><li class="nav-item"><button class="nav-link " id="tab-6" data-bs-toggle="pill" data-bs-target="#unit-6" type="button">Unit 6</button></li>
         <li class="nav-item"><button class="nav-link" id="tab-comp" data-bs-toggle="pill" data-bs-target="#composition-zone" type="button">📝 作文天地</button></li>
+        <li class="nav-item"><button class="nav-link" id="tab-rank" data-bs-toggle="pill" data-bs-target="#leaderboard-zone" type="button">🏆 荣誉榜</button></li>
     </ul>
 
     <div class="tab-content" id="unitTabContent">
@@ -2798,6 +2857,38 @@
             </div>
         </div>
         
+        <div class="tab-pane fade" id="leaderboard-zone" role="tabpanel">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="leaderboard-card animate__animated animate__fadeIn">
+                        <div class="text-center mb-4">
+                            <h2 class="text-warning">🏆 英语挑战荣誉榜</h2>
+                            <p class="text-muted">比一比，看谁是今天的英语小达人！</p>
+                            <div class="mt-3">
+                                <span>当前学生: <span id="student-name-display" onclick="changeStudentName()">点击设置姓名</span></span>
+                                <div class="score-badge">累计得分: <span id="current-session-score">0</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="leaderboard-table">
+                                <tbody id="leaderboard-body">
+                                    <!-- 排行榜内容将通过 JS 动态加载 -->
+                                    <tr>
+                                        <td colspan="3" class="text-center py-5 text-muted">暂无记录，快去开始挑战吧！</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-danger btn-sm" onclick="clearLeaderboard()">重置排行榜</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 
@@ -2814,6 +2905,147 @@
 <script>
     const unitProgress = {};
     const encouragingWords = ["太棒了！", "真聪明！", "你太牛了！", "继续加油！", "完美！", "英语小达人！"];
+    
+    // 排行榜相关逻辑
+    let currentUser = localStorage.getItem('pep5_current_user') || '未命名学生';
+    let currentScore = 0;
+    
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        updateUserDisplay();
+        loadLeaderboard();
+        
+        // 监听标签切换
+        const rankTab = document.getElementById('tab-rank');
+        if (rankTab) {
+            rankTab.addEventListener('shown.bs.tab', () => {
+                loadLeaderboard();
+            });
+        }
+        
+        // 检查是否有存储的当次分数（可选，目前每次刷新归零或从localStorage读取）
+        // 这里设计为单次会话累积，刷新页面重置当次分数，但排行榜记录历史最高
+    });
+
+    function updateUserDisplay() {
+        const display = document.getElementById('student-name-display');
+        if (display) display.innerText = currentUser;
+    }
+
+    function changeStudentName() {
+        const newName = prompt("请输入你的名字：", currentUser);
+        if (newName && newName.trim() !== "") {
+            currentUser = newName.trim();
+            localStorage.setItem('pep5_current_user', currentUser);
+            updateUserDisplay();
+            // 切换用户后重置当前临时得分
+            currentScore = 0;
+            updateScoreDisplay();
+            showToast(`欢迎你，${currentUser}！开始挑战吧！`);
+        }
+    }
+    
+    function addScore(points) {
+        if (currentUser === '未命名学生') {
+            const newName = prompt("太棒了！你得得分了，请输入你的名字来记录成绩：");
+            if (newName && newName.trim() !== "") {
+                currentUser = newName.trim();
+                localStorage.setItem('pep5_current_user', currentUser);
+                updateUserDisplay();
+            }
+        }
+        
+        currentScore += points;
+        updateScoreDisplay();
+        
+        // 增加得分动画效果
+        const scoreBadge = document.querySelector('.score-badge');
+        scoreBadge.classList.add('animate__animated', 'animate__pulse');
+        setTimeout(() => scoreBadge.classList.remove('animate__animated', 'animate__pulse'), 1000);
+        
+        // 更新排行榜数据
+        updateLeaderboard(currentUser, currentScore);
+    }
+    
+    function updateScoreDisplay() {
+        const scoreEl = document.getElementById('current-session-score');
+        if (scoreEl) scoreEl.innerText = currentScore;
+    }
+    
+    function updateLeaderboard(name, score) {
+        let leaderboard = JSON.parse(localStorage.getItem('pep5_leaderboard') || '[]');
+        
+        // 查找该用户是否已有记录
+        const existingIndex = leaderboard.findIndex(item => item.name === name);
+        
+        if (existingIndex !== -1) {
+            // 如果新分数更高，则更新
+            if (score > leaderboard[existingIndex].score) {
+                leaderboard[existingIndex].score = score;
+                leaderboard[existingIndex].date = new Date().toLocaleDateString();
+            }
+        } else {
+            // 新用户记录
+            leaderboard.push({
+                name: name,
+                score: score,
+                date: new Date().toLocaleDateString()
+            });
+        }
+        
+        // 排序：分数降序
+        leaderboard.sort((a, b) => b.score - a.score);
+        
+        // 只保留前10名
+        leaderboard = leaderboard.slice(0, 10);
+        
+        localStorage.setItem('pep5_leaderboard', JSON.stringify(leaderboard));
+        loadLeaderboard();
+    }
+    
+    function loadLeaderboard() {
+        const tbody = document.getElementById('leaderboard-body');
+        if (!tbody) return;
+        
+        const leaderboard = JSON.parse(localStorage.getItem('pep5_leaderboard') || '[]');
+        
+        if (leaderboard.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-5 text-muted">暂无记录，快去开始挑战吧！</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        leaderboard.forEach((item, index) => {
+            let rankClass = '';
+            let rankIcon = '';
+            
+            if (index === 0) { rankClass = 'rank-1'; rankIcon = '🥇 '; }
+            else if (index === 1) { rankClass = 'rank-2'; rankIcon = '🥈 '; }
+            else if (index === 2) { rankClass = 'rank-3'; rankIcon = '🥉 '; }
+            else { rankIcon = `${index + 1}. `; }
+            
+            html += `
+                <tr class="${rankClass}">
+                    <td>${rankIcon}</td>
+                    <td>
+                        <div class="fw-bold">${item.name}</div>
+                        <small class="text-muted">${item.date}</small>
+                    </td>
+                    <td>${item.score} 分</td>
+                </tr>
+            `;
+        });
+        
+        tbody.innerHTML = html;
+    }
+    
+    function clearLeaderboard() {
+        if (confirm("确定要清空排行榜吗？此操作不可撤销。")) {
+            localStorage.removeItem('pep5_leaderboard');
+            loadLeaderboard();
+            showToast("排行榜已重置", "warning");
+        }
+    }
 
     function showToast(message, type = 'success') {
         const toastContainer = document.getElementById('toast-container');
@@ -2897,6 +3129,7 @@
             btn.className = 'btn btn-success text-start text-white';
             showToast("回答正确！🎉", "success");
             document.getElementById('audio-correct').play();
+            addScore(10); // 竞技场正确加10分
         } else {
             btn.className = 'btn btn-danger text-start text-white';
             buttons.forEach(b => {
@@ -2976,6 +3209,7 @@
                         btn.innerText = '✅ ' + word;
                         state.correctCount++;
                         document.getElementById('audio-correct').play();
+                        addScore(5); // 语音挑战每题5分
                     } else {
                         btn.style.background = '#FFCDD2';
                         btn.innerText = '❌ ' + word;
@@ -3011,6 +3245,7 @@
         if (selected === correct) {
             btn.classList.add('correct');
             unitProgress[unitId]++;
+            addScore(5); // 普通练习每题5分
             
             // 播放音效
             document.getElementById('audio-correct').play();
