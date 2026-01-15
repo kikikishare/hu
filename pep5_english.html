@@ -3248,15 +3248,15 @@
 
     function startVocabTest(unitId, vocabList) {
         vocabTestState.currentUnit = unitId;
-        const targetCount = 20;
+        const targetCount = 10;
         
-        // 如果词汇量不足 20，则循环补充直到达到 20 个
+        // 如果词汇量不足 10，则循环补充直到达到 10 个
         let testList = [...vocabList];
         while (testList.length < targetCount) {
             testList = testList.concat(vocabList);
         }
         
-        // 从补充后的词汇表中随机选取 20 个单词进行测试
+        // 从补充后的词汇表中随机选取 10 个单词进行测试
         const shuffled = shuffleArray(testList).slice(0, targetCount);
         
         vocabTestState.questions = shuffled.map(wordObj => {
