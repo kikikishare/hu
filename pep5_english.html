@@ -3169,17 +3169,19 @@
     // 语音引擎优化
     let preferredVoice = null;
     function initVoices() {
-        if (!('speechSynthesis' in window)) return;
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            // 优先选择高质量美式女声：Google US English, Samantha (macOS), 或其他美式英语
-            preferredVoice = voices.find(v => v.name.includes('Google US English')) || 
-                             voices.find(v => v.name.includes('Samantha')) ||
-                             voices.find(v => v.lang === 'en-US' && v.name.includes('Female')) ||
-                             voices.find(v => v.lang === 'en-US');
-            console.log("Selected voice:", preferredVoice ? preferredVoice.name : "Default");
-        }
-    }
+         if (!('speechSynthesis' in window)) return;
+         const voices = window.speechSynthesis.getVoices();
+         if (voices.length > 0) {
+             // 优先选择高质量美式男声：Alex (Mac经典), Google US English (Male), 或其他美式英语男声
+             preferredVoice = voices.find(v => v.name.includes('Alex')) || 
+                              voices.find(v => v.name.includes('Google US English') && v.name.includes('Male')) ||
+                              voices.find(v => v.name.includes('Microsoft David')) ||
+                              voices.find(v => v.lang === 'en-US' && v.name.includes('Male')) ||
+                              voices.find(v => v.name.includes('Google US English')) || 
+                              voices.find(v => v.lang === 'en-US');
+             console.log("Selected voice:", preferredVoice ? preferredVoice.name : "Default");
+         }
+     }
     if ('speechSynthesis' in window) {
         window.speechSynthesis.onvoiceschanged = initVoices;
         initVoices();
