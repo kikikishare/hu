@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEP英语五年级上册复习助手</title>
+    <title>CAT English Lab - PEP英语五年级上册复习助手</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
@@ -28,12 +28,23 @@
         .header {
             background: linear-gradient(135deg, #4FC3F7, #64B5F6);
             color: white;
-            padding: 3rem 0;
+            padding: 5rem 0;
             text-align: center;
             margin-bottom: 2rem;
             box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .core-description {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 800px;
         }
         .flashcard {
             height: 140px;
@@ -472,8 +483,18 @@
 <div id="feedback-pop" class="feedback-pop animate__animated">🎉</div>
 
 <div class="header">
-    <h1 class="animate__animated animate__bounceIn">📚 Catherine的英语课堂</h1>
-    <p>—— PEP英语五年级上册复习助手 ——</p>
+    <div class="container">
+        <h1 class="animate__animated animate__bounceIn display-4 fw-bold">🌟 CAT English Lab</h1>
+        <h2 class="animate__animated animate__fadeInDown h3 mt-3">Learn Smart. Speak Strong.</h2>
+        <p class="lead mt-4 mb-4">
+            An English lab where listening leads to confident speaking.<br>
+            <span class="small opacity-75">一个用方法训练听力、用练习打造表达力的英语学习空间</span>
+        </p>
+        <div class="core-description mt-4 animate__animated animate__fadeInUp animate__delay-1s">
+            <p class="mb-1">Designed by Ms Hu (Catherine) for Grade 5 learners.</p>
+            <p class="mb-0">Built to help students listen carefully, think clearly, and speak confidently.</p>
+        </div>
+    </div>
 </div>
 
 <div class="container">
