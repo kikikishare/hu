@@ -346,6 +346,59 @@
         }
         .arena-header i { font-size: 1.5rem; margin-right: 10px; }
 
+        /* 作文天地样式 */
+        .composition-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid #E3F2FD;
+            transition: transform 0.3s;
+        }
+        .composition-card:hover {
+            transform: translateY(-5px);
+        }
+        .composition-title {
+            color: #1976D2;
+            font-weight: bold;
+            border-bottom: 2px solid #BBDEFB;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .composition-text {
+            line-height: 2;
+            font-size: 1.1rem;
+            color: #455A64;
+        }
+        .sentence-item {
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 5px;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .sentence-item:hover {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        .full-read-btn {
+            background: #E3F2FD;
+            color: #1976D2;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .full-read-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
         .toast-container {
             position: fixed;
             top: 20px;
@@ -368,6 +421,7 @@
 <div class="container">
     <ul class="nav nav-pills mb-4 justify-content-center bg-white p-2 rounded-pill shadow-sm sticky-top" style="top: 20px; z-index: 1000;" id="unitTabs" role="tablist">
         <li class="nav-item"><button class="nav-link active" id="tab-1" data-bs-toggle="pill" data-bs-target="#unit-1" type="button">Unit 1</button></li><li class="nav-item"><button class="nav-link " id="tab-2" data-bs-toggle="pill" data-bs-target="#unit-2" type="button">Unit 2</button></li><li class="nav-item"><button class="nav-link " id="tab-3" data-bs-toggle="pill" data-bs-target="#unit-3" type="button">Unit 3</button></li><li class="nav-item"><button class="nav-link " id="tab-4" data-bs-toggle="pill" data-bs-target="#unit-4" type="button">Unit 4</button></li><li class="nav-item"><button class="nav-link " id="tab-5" data-bs-toggle="pill" data-bs-target="#unit-5" type="button">Unit 5</button></li><li class="nav-item"><button class="nav-link " id="tab-6" data-bs-toggle="pill" data-bs-target="#unit-6" type="button">Unit 6</button></li>
+        <li class="nav-item"><button class="nav-link" id="tab-comp" data-bs-toggle="pill" data-bs-target="#composition-zone" type="button">📝 作文天地</button></li>
     </ul>
 
     <div class="tab-content" id="unitTabContent">
@@ -2594,6 +2648,150 @@
                                     <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?')">🔊</button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="composition-zone" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card p-4 border-0 shadow-sm bg-gradient text-white" style="background: linear-gradient(135deg, #1976D2, #64B5F6);">
+                        <h3 class="mb-2">📝 五年级英语作文天地</h3>
+                        <p class="mb-0">点击整篇朗读，或点击单词、句子进行逐句跟读复习。</p>
+                    </div>
+                </div>
+
+                <!-- 1. 交友：介绍自己 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp">
+                        <div class="composition-title">
+                            <span>1. 交友：介绍自己</span>
+                            <button class="full-read-btn" onclick="speak('Dear Betty, How are you? I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. I can do some kung fu and play basketball. I often do some kung fu on the weekend. My favourite food is dumplings. They are delicious. My favourite drink is tea. How about you? Yours, Jim')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text">
+                            <span class="sentence-item" onclick="speak('Dear Betty,')">Dear Betty,</span><br>
+                            <span class="sentence-item" onclick="speak('How are you?')">How are you?</span>
+                            <span class="sentence-item" onclick="speak('I want to be your friend.')">I want to be your friend.</span>
+                            <span class="sentence-item" onclick="speak('I am Jim.')">I'm Jim.</span>
+                            <span class="sentence-item" onclick="speak('I am eleven years old.')">I'm eleven years old.</span>
+                            <span class="sentence-item" onclick="speak('I am tall and thin.')">I'm tall and thin.</span>
+                            <span class="sentence-item" onclick="speak('I am hard-working.')">I'm hard-working.</span>
+                            <span class="sentence-item" onclick="speak('I can do some kung fu and play basketball.')">I can do some kung fu and play basketball.</span>
+                            <span class="sentence-item" onclick="speak('I often do some kung fu on the weekend.')">I often do some kung fu on the weekend.</span>
+                            <span class="sentence-item" onclick="speak('My favourite food is dumplings.')">My favourite food is dumplings.</span>
+                            <span class="sentence-item" onclick="speak('They are delicious.')">They're delicious.</span>
+                            <span class="sentence-item" onclick="speak('My favourite drink is tea.')">My favourite drink is tea.</span>
+                            <span class="sentence-item" onclick="speak('How about you?')">How about you?</span><br>
+                            <span class="sentence-item" onclick="speak('Yours, Jim')">Yours, Jim</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 交友：介绍周末活动 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                        <div class="composition-title">
+                            <span>2. 交友：介绍周末活动</span>
+                            <button class="full-read-btn" onclick="speak('Dear Amy, Hello, I am Lucy. I do not go to school on the weekend. I often have an art class on Saturdays. I like drawing pictures. I often go to the park with my parents on Sundays. We often have a picnic there. I am always happy. I like my weekend. Yours, Lucy')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text">
+                            <span class="sentence-item" onclick="speak('Dear Amy,')">Dear Amy,</span><br>
+                            <span class="sentence-item" onclick="speak('Hello, I am Lucy.')">Hello, I'm Lucy.</span>
+                            <span class="sentence-item" onclick="speak('I do not go to school on the weekend.')">I don't go to school on the weekend.</span>
+                            <span class="sentence-item" onclick="speak('I often have an art class on Saturdays.')">I often have an art class on Saturdays.</span>
+                            <span class="sentence-item" onclick="speak('I like drawing pictures.')">I like drawing pictures.</span>
+                            <span class="sentence-item" onclick="speak('I often go to the park with my parents on Sundays.')">I often go to the park with my parents on Sundays.</span>
+                            <span class="sentence-item" onclick="speak('We often have a picnic there.')">We often have a picnic there.</span>
+                            <span class="sentence-item" onclick="speak('I am always happy.')">I'm always happy.</span>
+                            <span class="sentence-item" onclick="speak('I like my weekend.')">I like my weekend.</span><br>
+                            <span class="sentence-item" onclick="speak('Yours, Lucy')">Yours, Lucy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 描述自然公园 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="composition-title">
+                            <span>3. 描述自然公园</span>
+                            <button class="full-read-btn" onclick="speak('The Nature Park. There is a nature park near my home. There are many hills and a long river in the nature park. There is a bridge over the river. There are some ducks on the river. We can go boating on the river. There are many trees beside the river. What a beautiful nature park!')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text text-center">
+                            <strong class="sentence-item d-block mb-2" onclick="speak('The Nature Park')">The Nature Park</strong>
+                            <span class="sentence-item" onclick="speak('There is a nature park near my home.')">There is a nature park near my home.</span>
+                            <span class="sentence-item" onclick="speak('There are many hills and a long river in the nature park.')">There are many hills and a long river in the nature park.</span>
+                            <span class="sentence-item" onclick="speak('There is a bridge over the river.')">There is a bridge over the river.</span>
+                            <span class="sentence-item" onclick="speak('There are some ducks on the river.')">There are some ducks on the river.</span>
+                            <span class="sentence-item" onclick="speak('We can go boating on the river.')">We can go boating on the river.</span>
+                            <span class="sentence-item" onclick="speak('There are many trees beside the river.')">There are many trees beside the river.</span>
+                            <span class="sentence-item" onclick="speak('What a beautiful nature park!')">What a beautiful nature park!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. 交友：介绍自己的房间 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                        <div class="composition-title">
+                            <span>4. 交友：介绍自己的房间</span>
+                            <button class="full-read-btn" onclick="speak('Dear Sally, This is my bedroom. It is small but nice. There is a small bed, a desk and a chair. There is a clock on the wall. There is a doll on my bed. There are some books and a photo on the shelf. There is a computer and a plant on the desk. My bag is on the floor. I often read books in my bedroom. I like my bedroom very much. Yours, Rita')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text">
+                            <span class="sentence-item" onclick="speak('Dear Sally,')">Dear Sally,</span><br>
+                            <span class="sentence-item" onclick="speak('This is my bedroom.')">This is my bedroom.</span>
+                            <span class="sentence-item" onclick="speak('It is small but nice.')">It's small but nice.</span>
+                            <span class="sentence-item" onclick="speak('There is a small bed, a desk and a chair.')">There is a small bed, a desk and a chair.</span>
+                            <span class="sentence-item" onclick="speak('There is a clock on the wall.')">There is a clock on the wall.</span>
+                            <span class="sentence-item" onclick="speak('There is a doll on my bed.')">There is a doll on my bed.</span>
+                            <span class="sentence-item" onclick="speak('There are some books and a photo on the shelf.')">There are some books and a photo on the shelf.</span>
+                            <span class="sentence-item" onclick="speak('There is a computer and a plant on the desk.')">There is a computer and a plant on the desk.</span>
+                            <span class="sentence-item" onclick="speak('My bag is on the floor.')">My bag is on the floor.</span>
+                            <span class="sentence-item" onclick="speak('I often read books in my bedroom.')">I often read books in my bedroom.</span>
+                            <span class="sentence-item" onclick="speak('I like my bedroom very much.')">I like my bedroom very much.</span><br>
+                            <span class="sentence-item" onclick="speak('Yours, Rita')">Yours, Rita</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 描述最喜爱的老师 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                        <div class="composition-title">
+                            <span>5. 描述最喜爱的老师</span>
+                            <button class="full-read-btn" onclick="speak('My favourite teacher. Hello, I am Tom. I have many teachers at school. But my favourite teacher is Mr Liu. Mr Liu is my PE teacher. He has big eyes. He is tall and thin. He is young. He likes playing sports. He is nice. I like him very much.')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text">
+                            <strong class="sentence-item d-block mb-2 text-center" onclick="speak('My favourite teacher')">My favourite teacher</strong>
+                            <span class="sentence-item" onclick="speak('Hello, I am Tom.')">Hello, I'm Tom.</span>
+                            <span class="sentence-item" onclick="speak('I have many teachers at school.')">I have many teachers at school.</span>
+                            <span class="sentence-item" onclick="speak('But my favourite teacher is Mr Liu.')">But my favourite teacher is Mr Liu.</span>
+                            <span class="sentence-item" onclick="speak('Mr Liu is my PE teacher.')">Mr Liu is my PE teacher.</span>
+                            <span class="sentence-item" onclick="speak('He has big eyes.')">He has big eyes.</span>
+                            <span class="sentence-item" onclick="speak('He is tall and thin.')">He is tall and thin.</span>
+                            <span class="sentence-item" onclick="speak('He is young.')">He is young.</span>
+                            <span class="sentence-item" onclick="speak('He likes playing sports.')">He likes playing sports.</span>
+                            <span class="sentence-item" onclick="speak('He is nice.')">He is nice.</span>
+                            <span class="sentence-item" onclick="speak('I like him very much.')">I like him very much.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. 介绍周末的活动 -->
+                <div class="col-md-6">
+                    <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                        <div class="composition-title">
+                            <span>6. 介绍周末的活动</span>
+                            <button class="full-read-btn" onclick="speak('My weekend. I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊 全文朗读</button>
+                        </div>
+                        <div class="composition-text">
+                            <strong class="sentence-item d-block mb-2 text-center" onclick="speak('My weekend')">My weekend</strong>
+                            <span class="sentence-item" onclick="speak('I am always busy on the weekend.')">I'm always busy on the weekend.</span>
+                            <span class="sentence-item" onclick="speak('On Saturdays, I often do my homework in the morning.')">On Saturdays, I often do my homework in the morning.</span>
+                            <span class="sentence-item" onclick="speak('In the afternoon, I often play football with my friends in the park.')">In the afternoon, I often play football with my friends in the park.</span>
+                            <span class="sentence-item" onclick="speak('On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.')">On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.</span>
+                            <span class="sentence-item" onclick="speak('I like my weekends.')">I like my weekends.</span>
                         </div>
                     </div>
                 </div>
