@@ -3287,10 +3287,19 @@
 
     function startVocabTest(unitId, vocabList) {
         vocabTestState.currentUnit = unitId;
-        // 从词汇表中随机选取 5 个单词进行测试
-        const shuffled = shuffleArray([...vocabList]);
-        vocabTestState.questions = shuffled.slice(0, 5).map(wordObj => {
-            // 生成干扰项
+        const targetCount = 20;
+        
+        // 如果词汇量不足 20，则循环补充直到达到 20 个
+        let testList = [...vocabList];
+        while (testList.length < targetCount) {
+            testList = testList.concat(vocabList);
+        }
+        
+        // 从补充后的词汇表中随机选取 20 个单词进行测试
+        const shuffled = shuffleArray(testList).slice(0, targetCount);
+        
+        vocabTestState.questions = shuffled.map(wordObj => {
+            // 生成干扰项 (从原始词汇表中选取，避免选项重复)
             const distractors = vocabList
                 .filter(w => w.en !== wordObj.en)
                 .sort(() => 0.5 - Math.random())
@@ -3314,6 +3323,7 @@
     function showVocabQuestion() {
         const q = vocabTestState.questions[vocabTestState.currentIndex];
         const body = document.getElementById('vocabTestBody');
+        const total = vocabTestState.questions.length;
         
         let optionsHtml = q.options.map(opt => `
             <button class="btn btn-outline-success w-100 mb-2 py-2 rounded-pill vocab-option" 
@@ -3322,7 +3332,7 @@
 
         body.innerHTML = `
             <div class="text-center mb-4">
-                <span class="badge bg-success-soft text-success mb-2">Question ${vocabTestState.currentIndex + 1}/5</span>
+                <span class="badge bg-success-soft text-success mb-2">Question ${vocabTestState.currentIndex + 1}/${total}</span>
                 <h3 class="fw-bold mb-0">${q.cn}</h3>
                 <p class="text-muted small mt-2">请选择对应的英文单词</p>
             </div>
@@ -3336,6 +3346,8 @@
     function checkVocabAnswer(btn, selected, correct) {
         const feedback = document.getElementById('vocabFeedback');
         const options = document.querySelectorAll('.vocab-option');
+        const total = vocabTestState.questions.length;
+        const pointsPerQuestion = Math.floor(100 / total);
         
         // 禁用所有按钮
         options.forEach(opt => opt.disabled = true);
@@ -3343,8 +3355,8 @@
         if (selected === correct) {
             btn.classList.replace('btn-outline-success', 'btn-success');
             feedback.innerHTML = '<span class="text-success fw-bold">✨ 太棒了！正确！</span>';
-            vocabTestState.score += 20;
-            addScore(20, event); // 给总分加分
+            vocabTestState.score += pointsPerQuestion;
+            addScore(pointsPerQuestion, event); // 给总分加分
         } else {
             btn.classList.replace('btn-outline-success', 'btn-danger');
             feedback.innerHTML = `<span class="text-danger fw-bold">❌ 记错了哦，正确答案是: ${correct}</span>`;
@@ -3356,7 +3368,7 @@
 
         setTimeout(() => {
             vocabTestState.currentIndex++;
-            if (vocabTestState.currentIndex < 5) {
+            if (vocabTestState.currentIndex < total) {
                 showVocabQuestion();
             } else {
                 showVocabResult();
