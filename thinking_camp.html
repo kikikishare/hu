@@ -432,13 +432,24 @@
 
     // 全局点击发音监听
     document.addEventListener('click', (e) => {
+        // 任何点击都尝试恢复语音引擎
+        if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+
         // 1. 案件线索文本
         const clueText = e.target.closest('.clue-text-content');
         if (clueText && !e.target.closest('.btn-play-clue')) {
             const btn = clueText.parentElement.querySelector('.btn-play-clue');
             if (btn) {
-                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
-                if (match && match[1]) speak(match[1]);
+                const onclickAttr = btn.getAttribute('onclick');
+                if (onclickAttr) {
+                    const match = onclickAttr.match(/speak\(['"](.*)['"]\)/);
+                    if (match && match[1]) {
+                        const text = match[1].replace(/\\'/g, "'").replace(/\\"/g, '"');
+                        speak(text);
+                    }
+                }
             }
         }
     });
@@ -446,6 +457,13 @@
     function speak(text) {
         if (!text) return;
         
+        // 1. 尝试自动恢复语音引擎
+        if ('speechSynthesis' in window) {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+        }
+
         // 如果未解锁，尝试自动解锁（由用户点击触发）
         if (!voiceUnlocked) {
             unlockVoice();
@@ -470,25 +488,28 @@
             fallbackAudio = null;
         }
 
-        // 生成新的请求 ID
+        // 2. 生成新的请求 ID
         const currentId = ++lastSpeakId;
 
         const cleanText = text.replace(/<[^>]*>/g, '').trim(); // 移除 HTML 标签
         
         if ('speechSynthesis' in window) {
+            // 3. 立即停止当前发音
             try {
                 window.speechSynthesis.cancel();
-                if (isAndroid && window.speechSynthesis.paused) window.speechSynthesis.resume();
             } catch (e) {}
 
-            const delay = isAndroid ? 250 : (isIOS ? 10 : 20);
-            speakTimeout = setTimeout(() => {
-                // 只有当这是最新的请求时才执行
-                if (currentId === lastSpeakId) {
-                    executeSpeak(cleanText, currentId);
-                }
-                speakTimeout = null;
-            }, delay);
+            // 针对不同平台设置不同的执行策略
+            if (!isAndroid) {
+                executeSpeak(cleanText, currentId);
+            } else {
+                speakTimeout = setTimeout(() => {
+                    if (currentId === lastSpeakId) {
+                        executeSpeak(cleanText, currentId);
+                    }
+                    speakTimeout = null;
+                }, 250);
+            }
         } else {
             speakFallback(cleanText, currentId);
         }
@@ -526,6 +547,9 @@
                 }
             };
 
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             window.speechSynthesis.speak(utterance);
 
             if (isAndroid) {
