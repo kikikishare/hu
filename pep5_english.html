@@ -250,6 +250,9 @@
             cursor: pointer;
             border: 1px dashed var(--secondary-color);
             transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .puzzle-item:hover { background: #FFF3E0; transform: scale(1.02); }
         .puzzle-item.used { opacity: 0.5; cursor: not-allowed; text-decoration: line-through; }
@@ -941,7 +944,14 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-1">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm eleven years old.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">How about you?</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm tall and thin.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite drink is tea.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I want to be your friend.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm Jim.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm hard-working.</div><div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite food is dumplings.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm eleven years old. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am eleven years old.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">How about you? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('How about you?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm tall and thin. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am tall and thin.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite drink is tea. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite drink is tea.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I want to be your friend. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I want to be your friend.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm Jim. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am Jim.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm hard-working. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am hard-working.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite food is dumplings. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite food is dumplings.')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-1"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(1)">🔄 重置拼图</button>
@@ -1311,12 +1321,12 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-2">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm always busy on the weekend.</div>
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Saturdays, I often do my homework in the morning.</div>
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">In the afternoon, I often play football with my friends.</div>
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Sundays, I usually visit my grandparents.</div>
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often watch TV with my parents in the afternoon.</div>
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like my weekends.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm always busy on the weekend. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am always busy on the weekend.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Saturdays, I often do my homework in the morning. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('On Saturdays, I often do my homework in the morning.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">In the afternoon, I often play football with my friends. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('In the afternoon, I often play football with my friends.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Sundays, I usually visit my grandparents. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('On Sundays, I usually visit my grandparents.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often watch TV with my parents in the afternoon. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I often watch TV with my parents in the afternoon.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like my weekends. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like my weekends.')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-2"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(2)">🔄 重置拼图</button>
@@ -1691,7 +1701,14 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-3">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like salad, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">I don't like beef but chicken is OK.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like grapes best.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">My favourite food is sandwich.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">It is very fresh.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">What's your favourite food and drink?</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">It's healthy and delicious.</div><div class="puzzle-item" onclick="addToPuzzle(this, 3)">They are sweet and purple.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like salad, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like salad, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I don't like beef but chicken is OK. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I do not like beef but chicken is OK.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like grapes best. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like grapes best.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">My favourite food is sandwich. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite food is sandwich.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">It is very fresh. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is very fresh.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">What's your favourite food and drink? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What is your favourite food and drink?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">It's healthy and delicious. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is healthy and delicious.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">They are sweet and purple. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('They are sweet and purple.')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-3"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(3)">🔄 重置拼图</button>
@@ -2067,7 +2084,14 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-4">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can do some kung fu, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can clean the room and wash my clothes.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I am helpful at home.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can speak English and Chinese.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can cook delicious food for my parents.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">But I can't swim.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">I want to be great.</div><div class="puzzle-item" onclick="addToPuzzle(this, 4)">Can you help me?</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can do some kung fu, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can do some kung fu, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can clean the room and wash my clothes. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can clean the room and wash my clothes.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I am helpful at home. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am helpful at home.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can speak English and Chinese. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can speak English and Chinese.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can cook delicious food for my parents. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can cook delicious food for my parents.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">But I can't swim. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('But I cannot swim.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I want to be great. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I want to be great.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">Can you help me? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Can you help me?')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-4"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(4)">🔄 重置拼图</button>
@@ -2446,7 +2470,14 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-5">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There are two plants on the desk.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">I like my room very much.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a big bed.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">This is my room.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">My computer is on the desk, too.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a clock above the bed.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">It is small but very nice.</div><div class="puzzle-item" onclick="addToPuzzle(this, 5)">Beside the bed, there is a desk.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There are two plants on the desk. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are two plants on the desk.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">I like my room very much. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like my room very much.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a big bed. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a big bed.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">This is my room. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('This is my room.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">My computer is on the desk, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My computer is on the desk, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a clock above the bed. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a clock above the bed.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">It is small but very nice. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is small but very nice.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">Beside the bed, there is a desk. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Beside the bed, there is a desk.')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-5"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(5)">🔄 重置拼图</button>
@@ -2809,7 +2840,14 @@
                             <div class="col-md-6 mb-3">
                                 <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
                                 <div class="puzzle-pool" id="pool-6">
-                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a high mountain near the lake.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a lake in the park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many trees in the park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">The water is clean.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many ducks on the lake.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">Do you like my nature park?</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">This is my nature park.</div><div class="puzzle-item" onclick="addToPuzzle(this, 6)">It is so big and beautiful.</div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a high mountain near the lake. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a high mountain near the lake.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a lake in the park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a lake in the park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many trees in the park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are many trees in the park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">The water is clean. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('The water is clean.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many ducks on the lake. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are many ducks on the lake.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">Do you like my nature park? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Do you like my nature park?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">This is my nature park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('This is my nature park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">It is so big and beautiful. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is so big and beautiful.')">🔊</button></div>
                                 </div>
                                 <div class="puzzle-box mt-3" id="box-6"></div>
                                 <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(6)">🔄 重置拼图</button>
