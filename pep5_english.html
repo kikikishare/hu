@@ -3501,46 +3501,56 @@
     let voiceUnlocked = false;
 
     function unlockVoice() {
-        if (!('speechSynthesis' in window)) return;
+        if (!('speechSynthesis' in window)) {
+            alert("抱歉，您的浏览器不支持语音功能，请尝试使用 Chrome 浏览器。");
+            return;
+        }
         
-        // 安卓/iOS 核心修复：必须在点击事件的第一时间创建并播放一段非空内容
-        // 哪怕是一声“Hello”，只要能打破浏览器的静默策略
-        const msg = new SpeechSynthesisUtterance('Hello');
-        msg.volume = 0; // 即使静音播放也能解锁
+        // 1. 确保引擎没被挂起
+        window.speechSynthesis.resume();
+        
+        // 2. 解锁 Web Speech API (播放一个极短的声音)
+        const msg = new SpeechSynthesisUtterance('Start');
+        msg.volume = 0.1; // 稍微有点声音，确保触发
+        msg.rate = 1.0;
+        
+        // 关键：某些安卓浏览器必须在 speak 之后立即跟一个 pause/resume
         window.speechSynthesis.speak(msg);
         
-        // 2. 解锁 HTML5 Audio 元素
+        // 3. 解锁 HTML5 Audio 元素
         ['audio-correct', 'audio-clapping'].forEach(id => {
             const audio = document.getElementById(id);
             if (audio) {
                 audio.play().then(() => {
                     audio.pause();
                     audio.currentTime = 0;
-                }).catch(e => console.log("Audio unlock failed for " + id, e));
+                }).catch(e => console.log("Audio unlock failed", e));
             }
         });
         
-        // 强制刷新语音列表
-        if (window.speechSynthesis.getVoices().length === 0) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                initVoices();
-                voiceUnlocked = true;
-                speak('Ready to speak!');
-            };
-        } else {
-            initVoices();
-            voiceUnlocked = true;
-            speak('Ready to speak!');
-        }
+        voiceUnlocked = true;
+        
+        // 4. 强制初始化语音列表
+        initVoices();
         
         // 更新按钮状态
         const btn = document.getElementById('btn-unlock-audio');
         if (btn) {
-            btn.innerHTML = '✅ 语音已开启';
-            btn.classList.replace('btn-light', 'btn-success');
+            btn.innerHTML = '✨ 语音初始化中...';
+            btn.classList.replace('btn-light', 'btn-warning');
+            
+            // 延迟检测是否成功发声
             setTimeout(() => {
-                btn.style.display = 'none';
-            }, 2000);
+                if (window.speechSynthesis.speaking || voiceUnlocked) {
+                    btn.innerHTML = '✅ 语音已开启';
+                    btn.classList.replace('btn-warning', 'btn-success');
+                    speak('Voice system ready!');
+                    setTimeout(() => btn.style.display = 'none', 1500);
+                } else {
+                    btn.innerHTML = '❌ 启用失败，请重试';
+                    btn.classList.replace('btn-warning', 'btn-danger');
+                }
+            }, 800);
         }
     }
 
@@ -3551,13 +3561,10 @@
         
         const trySelectVoice = () => {
             if (voices.length > 0) {
-                // 优先选择高质量美式英语发音
+                // 优化选择逻辑
                 preferredVoice = voices.find(v => (v.name === 'Google US English' || v.name === 'English (United States)') && v.lang.startsWith('en')) ||
                                  voices.find(v => v.name.includes('Samantha') && v.lang.startsWith('en')) ||
-                                 voices.find(v => v.name.includes('Microsoft David') && v.lang.startsWith('en')) ||
-                                 voices.find(v => v.name.includes('Microsoft Zira') && v.lang.startsWith('en')) ||
-                                 voices.find(v => v.name.includes('Alex') && v.lang.startsWith('en')) ||
-                                 voices.find(v => v.lang.startsWith('en-US') && !v.name.includes('India') && !v.name.includes('UK') && !v.name.includes('Australia')) ||
+                                 voices.find(v => v.lang.startsWith('en-US')) ||
                                  voices.find(v => v.lang.startsWith('en'));
                 
                 console.log("Selected voice:", preferredVoice ? preferredVoice.name : "Default");
@@ -3565,57 +3572,64 @@
         };
 
         if (voices.length === 0) {
-            setTimeout(() => {
+            // 兼容性处理
+            window.speechSynthesis.onvoiceschanged = () => {
                 voices = window.speechSynthesis.getVoices();
                 trySelectVoice();
-            }, 100);
+            };
+            // 备选方案：主动拉取
+            setTimeout(() => {
+                if (!preferredVoice) {
+                    voices = window.speechSynthesis.getVoices();
+                    trySelectVoice();
+                }
+            }, 500);
         } else {
             trySelectVoice();
         }
     }
 
+    // 初始化加载一次
     if ('speechSynthesis' in window) {
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = initVoices;
-        }
         initVoices();
     }
 
     function speak(text) {
         if (!('speechSynthesis' in window)) return;
 
-        // 安卓兼容性核心修复：确保在 speak 之前 resume
+        // 核心：处理安卓挂起问题
         if (window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
         }
 
-        window.speechSynthesis.cancel();
-
-        // 移除 setTimeout，或者缩短到 0ms，以保持在用户手势链中
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'en-US';
-        msg.rate = 0.85;
-        msg.pitch = 1.0;
-        msg.volume = 1.0;
-        
-        if (!preferredVoice) {
-            initVoices();
+        // 核心：不要频繁调用 cancel()，尤其是安卓
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
         }
 
-        if (preferredVoice) {
-            msg.voice = preferredVoice;
-        }
+        // 给 cancel() 一个极短的缓冲时间 (10ms 不会断开用户手势)
+        setTimeout(() => {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            msg.lang = 'en-US';
+            msg.rate = 0.85;
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
+            
+            if (!preferredVoice) initVoices();
+            if (preferredVoice) msg.voice = preferredVoice;
 
-        // 增加错误监听
-        msg.onerror = (e) => {
-            console.error("Speech error:", e);
-            if (e.error === 'not-allowed') {
-                document.getElementById('btn-unlock-audio').style.display = 'block';
-            }
-        };
-        
-        window.speechSynthesis.speak(msg);
+            msg.onerror = (e) => {
+                console.error("Speech error:", e);
+                // 如果报错 not-allowed，说明需要再次点击解锁
+                if (e.error === 'not-allowed') {
+                    const btn = document.getElementById('btn-unlock-audio');
+                    if (btn) btn.style.display = 'block';
+                }
+            };
+            
+            window.speechSynthesis.speak(msg);
+        }, 10);
     }
 
     const phonicsQuizState = {};
