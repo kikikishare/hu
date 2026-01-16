@@ -303,7 +303,7 @@
             transition: all 0.3s;
         }
         /* 语音可点击项 */
-        .flashcard-back, .sentence-card .flashcard-front, .model-text {
+        .flashcard-back, .sentence-card .flashcard-front, .model-text, .sentence-item {
             cursor: pointer;
         }
         .maruko-mascot:hover {
@@ -3513,43 +3513,28 @@
 
     // 全局点击发音监听
     document.addEventListener('click', (e) => {
-        // 1. 作文拼图项
-        const puzzleItem = e.target.closest('.puzzle-item');
-        if (puzzleItem && !e.target.closest('.btn-speak')) {
-            const btn = puzzleItem.querySelector('.btn-speak');
-            if (btn) {
-                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
-                if (match && match[1]) speak(match[1]);
-            }
-        }
-        
-        // 2. 单词卡片背面
-        const flashcardBack = e.target.closest('.flashcard-back');
-        if (flashcardBack && !e.target.closest('.btn-speak')) {
-            const btn = flashcardBack.querySelector('.btn-speak');
-            if (btn) {
-                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
-                if (match && match[1]) speak(match[1]);
-            }
+        // 任何点击都尝试恢复语音引擎
+        if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
         }
 
-        // 3. 句子卡片正面 (有些句子卡片正面也有喇叭)
-        const sentenceFront = e.target.closest('.sentence-card .flashcard-front');
-        if (sentenceFront && !e.target.closest('.btn-speak')) {
-            const btn = sentenceFront.querySelector('.btn-speak');
-            if (btn) {
-                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
-                if (match && match[1]) speak(match[1]);
-            }
-        }
-
-        // 4. 参考范文文本
-        const modelText = e.target.closest('.model-text');
-        if (modelText && !e.target.closest('.btn-speak')) {
-            const btn = modelText.querySelector('.btn-speak');
-            if (btn) {
-                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
-                if (match && match[1]) speak(match[1]);
+        // 查找最近的可发音容器
+        const clickable = e.target.closest('.puzzle-item, .flashcard-back, .sentence-card .flashcard-front, .model-text, .sentence-item');
+        if (clickable && !e.target.closest('.btn-speak, .full-read-btn')) {
+            const btn = clickable.querySelector('.btn-speak') || clickable;
+            const onclickAttr = btn.getAttribute('onclick');
+            
+            if (onclickAttr) {
+                // 提取 speak('...') 中的内容
+                const match = onclickAttr.match(/speak\(['"](.*)['"]\)/);
+                if (match && match[1]) {
+                    // 处理转义字符并去重
+                    const text = match[1].replace(/\\'/g, "'").replace(/\\"/g, '"');
+                    speak(text);
+                }
+            } else if (clickable.classList.contains('sentence-item')) {
+                // 如果是直接在文本上且没有 onclick (虽然目前都有)，则取文本
+                speak(clickable.innerText);
             }
         }
     });
@@ -3646,13 +3631,22 @@
 
     function speak(text) {
         if (!text) return;
+        console.log("TTS Request:", text);
         
+        // 1. 尝试自动恢复语音引擎 (解决部分浏览器静默状态下无法发音的问题)
+        if ('speechSynthesis' in window) {
+            if (window.speechSynthesis.paused) {
+                console.log("Resuming stalled speechSynthesis");
+                window.speechSynthesis.resume();
+            }
+        }
+
         // 如果未解锁，尝试自动解锁（由用户点击触发）
         if (!voiceUnlocked) {
             unlockVoice();
         }
         
-        // 1. 彻底清理之前的待执行任务
+        // 2. 彻底清理之前的待执行任务
         if (speakTimeout) {
             clearTimeout(speakTimeout);
             speakTimeout = null;
@@ -3672,31 +3666,31 @@
             fallbackAudio = null;
         }
 
-        // 2. 生成新的请求 ID
+        // 3. 生成新的请求 ID
         const currentId = ++lastSpeakId;
 
         // 清理文本
         const cleanText = text.replace(/\s+/g, ' ').trim();
 
         if ('speechSynthesis' in window) {
-            // 3. 立即停止当前发音
+            // 4. 立即停止当前发音
             try {
                 window.speechSynthesis.cancel();
-                if (isAndroid && window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                }
             } catch (e) {}
 
-            // 针对不同平台设置不同的延时，确保 cancel() 彻底完成
-            const delay = isAndroid ? 250 : (isIOS ? 10 : 20);
-            
-            speakTimeout = setTimeout(() => {
-                // 只有当这是最新的请求时才执行，防止快速点击导致的重叠
-                if (currentId === lastSpeakId) {
-                    executeSpeak(cleanText, currentId);
-                }
-                speakTimeout = null;
-            }, delay);
+            // 针对不同平台设置不同的执行策略
+            // iOS 和 Desktop 必须立即执行以保留用户手势上下文
+            if (!isAndroid) {
+                executeSpeak(cleanText, currentId);
+            } else {
+                // 安卓通常需要一点延迟来确保 cancel() 完成
+                speakTimeout = setTimeout(() => {
+                    if (currentId === lastSpeakId) {
+                        executeSpeak(cleanText, currentId);
+                    }
+                    speakTimeout = null;
+                }, 250);
+            }
         } else {
             speakFallback(cleanText, currentId);
         }
@@ -3712,6 +3706,7 @@
     }
 
     function executeSpeak(text, requestId) {
+        console.log("Executing WebSpeech:", text, "RequestID:", requestId);
         try {
             // 1. 创建新的 Utterance
             const utterance = new SpeechSynthesisUtterance();
@@ -3728,6 +3723,7 @@
 
             // 3. 核心事件监听
             utterance.onstart = () => {
+                console.log("WebSpeech started:", requestId);
                 if (requestId !== lastSpeakId) return;
                 if (window.speechSynthesis.paused) {
                     window.speechSynthesis.resume();
@@ -3735,6 +3731,7 @@
             };
 
             utterance.onend = () => {
+                console.log("WebSpeech ended:", requestId);
                 if (requestId !== lastSpeakId) return;
                 currentUtterance = null;
                 if (checkSpeakingInterval) {
@@ -3744,8 +3741,8 @@
             };
 
             utterance.onerror = (e) => {
+                console.error("WebSpeech Error:", e, "RequestID:", requestId);
                 if (requestId !== lastSpeakId) return;
-                console.error("Web Speech error:", e);
                 currentUtterance = null;
                 if (checkSpeakingInterval) {
                     clearInterval(checkSpeakingInterval);
@@ -3754,12 +3751,24 @@
                 
                 // 核心修复：只有非人为中断的错误才触发 Fallback
                 if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                    // 如果是其他错误（如网络问题、引擎故障），尝试 Fallback
                     speakFallback(text, requestId);
                 }
             };
             
             // 4. 执行朗读
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             window.speechSynthesis.speak(currentUtterance);
+            
+            // 监控：如果 2 秒后还没开始，强制 resume 一次
+            setTimeout(() => {
+                if (requestId === lastSpeakId && currentUtterance && !window.speechSynthesis.speaking) {
+                    console.log("Stuck detected, forcing resume...");
+                    window.speechSynthesis.resume();
+                }
+            }, 2000);
 
             // 5. 安卓 Hack: 定时检查是否处于“假死”状态
             if (isAndroid) {
@@ -3789,6 +3798,7 @@
 
     function speakFallback(text, requestId) {
         if (!text) return;
+        console.log("Using Fallback TTS:", text, "RequestID:", requestId);
         
         // 如果请求 ID 不是最新的，放弃播放
         if (requestId !== undefined && requestId !== lastSpeakId) return;

@@ -456,10 +456,12 @@
 
     function speak(text) {
         if (!text) return;
+        console.log("TTS Request:", text);
         
         // 1. 尝试自动恢复语音引擎
         if ('speechSynthesis' in window) {
             if (window.speechSynthesis.paused) {
+                console.log("Resuming stalled speechSynthesis");
                 window.speechSynthesis.resume();
             }
         }
@@ -516,6 +518,7 @@
     }
 
     function executeSpeak(text, requestId) {
+        console.log("Executing WebSpeech:", text, "RequestID:", requestId);
         try {
             const utterance = new SpeechSynthesisUtterance(text);
             currentUtterance = utterance;
@@ -524,10 +527,12 @@
             if (preferredVoice) utterance.voice = preferredVoice;
 
             utterance.onstart = () => {
+                console.log("WebSpeech started:", requestId);
                 if (requestId !== lastSpeakId) return;
                 if (window.speechSynthesis.paused) window.speechSynthesis.resume();
             };
             utterance.onend = () => { 
+                console.log("WebSpeech ended:", requestId);
                 if (requestId !== lastSpeakId) return;
                 currentUtterance = null; 
                 if (checkSpeakingInterval) {
@@ -536,6 +541,7 @@
                 }
             };
             utterance.onerror = (e) => { 
+                console.error("WebSpeech Error:", e, "RequestID:", requestId);
                 if (requestId !== lastSpeakId) return;
                 currentUtterance = null; 
                 if (checkSpeakingInterval) {
@@ -551,6 +557,14 @@
                 window.speechSynthesis.resume();
             }
             window.speechSynthesis.speak(utterance);
+            
+            // 监控：如果 2 秒后还没开始，强制 resume 一次
+            setTimeout(() => {
+                if (requestId === lastSpeakId && currentUtterance && !window.speechSynthesis.speaking) {
+                    console.log("Stuck detected, forcing resume...");
+                    window.speechSynthesis.resume();
+                }
+            }, 2000);
 
             if (isAndroid) {
                 checkSpeakingInterval = setInterval(() => {
@@ -575,6 +589,7 @@
 
     function speakFallback(text, requestId) {
         if (!text) return;
+        console.log("Using Fallback TTS:", text, "RequestID:", requestId);
         
         // 如果请求 ID 不是最新的，放弃播放
         if (requestId !== undefined && requestId !== lastSpeakId) return;
