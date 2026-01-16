@@ -21,40 +21,62 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
         }
 
         .game-container {
             max-width: 800px;
             width: 100%;
             background: white;
-            padding: 30px;
-            border-radius: 30px;
+            padding: 20px;
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
+            margin-top: 50px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 30px;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 576px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .card-item {
+                font-size: 0.95rem !important;
+                padding: 5px !important;
+            }
+            .game-container {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
         }
 
         .card-item {
             aspect-ratio: 1;
             background: #f8f9fa;
-            border: 3px solid #e3f2fd;
-            border-radius: 15px;
+            border: 2px solid #e3f2fd;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
             user-select: none;
-            padding: 10px;
+            padding: 8px;
+            word-break: break-all;
+            hyphens: auto;
         }
 
         .card-item:hover {
@@ -77,15 +99,19 @@
         .stats {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 15px;
         }
 
         .btn-back {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
             border-radius: 50px;
+            z-index: 100;
         }
 
         #message {
@@ -98,11 +124,19 @@
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             z-index: 1000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 576px) {
+            .win-overlay h1 {
+                font-size: 3rem;
+            }
         }
     </style>
 </head>
