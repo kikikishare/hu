@@ -3592,7 +3592,9 @@
     }
 
     function speak(text) {
-        // 如果未解锁且不在主页，引导用户去解锁（虽然有了持久化，但保险起见）
+        if (!text) return;
+        
+        // 如果未解锁且不在主页，引导用户去解锁
         if (!voiceUnlocked) {
             const btn = document.getElementById('btn-unlock-audio');
             if (btn) {
@@ -3602,51 +3604,80 @@
             }
         }
 
+        // 清理文本中的多余空格和换行
+        const cleanText = text.replace(/\s+/g, ' ').trim();
+
         // 优先使用 Web Speech API (离线、响应快)
         if ('speechSynthesis' in window) {
             if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-            if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
-
-            setTimeout(() => {
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = text;
-                msg.lang = 'en-US';
-                msg.rate = 0.85;
-                msg.pitch = 1.0;
-                msg.volume = 1.0;
-                
-                if (!preferredVoice) initVoices();
-                if (preferredVoice) msg.voice = preferredVoice;
-
-                msg.onerror = (e) => {
-                    console.error("Web Speech error, falling back:", e);
-                    speakFallback(text);
-                };
-                
-                window.speechSynthesis.speak(msg);
-            }, 10);
+            
+            // 核心：处理安卓端正在说话时的冲突
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                // cancel 之后需要一点点时间让引擎释放
+                setTimeout(() => executeSpeak(cleanText), 50);
+            } else {
+                executeSpeak(cleanText);
+            }
         } else {
             // 如果浏览器不支持 Web Speech API，使用在线补丁
-            speakFallback(text);
+            speakFallback(cleanText);
         }
     }
 
+    function executeSpeak(text) {
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = text;
+        msg.lang = 'en-US';
+        msg.rate = 0.85;
+        msg.pitch = 1.0;
+        msg.volume = 1.0;
+        
+        if (!preferredVoice) initVoices();
+        if (preferredVoice) msg.voice = preferredVoice;
+
+        msg.onerror = (e) => {
+            console.error("Web Speech error, falling back:", e);
+            speakFallback(text);
+        };
+        
+        window.speechSynthesis.speak(msg);
+    }
+
     function speakFallback(text) {
+        if (!text) return;
+        
+        // 如果正在播放，先停止
         if (fallbackAudio) {
             fallbackAudio.pause();
+            fallbackAudio.onended = null;
             fallbackAudio = null;
         }
+        
         // 使用有道词典的高质量美音接口 (type=2)
         const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
-        fallbackAudio = new Audio(url);
-        fallbackAudio.play().catch(e => {
-            console.error("Fallback TTS play failed:", e);
-            // 如果播不了，提示用户点击顶部的启用按钮
-            if (!voiceUnlocked) {
-                const btn = document.getElementById('btn-unlock-audio');
-                if (btn) btn.style.display = 'block';
+        
+        try {
+            fallbackAudio = new Audio();
+            fallbackAudio.src = url;
+            
+            // 安卓端 Audio 对象必须在用户手势回调中 play，
+            // 这里的 speakFallback 通常是在按钮点击或 speak() 的异步回调中
+            const playPromise = fallbackAudio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.error("Fallback TTS play failed:", e);
+                    // 只有在完全没解锁过的情况下才显示按钮
+                    if (!voiceUnlocked) {
+                        const btn = document.getElementById('btn-unlock-audio');
+                        if (btn) btn.style.display = 'block';
+                    }
+                });
             }
-        });
+        } catch (e) {
+            console.error("Audio object creation failed:", e);
+        }
     }
 
     const phonicsQuizState = {};
