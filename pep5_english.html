@@ -3498,8 +3498,21 @@
 
     // 语音引擎优化
     let preferredVoice = null;
-    let voiceUnlocked = false;
+    let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
     let fallbackAudio = null;
+
+    // 页面加载时自动检查状态
+    window.addEventListener('DOMContentLoaded', () => {
+        if (voiceUnlocked) {
+            const btn = document.getElementById('btn-unlock-audio');
+            if (btn) btn.style.display = 'none';
+            // 尝试静默恢复引擎（仅对支持的浏览器有效）
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.resume();
+                initVoices();
+            }
+        }
+    });
 
     function unlockVoice() {
         const hasWebSpeech = ('speechSynthesis' in window);
@@ -3525,6 +3538,8 @@
         });
         
         voiceUnlocked = true;
+        localStorage.setItem('pep5_voice_unlocked', 'true');
+        
         if (hasWebSpeech) initVoices();
         
         // 更新按钮状态
@@ -3577,6 +3592,16 @@
     }
 
     function speak(text) {
+        // 如果未解锁且不在主页，引导用户去解锁（虽然有了持久化，但保险起见）
+        if (!voiceUnlocked) {
+            const btn = document.getElementById('btn-unlock-audio');
+            if (btn) {
+                btn.style.display = 'block';
+                btn.classList.add('animate__shakeX');
+                setTimeout(() => btn.classList.remove('animate__shakeX'), 1000);
+            }
+        }
+
         // 优先使用 Web Speech API (离线、响应快)
         if ('speechSynthesis' in window) {
             if (window.speechSynthesis.paused) window.speechSynthesis.resume();
