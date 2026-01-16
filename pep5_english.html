@@ -496,8 +496,15 @@
 
 <div class="header">
     <div class="container">
-        <h1 class="animate__animated animate__bounceIn display-4 fw-bold">🌟 CAT English Lab</h1>
-        <h2 class="animate__animated animate__fadeInDown h3 mt-3">Learn Smart. Speak Strong.</h2>
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="animate__animated animate__bounceIn display-4 fw-bold">🌟 CAT English Lab</h1>
+                <h2 class="animate__animated animate__fadeInDown h3 mt-3">Learn Smart. Speak Strong.</h2>
+            </div>
+            <button id="btn-unlock-audio" class="btn btn-light btn-sm rounded-pill shadow-sm mt-2" onclick="unlockVoice()">
+                🔊 <span class="d-none d-sm-inline">启用语音发音</span><span class="d-inline d-sm-none">语音</span>
+            </button>
+        </div>
         <p class="lead mt-4 mb-4">
             An English lab where listening leads to confident speaking.<br>
             <span class="small opacity-75">一个用方法训练听力、用练习打造表达力的英语学习空间</span>
@@ -3491,6 +3498,45 @@
 
     // 语音引擎优化
     let preferredVoice = null;
+    let voiceUnlocked = false;
+
+    function unlockVoice() {
+        if (!('speechSynthesis' in window)) return;
+        
+        // 1. 解锁 Web Speech API
+        const msg = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(msg);
+        
+        // 2. 解锁 HTML5 Audio 元素
+        ['audio-correct', 'audio-clapping'].forEach(id => {
+            const audio = document.getElementById(id);
+            if (audio) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e => console.log("Audio unlock failed for " + id, e));
+            }
+        });
+        
+        // 重新初始化语音列表
+        initVoices();
+        
+        voiceUnlocked = true;
+        
+        // 更新按钮状态
+        const btn = document.getElementById('btn-unlock-audio');
+        if (btn) {
+            btn.innerHTML = '✅ 语音已启用';
+            btn.classList.replace('btn-light', 'btn-success');
+            setTimeout(() => {
+                btn.style.display = 'none';
+            }, 2000);
+        }
+        
+        // 尝试打个招呼
+        speak('Audio system enabled. Let\'s learn English together!');
+    }
+
     function initVoices() {
         if (!('speechSynthesis' in window)) return;
         
@@ -3498,23 +3544,20 @@
         
         const trySelectVoice = () => {
             if (voices.length > 0) {
-                // 优先选择高质量美式英语发音，避开印度等口音
-                // 优先级：Google US English > Microsoft David/Zira > Apple Samantha/Alex > en-US
-                preferredVoice = voices.find(v => v.name === 'Google US English' && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Samantha') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Microsoft David') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Microsoft Zira') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Alex') && v.lang === 'en-US') ||
-                                 voices.find(v => v.lang === 'en-US' && !v.name.includes('India') && !v.name.includes('UK') && !v.name.includes('Australia')) ||
-                                 voices.find(v => v.lang === 'en-US');
+                // 优先选择高质量美式英语发音
+                preferredVoice = voices.find(v => (v.name === 'Google US English' || v.name === 'English (United States)') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.name.includes('Samantha') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.name.includes('Microsoft David') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.name.includes('Microsoft Zira') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.name.includes('Alex') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.lang.startsWith('en-US') && !v.name.includes('India') && !v.name.includes('UK') && !v.name.includes('Australia')) ||
+                                 voices.find(v => v.lang.startsWith('en'));
                 
                 console.log("Selected voice:", preferredVoice ? preferredVoice.name : "Default");
             }
         };
 
         if (voices.length === 0) {
-            // 某些浏览器（如 Chrome）第一次 getVoices() 可能返回空
-            // 需要等待 voiceschanged 事件或稍后再试
             setTimeout(() => {
                 voices = window.speechSynthesis.getVoices();
                 trySelectVoice();
@@ -3525,7 +3568,6 @@
     }
 
     if ('speechSynthesis' in window) {
-        // 兼容不同浏览器对 voiceschanged 的处理
         if (window.speechSynthesis.onvoiceschanged !== undefined) {
             window.speechSynthesis.onvoiceschanged = initVoices;
         }
@@ -3535,30 +3577,23 @@
     function speak(text) {
         if (!('speechSynthesis' in window)) return;
 
-        // 停止之前的朗读
+        // 如果是安卓且还没解锁，尝试自动解锁（虽然可能失败，但作为最后手段）
+        if (!voiceUnlocked && /Android/i.test(navigator.userAgent)) {
+            console.log("Attempting auto-unlock on Android...");
+        }
+
         window.speechSynthesis.cancel();
 
-        // 延迟一小会儿执行，确保 cancel 彻底完成，解决某些浏览器不发音的问题
         setTimeout(() => {
             const msg = new SpeechSynthesisUtterance();
             msg.text = text;
             msg.lang = 'en-US';
-            msg.rate = 0.85; // 稍微放慢一点点，方便听清
+            msg.rate = 0.85;
             msg.pitch = 1.0;
             msg.volume = 1.0;
             
-            // 如果还没有选出 voice，再尝试选一次
             if (!preferredVoice) {
-                const voices = window.speechSynthesis.getVoices();
-                if (voices.length > 0) {
-                preferredVoice = voices.find(v => v.name === 'Google US English' && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Samantha') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Microsoft David') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Microsoft Zira') && v.lang === 'en-US') ||
-                                 voices.find(v => v.name.includes('Alex') && v.lang === 'en-US') ||
-                                 voices.find(v => v.lang === 'en-US' && !v.name.includes('India') && !v.name.includes('UK') && !v.name.includes('Australia')) ||
-                                 voices.find(v => v.lang === 'en-US');
-            }
+                initVoices();
             }
 
             if (preferredVoice) {
