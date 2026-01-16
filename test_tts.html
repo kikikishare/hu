@@ -3722,28 +3722,25 @@
         const cleanText = text.replace(/\s+/g, ' ').trim();
 
         if ('speechSynthesis' in window) {
-            console.log("Cancelling existing speech...");
+            console.log("Safely handling speech interruption...");
             try {
-                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
             } catch (e) {
                 console.error("Cancel failed:", e);
             }
 
             // 针对不同平台设置不同的执行策略
-            // iOS 和 Desktop 必须立即执行以保留用户手势上下文
-            if (!isAndroid) {
-                console.log("Desktop/iOS direct execution");
-                executeSpeak(cleanText, currentId);
-            } else {
-                console.log("Android delayed execution");
-                // 安卓通常需要一点延迟来确保 cancel() 完成
-                speakTimeout = setTimeout(() => {
-                    if (currentId === lastSpeakId) {
-                        executeSpeak(cleanText, currentId);
-                    }
-                    speakTimeout = null;
-                }, 250);
-            }
+            const delay = isAndroid ? 250 : 50;
+            console.log(`Setting delay of ${delay}ms before execution`);
+            
+            speakTimeout = setTimeout(() => {
+                if (currentId === lastSpeakId) {
+                    executeSpeak(cleanText, currentId);
+                }
+                speakTimeout = null;
+            }, delay);
         } else {
             speakFallback(cleanText, currentId);
         }
