@@ -3501,6 +3501,11 @@
     let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
     let fallbackAudio = null;
     let currentUtterance = null; // 保持引用，防止安卓垃圾回收导致发音中断
+    let speakTimeout = null; // 用于管理延时朗读，防止重复
+    let checkSpeakingInterval = null; // 用于安卓假死检查
+    let lastSpeakId = 0; // 用于追踪最新的发音请求，防止并发冲突
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(navigator.userAgent);
 
     // 页面加载时自动检查状态
     window.addEventListener('DOMContentLoaded', () => {
@@ -3595,31 +3600,58 @@
     function speak(text) {
         if (!text) return;
         
-        // 如果未解锁，引导用户去解锁
+        // 如果未解锁，尝试自动解锁（由用户点击触发）
         if (!voiceUnlocked) {
-            showUnlockButton();
+            unlockVoice();
         }
+        
+        // 1. 彻底清理之前的待执行任务
+        if (speakTimeout) {
+            clearTimeout(speakTimeout);
+            speakTimeout = null;
+        }
+        
+        if (checkSpeakingInterval) {
+            clearInterval(checkSpeakingInterval);
+            checkSpeakingInterval = null;
+        }
+
+        // 停止之前的 Fallback 音频
+        if (fallbackAudio) {
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
+            fallbackAudio = null;
+        }
+
+        // 2. 生成新的请求 ID
+        const currentId = ++lastSpeakId;
 
         // 清理文本
         const cleanText = text.replace(/\s+/g, ' ').trim();
 
         if ('speechSynthesis' in window) {
-            // 安卓兼容性核心：彻底取消 -> 强制恢复 -> 延时播放
+            // 3. 立即停止当前发音
             try {
                 window.speechSynthesis.cancel();
-                if (window.speechSynthesis.paused) {
+                if (isAndroid && window.speechSynthesis.paused) {
                     window.speechSynthesis.resume();
                 }
-            } catch (e) {
-                console.error("Speech reset failed:", e);
-            }
+            } catch (e) {}
+
+            // 针对不同平台设置不同的延时，确保 cancel() 彻底完成
+            const delay = isAndroid ? 250 : (isIOS ? 10 : 20);
             
-            // 延时执行以确保 cancel 生效，安卓建议 250ms+
-            setTimeout(() => {
-                executeSpeak(cleanText);
-            }, 250);
+            speakTimeout = setTimeout(() => {
+                // 只有当这是最新的请求时才执行，防止快速点击导致的重叠
+                if (currentId === lastSpeakId) {
+                    executeSpeak(cleanText, currentId);
+                }
+                speakTimeout = null;
+            }, delay);
         } else {
-            speakFallback(cleanText);
+            speakFallback(cleanText, currentId);
         }
     }
 
@@ -3632,71 +3664,93 @@
         }
     }
 
-    function executeSpeak(text) {
+    function executeSpeak(text, requestId) {
         try {
             // 1. 创建新的 Utterance
-            currentUtterance = new SpeechSynthesisUtterance();
-            currentUtterance.text = text;
-            currentUtterance.lang = 'en-US';
-            currentUtterance.rate = 0.85;
-            currentUtterance.pitch = 1.0;
-            currentUtterance.volume = 1.0;
+            const utterance = new SpeechSynthesisUtterance();
+            currentUtterance = utterance;
+            utterance.text = text;
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
             
             // 2. 选择语音
             if (!preferredVoice) initVoices();
-            if (preferredVoice) currentUtterance.voice = preferredVoice;
+            if (preferredVoice) utterance.voice = preferredVoice;
 
-            // 3. 核心事件监听：防止内存泄露和卡顿
-            currentUtterance.onstart = () => {
-                // 安卓补丁：开始播放时再次确保没有暂停
+            // 3. 核心事件监听
+            utterance.onstart = () => {
+                if (requestId !== lastSpeakId) return;
                 if (window.speechSynthesis.paused) {
                     window.speechSynthesis.resume();
                 }
             };
 
-            currentUtterance.onend = () => {
+            utterance.onend = () => {
+                if (requestId !== lastSpeakId) return;
                 currentUtterance = null;
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
+                }
             };
 
-            currentUtterance.onerror = (e) => {
+            utterance.onerror = (e) => {
+                if (requestId !== lastSpeakId) return;
                 console.error("Web Speech error:", e);
                 currentUtterance = null;
-                // 如果是用户激活错误，显示解锁按钮
-                if (e.error === 'not-allowed' || e.error === 'network' || e.error === 'interrupted') {
-                    showUnlockButton();
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
                 }
-                // 发生错误时自动切换到备用引擎
-                speakFallback(text);
+                
+                // 核心修复：只有非人为中断的错误才触发 Fallback
+                if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                    speakFallback(text, requestId);
+                }
             };
             
             // 4. 执行朗读
             window.speechSynthesis.speak(currentUtterance);
 
             // 5. 安卓 Hack: 定时检查是否处于“假死”状态
-            // 每 2 秒检查一次，直到播放结束
-            const checkSpeaking = setInterval(() => {
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.resume();
-                } else {
-                    clearInterval(checkSpeaking);
-                }
-            }, 2000);
-
-            // 确保不会无限循环
-            setTimeout(() => clearInterval(checkSpeaking), 15000);
+            if (isAndroid) {
+                checkSpeakingInterval = setInterval(() => {
+                    // 如果请求 ID 已变，说明有新任务，立即退出
+                    if (requestId !== lastSpeakId) {
+                        clearInterval(checkSpeakingInterval);
+                        return;
+                    }
+                    if (window.speechSynthesis.speaking) {
+                        if (window.speechSynthesis.paused) {
+                            window.speechSynthesis.resume();
+                        }
+                    } else {
+                        clearInterval(checkSpeakingInterval);
+                        checkSpeakingInterval = null;
+                    }
+                }, 2000);
+            }
 
         } catch (e) {
             console.error("Execute speak failed:", e);
             currentUtterance = null;
-            speakFallback(text);
+            speakFallback(text, requestId);
         }
     }
 
-    function speakFallback(text) {
+    function speakFallback(text, requestId) {
         if (!text) return;
         
+        // 如果请求 ID 不是最新的，放弃播放
+        if (requestId !== undefined && requestId !== lastSpeakId) return;
+
         if (fallbackAudio) {
-            fallbackAudio.pause();
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
             fallbackAudio = null;
         }
         
@@ -3709,7 +3763,8 @@
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
                     console.error("Fallback TTS failed:", e);
-                    showUnlockButton();
+                    // 如果自动解锁失败，才显示按钮
+                    if (!voiceUnlocked) showUnlockButton();
                 });
             }
         } catch (e) {

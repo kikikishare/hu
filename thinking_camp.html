@@ -379,6 +379,8 @@
     let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
     let preferredVoice = null;
     let currentUtterance = null;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(navigator.userAgent);
 
     function initVoices() {
         if (!('speechSynthesis' in window)) return;
@@ -419,66 +421,141 @@
     }
 
     let fallbackAudio = null;
+    let speakTimeout = null;
+    let checkSpeakingInterval = null;
+    let lastSpeakId = 0; // 用于追踪最新的发音请求，防止并发冲突
 
     function speak(text) {
-        if (!text || !voiceUnlocked) return;
+        if (!text) return;
+        
+        // 如果未解锁，尝试自动解锁（由用户点击触发）
+        if (!voiceUnlocked) {
+            unlockVoice();
+        }
+        
+        if (speakTimeout) {
+            clearTimeout(speakTimeout);
+            speakTimeout = null;
+        }
+        
+        if (checkSpeakingInterval) {
+            clearInterval(checkSpeakingInterval);
+            checkSpeakingInterval = null;
+        }
+
+        // 停止之前的 Fallback 音频
+        if (fallbackAudio) {
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
+            fallbackAudio = null;
+        }
+
+        // 生成新的请求 ID
+        const currentId = ++lastSpeakId;
+
         const cleanText = text.replace(/<[^>]*>/g, '').trim(); // 移除 HTML 标签
         
         if ('speechSynthesis' in window) {
             try {
                 window.speechSynthesis.cancel();
-                if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+                if (isAndroid && window.speechSynthesis.paused) window.speechSynthesis.resume();
             } catch (e) {}
 
-            setTimeout(() => {
-                executeSpeak(cleanText);
-            }, 250);
+            const delay = isAndroid ? 250 : (isIOS ? 10 : 20);
+            speakTimeout = setTimeout(() => {
+                // 只有当这是最新的请求时才执行
+                if (currentId === lastSpeakId) {
+                    executeSpeak(cleanText, currentId);
+                }
+                speakTimeout = null;
+            }, delay);
         } else {
-            speakFallback(cleanText);
+            speakFallback(cleanText, currentId);
         }
     }
 
-    function executeSpeak(text) {
+    function executeSpeak(text, requestId) {
         try {
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.lang = 'en-US';
-            currentUtterance.rate = 0.85;
-            if (preferredVoice) currentUtterance.voice = preferredVoice;
+            const utterance = new SpeechSynthesisUtterance(text);
+            currentUtterance = utterance;
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            if (preferredVoice) utterance.voice = preferredVoice;
 
-            currentUtterance.onstart = () => {
+            utterance.onstart = () => {
+                if (requestId !== lastSpeakId) return;
                 if (window.speechSynthesis.paused) window.speechSynthesis.resume();
             };
-            currentUtterance.onend = () => { currentUtterance = null; };
-            currentUtterance.onerror = (e) => { 
+            utterance.onend = () => { 
+                if (requestId !== lastSpeakId) return;
                 currentUtterance = null; 
-                speakFallback(text);
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
+                }
+            };
+            utterance.onerror = (e) => { 
+                if (requestId !== lastSpeakId) return;
+                currentUtterance = null; 
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
+                }
+                if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                    speakFallback(text, requestId);
+                }
             };
 
-            window.speechSynthesis.speak(currentUtterance);
+            window.speechSynthesis.speak(utterance);
 
-            const checkSpeaking = setInterval(() => {
-                if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.resume();
-                } else {
-                    clearInterval(checkSpeaking);
-                }
-            }, 2000);
-            setTimeout(() => clearInterval(checkSpeaking), 15000);
+            if (isAndroid) {
+                checkSpeakingInterval = setInterval(() => {
+                    if (requestId !== lastSpeakId) {
+                        clearInterval(checkSpeakingInterval);
+                        return;
+                    }
+                    if (window.speechSynthesis.speaking) {
+                        if (window.speechSynthesis.paused) {
+                            window.speechSynthesis.resume();
+                        }
+                    } else {
+                        clearInterval(checkSpeakingInterval);
+                        checkSpeakingInterval = null;
+                    }
+                }, 2000);
+            }
         } catch (e) {
-            speakFallback(text);
+            speakFallback(text, requestId);
         }
     }
 
-    function speakFallback(text) {
+    function speakFallback(text, requestId) {
         if (!text) return;
+        
+        // 如果请求 ID 不是最新的，放弃播放
+        if (requestId !== undefined && requestId !== lastSpeakId) return;
+
         if (fallbackAudio) {
-            fallbackAudio.pause();
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
             fallbackAudio = null;
         }
+        
         const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
         try {
             fallbackAudio = new Audio(url);
-            fallbackAudio.play().catch(e => console.error("Fallback audio failed", e));
+            fallbackAudio.play().catch(e => {
+                console.error("Fallback audio failed", e);
+                // 如果自动解锁失败，才显示按钮
+                if (!voiceUnlocked) {
+                    const btn = document.getElementById('btn-unlock-audio');
+                    if (btn) btn.style.display = 'block';
+                }
+            });
         } catch (e) {
             console.error("Fallback audio creation failed", e);
         }
