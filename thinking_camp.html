@@ -391,21 +391,29 @@
         if (!('speechSynthesis' in window)) return;
         let voices = window.speechSynthesis.getVoices();
         const trySelectVoice = () => {
+            voices = window.speechSynthesis.getVoices();
             if (voices.length > 0) {
-                preferredVoice = voices.find(v => (v.name === 'Google US English' || v.name === 'English (United States)') && v.lang.startsWith('en')) ||
-                                 voices.find(v => v.lang.startsWith('en-US')) ||
+                // 桌面端排错：优先选择本地服务 (localService: true) 的语音包
+                const localEnVoices = voices.filter(v => v.lang.startsWith('en') && v.localService === true);
+                preferredVoice = localEnVoices.find(v => v.name.includes('Samantha')) ||
+                                 localEnVoices.find(v => v.name.includes('Microsoft David')) ||
+                                 localEnVoices.find(v => v.name.includes('English (United States)')) ||
+                                 localEnVoices[0] ||
+                                 voices.find(v => v.name.includes('Google US English')) ||
                                  voices.find(v => v.lang.startsWith('en'));
             }
         };
         if (voices.length === 0) {
             window.speechSynthesis.onvoiceschanged = () => {
-                voices = window.speechSynthesis.getVoices();
                 trySelectVoice();
             };
         } else {
             trySelectVoice();
         }
     }
+
+    let errorCount = 0;
+    const MAX_ERRORS = 2;
 
     function unlockVoice() {
         if ('speechSynthesis' in window) {
@@ -498,20 +506,19 @@
         if ('speechSynthesis' in window) {
             // 3. 立即停止当前发音
             try {
-                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
             } catch (e) {}
 
             // 针对不同平台设置不同的执行策略
-            if (!isAndroid) {
-                executeSpeak(cleanText, currentId);
-            } else {
-                speakTimeout = setTimeout(() => {
-                    if (currentId === lastSpeakId) {
-                        executeSpeak(cleanText, currentId);
-                    }
-                    speakTimeout = null;
-                }, 250);
-            }
+            const delay = isAndroid ? 250 : 50;
+            speakTimeout = setTimeout(() => {
+                if (currentId === lastSpeakId) {
+                    executeSpeak(cleanText, currentId);
+                }
+                speakTimeout = null;
+            }, delay);
         } else {
             speakFallback(cleanText, currentId);
         }
@@ -529,6 +536,7 @@
             utterance.onstart = () => {
                 console.log("WebSpeech started:", requestId);
                 if (requestId !== lastSpeakId) return;
+                errorCount = 0; // 成功开始，重置错误计数
                 if (window.speechSynthesis.paused) window.speechSynthesis.resume();
             };
             utterance.onend = () => { 
@@ -541,14 +549,28 @@
                 }
             };
             utterance.onerror = (e) => { 
-                console.error("WebSpeech Error:", e, "RequestID:", requestId);
+                console.error("WebSpeech Error:", e.error || e, "RequestID:", requestId);
                 if (requestId !== lastSpeakId) return;
                 currentUtterance = null; 
                 if (checkSpeakingInterval) {
                     clearInterval(checkSpeakingInterval);
                     checkSpeakingInterval = null;
                 }
-                if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                
+                // 核心修复：如果遇到 interrupted 或 network 错误，且重试次数未超限，尝试换一个本地语音包
+                if (e.error === 'interrupted' || e.error === 'network') {
+                    errorCount++;
+                    if (errorCount >= MAX_ERRORS) {
+                        speakFallback(text, requestId);
+                    } else {
+                        const voices = window.speechSynthesis.getVoices();
+                        const safeVoice = voices.find(v => v.localService && v.lang.startsWith('en') && v !== preferredVoice);
+                        if (safeVoice) preferredVoice = safeVoice;
+                        setTimeout(() => {
+                            if (requestId === lastSpeakId) executeSpeak(text, requestId);
+                        }, 100);
+                    }
+                } else if (e.error !== 'canceled') {
                     speakFallback(text, requestId);
                 }
             };

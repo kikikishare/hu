@@ -3645,16 +3645,22 @@
         const trySelectVoice = () => {
             voices = window.speechSynthesis.getVoices();
             if (voices.length > 0) {
-                // 优先选择更自然且在桌面端常见的语音
-                preferredVoice = voices.find(v => v.name.includes('Google US English')) ||
-                                 voices.find(v => v.name.includes('Microsoft David')) ||
-                                 voices.find(v => v.name.includes('Microsoft Zira')) ||
-                                 voices.find(v => v.name.includes('Samantha')) ||
-                                 voices.find(v => v.lang === 'en-US' && !v.name.includes('Low Quality')) ||
+                // 桌面端排错：Google 系列语音是云端语音，在某些网络下极其不稳定，容易报 interrupted
+                // 优先选择本地服务 (localService: true) 的语音包，通常是系统自带的，不需要联网，最稳健
+                
+                const localEnVoices = voices.filter(v => v.lang.startsWith('en') && v.localService === true);
+                
+                preferredVoice = localEnVoices.find(v => v.name.includes('Samantha')) ||
+                                 localEnVoices.find(v => v.name.includes('Microsoft David')) ||
+                                 localEnVoices.find(v => v.name.includes('Microsoft Zira')) ||
+                                 localEnVoices.find(v => v.name.includes('English (United States)')) ||
+                                 localEnVoices[0] ||
+                                 // 如果没找到本地的，再考虑云端的
+                                 voices.find(v => v.name.includes('Google US English')) ||
                                  voices.find(v => v.lang.startsWith('en'));
                 
                 if (preferredVoice) {
-                    console.log("Selected Voice:", preferredVoice.name, preferredVoice.lang);
+                    console.log("Selected Voice:", preferredVoice.name, "Local:", preferredVoice.localService);
                 }
                 updateDebugUI();
             }
@@ -3755,6 +3761,9 @@
         }
     }
 
+    let errorCount = 0;
+    const MAX_ERRORS = 2;
+
     function executeSpeak(text, requestId) {
         console.log("Executing WebSpeech:", text, "RequestID:", requestId);
         try {
@@ -3775,9 +3784,11 @@
             utterance.onstart = () => {
                 console.log("WebSpeech started:", requestId);
                 if (requestId !== lastSpeakId) return;
+                errorCount = 0; // 成功开始，重置错误计数
                 if (window.speechSynthesis.paused) {
                     window.speechSynthesis.resume();
                 }
+                updateDebugUI();
             };
 
             utterance.onend = () => {
@@ -3788,6 +3799,7 @@
                     clearInterval(checkSpeakingInterval);
                     checkSpeakingInterval = null;
                 }
+                updateDebugUI();
             };
 
             utterance.onerror = (e) => {
@@ -3802,11 +3814,31 @@
                     checkSpeakingInterval = null;
                 }
                 
-                // 核心修复：只有非人为中断的错误才触发 Fallback
-                if (e.error !== 'interrupted' && e.error !== 'canceled') {
-                    // 如果是其他错误（如网络问题、引擎故障），尝试 Fallback
+                // 核心修复：如果遇到 interrupted 或 network 错误，且重试次数未超限，尝试换一个本地语音包
+                if (e.error === 'interrupted' || e.error === 'network') {
+                    errorCount++;
+                    if (errorCount >= MAX_ERRORS) {
+                        console.warn("Too many errors, switching to fallback audio");
+                        speakFallback(text, requestId);
+                    } else {
+                        console.log(`Retrying... (${errorCount}/${MAX_ERRORS})`);
+                        // 尝试寻找一个不同的本地语音包
+                        const voices = window.speechSynthesis.getVoices();
+                        const safeVoice = voices.find(v => v.localService && v.lang.startsWith('en') && v !== preferredVoice);
+                        if (safeVoice) {
+                            preferredVoice = safeVoice;
+                            console.log("Switched to safe voice:", preferredVoice.name);
+                        }
+                        // 稍作延迟后重试
+                        setTimeout(() => {
+                            if (requestId === lastSpeakId) executeSpeak(text, requestId);
+                        }, 100);
+                    }
+                } else if (e.error !== 'canceled') {
+                    // 如果是其他非人为取消的错误，尝试 Fallback
                     speakFallback(text, requestId);
                 }
+                updateDebugUI();
             };
             
             // 4. 执行朗读
