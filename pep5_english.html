@@ -913,7 +913,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="5">
-                <p class="fw-bold">6. [学霸挑战] Ms. Wang is very ________. She works from morning to night. <button class="btn-speak btn-sm" onclick="speak('Ms. Wang is very hard-working. She works from morning to night.')">🔊</button></p>
+                <p class="fw-bold">6. [学霸挑战] Ms. Wang is very ________. She works from morning to night. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Ms. Wang is very hard-working. She works from morning to night.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 1, 8, event)">A. hard-working</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 1, 8, event)">B. helpful</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 1, 8, event)">C. polite</button>
                 </div>
@@ -921,7 +921,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="6">
-                <p class="fw-bold">7. [学霸挑战] Our new PE teacher is very strong, ________ he is very kind. <button class="btn-speak btn-sm" onclick="speak('Our new PE teacher is very strong, but he is very kind.')">🔊</button></p>
+                <p class="fw-bold">7. [学霸挑战] Our new PE teacher is very strong, ________ he is very kind. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Our new PE teacher is very strong, but he is very kind.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. and</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. but</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. or</button>
                 </div>
@@ -929,7 +929,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="7">
-                <p class="fw-bold">8. [学霸挑战] —Who is your favorite teacher? —________ Mr. Li. He is very funny. <button class="btn-speak btn-sm" onclick="speak('Who is your favorite teacher? He is Mr. Li. He is very funny.')">🔊</button></p>
+                <p class="fw-bold">8. [学霸挑战] —Who is your favorite teacher? —________ Mr. Li. He is very funny. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Who is your favorite teacher? He is Mr. Li. He is very funny.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 1, 8, event)">A. She is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 1, 8, event)">B. He is</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 1, 8, event)">C. It is</button>
                 </div>
@@ -967,7 +967,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(1)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-1" style="display:none; line-height: 1.8;">
                                     I want to be your friend. I'm Jim. I'm eleven years old. I'm tall and thin. I'm hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -1269,7 +1269,7 @@
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="3">
-                            <p class="fw-bold">4. [学霸挑战] —What ________ you ________ on Sundays? —I often watch TV. <button class="btn-speak btn-sm" onclick="speak('What do you do on Sundays? I often watch TV.')">🔊</button></p>
+                            <p class="fw-bold">4. [学霸挑战] —What ________ you ________ on Sundays? —I often watch TV. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What do you do on Sundays? I often watch TV.')">🔊</button></p>
                             <div class="options">
                                 <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. do, do</button>
                                 <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. are, doing</button>
@@ -1278,7 +1278,7 @@
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="4">
-                            <p class="fw-bold">5. [学霸挑战] We ________ have a football match on Wednesdays. <button class="btn-speak btn-sm" onclick="speak('We sometimes have a football match on Wednesdays.')">🔊</button></p>
+                            <p class="fw-bold">5. [学霸挑战] We ________ have a football match on Wednesdays. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('We sometimes have a football match on Wednesdays.')">🔊</button></p>
                             <div class="options">
                                 <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. sometimes</button>
                                 <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. some times</button>
@@ -1287,7 +1287,7 @@
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="5">
-                            <p class="fw-bold">6. [学霸挑战] I often play football ________ my friends on Saturdays. <button class="btn-speak btn-sm" onclick="speak('I often play football with my friends on Saturdays.')">🔊</button></p>
+                            <p class="fw-bold">6. [学霸挑战] I often play football ________ my friends on Saturdays. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I often play football with my friends on Saturdays.')">🔊</button></p>
                             <div class="options">
                                 <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. with</button>
                                 <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. and</button>
@@ -1296,7 +1296,7 @@
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="6">
-                            <p class="fw-bold">7. [学霸挑战] —What do you do ________ the weekend? —I often wash my clothes. <button class="btn-speak btn-sm" onclick="speak('What do you do on the weekend? I often wash my clothes.')">🔊</button></p>
+                            <p class="fw-bold">7. [学霸挑战] —What do you do ________ the weekend? —I often wash my clothes. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What do you do on the weekend? I often wash my clothes.')">🔊</button></p>
                             <div class="options">
                                 <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 2, 8, event)">A. in</button>
                                 <button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 2, 8, event)">B. on</button>
@@ -1305,7 +1305,7 @@
                             <div class="feedback mt-2" style="display:none;"></div>
                         </div>
                         <div class="quiz-item" data-quiz-id="7">
-                            <p class="fw-bold">8. [学霸挑战] —Do you often read books in this park? —________. I like reading very much. <button class="btn-speak btn-sm" onclick="speak('Do you often read books in this park? Yes, I do. I like reading very much.')">🔊</button></p>
+                            <p class="fw-bold">8. [学霸挑战] —Do you often read books in this park? —________. I like reading very much. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Do you often read books in this park? Yes, I do. I like reading very much.')">🔊</button></p>
                             <div class="options">
                                 <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 2, 8, event)">A. Yes, I do</button>
                                 <button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 2, 8, event)">B. No, I don't</button>
@@ -1342,7 +1342,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(2)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-2" style="display:none; line-height: 1.8;">
                                     I'm always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -1624,7 +1624,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="5">
-                <p class="fw-bold">6. [学霸挑战] I'd like some ________. They are very healthy. <button class="btn-speak btn-sm" onclick="speak('I would like some vegetables. They are very healthy.')">🔊</button></p>
+                <p class="fw-bold">6. [学霸挑战] I'd like some ________. They are very healthy. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I would like some vegetables. They are very healthy.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. vegetables</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. sandwich</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. water</button>
                 </div>
@@ -1632,7 +1632,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="6">
-                <p class="fw-bold">7. [学霸挑战] My favorite food is ice cream. It's ________. <button class="btn-speak btn-sm" onclick="speak('My favorite food is ice cream. It is sweet.')">🔊</button></p>
+                <p class="fw-bold">7. [学霸挑战] My favorite food is ice cream. It's ________. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favorite food is ice cream. It is sweet.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 3, 8, event)">A. hot</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 3, 8, event)">B. sweet</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 3, 8, event)">C. salty</button>
                 </div>
@@ -1640,7 +1640,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="7">
-                <p class="fw-bold">8. [学霸挑战] —What would you like to drink? —________ some grape juice, please. <button class="btn-speak btn-sm" onclick="speak('What would you like to drink? I would like some grape juice, please.')">🔊</button></p>
+                <p class="fw-bold">8. [学霸挑战] —What would you like to drink? —________ some grape juice, please. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What would you like to drink? I would like some grape juice, please.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 3, 8, event)">A. I'd like</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 3, 8, event)">B. I like</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 3, 8, event)">C. I have</button>
                 </div>
@@ -1724,7 +1724,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(3)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-3" style="display:none; line-height: 1.8;">
                                     My favourite food is sandwich. It's healthy and delicious. I like salad, too. It is very fresh. I don't like beef but chicken is OK. I like grapes best. They are sweet and purple. What's your favourite food and drink?
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('My favourite food is sandwich. It\'s healthy and delicious. I like salad, too. It is very fresh. I don\'t like beef but chicken is OK. I like grapes best. They are sweet and purple. What\'s your favourite food and drink?')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('My favourite food is sandwich. It\'s healthy and delicious. I like salad, too. It is very fresh. I don\'t like beef but chicken is OK. I like grapes best. They are sweet and purple. What\'s your favourite food and drink?')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -2007,7 +2007,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="5">
-                <p class="fw-bold">6. [学霸挑战] —Can you play ________ pipa? —Yes, I can. <button class="btn-speak btn-sm" onclick="speak('Can you play the pipa? Yes, I can.')">🔊</button></p>
+                <p class="fw-bold">6. [学霸挑战] —Can you play ________ pipa? —Yes, I can. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Can you play the pipa? Yes, I can.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 8, event)">A. the</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 8, event)">B. a</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 8, event)">C. /</button>
                 </div>
@@ -2015,7 +2015,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="6">
-                <p class="fw-bold">7. [学霸挑战] I can dance, ________ I can't draw cartoons. <button class="btn-speak btn-sm" onclick="speak('I can dance, but I can\'t draw cartoons.')">🔊</button></p>
+                <p class="fw-bold">7. [学霸挑战] I can dance, ________ I can't draw cartoons. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can dance, but I can\'t draw cartoons.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 4, 8, event)">A. and</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 4, 8, event)">B. but</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 4, 8, event)">C. so</button>
                 </div>
@@ -2023,7 +2023,7 @@
             </div>
             
             <div class="quiz-item" data-quiz-id="7">
-                <p class="fw-bold">8. [学霸挑战] —________ can you do for the party? —I can sing English songs. <button class="btn-speak btn-sm" onclick="speak('What can you do for the party? I can sing English songs.')">🔊</button></p>
+                <p class="fw-bold">8. [学霸挑战] —________ can you do for the party? —I can sing English songs. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What can you do for the party? I can sing English songs.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 4, 8, event)">A. What</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 4, 8, event)">B. Who</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 4, 8, event)">C. Where</button>
                 </div>
@@ -2107,7 +2107,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(4)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-4" style="display:none; line-height: 1.8;">
                                     I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can't swim. Can you help me? I want to be great.
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can\'t swim. Can you help me? I want to be great.')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can\'t swim. Can you help me? I want to be great.')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -2393,7 +2393,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="5">
-                <p class="fw-bold">6. [学霸挑战] There is a big clock ________ the desk and the plant. <button class="btn-speak btn-sm" onclick="speak('There is a big clock between the desk and the plant.')">🔊</button></p>
+                <p class="fw-bold">6. [学霸挑战] There is a big clock ________ the desk and the plant. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a big clock between the desk and the plant.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 5, 8, event)">A. above</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 5, 8, event)">B. between</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 5, 8, event)">C. behind</button>
                 </div>
@@ -2401,7 +2401,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="6">
-                <p class="fw-bold">7. [学霸挑战] There ________ many nice photos in the room. <button class="btn-speak btn-sm" onclick="speak('There are many nice photos in the room.')">🔊</button></p>
+                <p class="fw-bold">7. [学霸挑战] There ________ many nice photos in the room. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are many nice photos in the room.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 5, 8, event)">A. is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 5, 8, event)">B. are</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 5, 8, event)">C. be</button>
                 </div>
@@ -2409,7 +2409,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="7">
-                <p class="fw-bold">8. [学霸挑战] Your room is so ________! Everything is in order. <button class="btn-speak btn-sm" onclick="speak('Your room is so tidy! Everything is in order.')">🔊</button></p>
+                <p class="fw-bold">8. [学霸挑战] Your room is so ________! Everything is in order. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Your room is so tidy! Everything is in order.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 5, 8, event)">A. tidy</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 5, 8, event)">B. small</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 5, 8, event)">C. messy</button>
                 </div>
@@ -2493,7 +2493,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(5)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-5" style="display:none; line-height: 1.8;">
                                     This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -2763,7 +2763,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="5">
-                <p class="fw-bold">6. [学霸挑战] —Are there any ________ in the village? —No, there aren't. <button class="btn-speak btn-sm" onclick="speak('Are there any tall buildings in the village? No, there aren\'t.')">🔊</button></p>
+                <p class="fw-bold">6. [学霸挑战] —Are there any ________ in the village? —No, there aren't. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Are there any tall buildings in the village? No, there aren\'t.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'B', 6, 8, event)">A. tall building</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'B', 6, 8, event)">B. tall buildings</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'B', 6, 8, event)">C. a tall building</button>
                 </div>
@@ -2771,7 +2771,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="6">
-                <p class="fw-bold">7. [学霸挑战] There ________ a forest and many trees in the nature park. <button class="btn-speak btn-sm" onclick="speak('There is a forest and many trees in the nature park.')">🔊</button></p>
+                <p class="fw-bold">7. [学霸挑战] There ________ a forest and many trees in the nature park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a forest and many trees in the nature park.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'A', 6, 8, event)">A. is</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'A', 6, 8, event)">B. are</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'A', 6, 8, event)">C. be</button>
                 </div>
@@ -2779,7 +2779,7 @@
             </div>
 
             <div class="quiz-item" data-quiz-id="7">
-                <p class="fw-bold">8. [学霸挑战] The ________ is clean. There are many fish in it. <button class="btn-speak btn-sm" onclick="speak('The river is clean. There are many fish in it.')">🔊</button></p>
+                <p class="fw-bold">8. [学霸挑战] The ________ is clean. There are many fish in it. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('The river is clean. There are many fish in it.')">🔊</button></p>
                 <div class="options">
                     <button class="option-btn" onclick="checkAnswer(this, 'A', 'C', 6, 8, event)">A. mountain</button><button class="option-btn" onclick="checkAnswer(this, 'B', 'C', 6, 8, event)">B. bridge</button><button class="option-btn" onclick="checkAnswer(this, 'C', 'C', 6, 8, event)">C. river</button>
                 </div>
@@ -2863,7 +2863,7 @@
                                 <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(6)">👁️ 显示/隐藏</button></h6>
                                 <div class="model-text p-3 bg-white rounded shadow-sm" id="model-6" style="display:none; line-height: 1.8;">
                                     Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?
-                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="speak('Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?')">🔊</button>
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?')">🔊</button>
                                 </div>
                             </div>
                         </div>
@@ -2886,24 +2886,24 @@
                     <div class="composition-card animate__animated animate__fadeInUp">
                         <div class="composition-title">
                             <span>1. 交友：介绍自己</span>
-                            <button class="full-read-btn" onclick="speak('Dear Betty, How are you? I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. I can do some kung fu and play basketball. I often do some kung fu on the weekend. My favourite food is dumplings. They are delicious. My favourite drink is tea. How about you? Yours, Jim')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('Dear Betty, How are you? I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. I can do some kung fu and play basketball. I often do some kung fu on the weekend. My favourite food is dumplings. They are delicious. My favourite drink is tea. How about you? Yours, Jim')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text">
-                            <span class="sentence-item" onclick="speak('Dear Betty,')">Dear Betty,</span><br>
-                            <span class="sentence-item" onclick="speak('How are you?')">How are you?</span>
-                            <span class="sentence-item" onclick="speak('I want to be your friend.')">I want to be your friend.</span>
-                            <span class="sentence-item" onclick="speak('I am Jim.')">I'm Jim.</span>
-                            <span class="sentence-item" onclick="speak('I am eleven years old.')">I'm eleven years old.</span>
-                            <span class="sentence-item" onclick="speak('I am tall and thin.')">I'm tall and thin.</span>
-                            <span class="sentence-item" onclick="speak('I am hard-working.')">I'm hard-working.</span>
-                            <span class="sentence-item" onclick="speak('I can do some kung fu and play basketball.')">I can do some kung fu and play basketball.</span>
-                            <span class="sentence-item" onclick="speak('I often do some kung fu on the weekend.')">I often do some kung fu on the weekend.</span>
-                            <span class="sentence-item" onclick="speak('My favourite food is dumplings.')">My favourite food is dumplings.</span>
-                            <span class="sentence-item" onclick="speak('They are delicious.')">They're delicious.</span>
-                            <span class="sentence-item" onclick="speak('My favourite drink is tea.')">My favourite drink is tea.</span>
-                            <span class="sentence-item" onclick="speak('How about you?')">How about you?</span><br><br>
-                            <span class="sentence-item" onclick="speak('Yours,')">Yours,</span><br>
-                            <span class="sentence-item" onclick="speak('Jim')">Jim</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Dear Betty,')">Dear Betty,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('How are you?')">How are you?</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I want to be your friend.')">I want to be your friend.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am Jim.')">I'm Jim.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am eleven years old.')">I'm eleven years old.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am tall and thin.')">I'm tall and thin.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am hard-working.')">I'm hard-working.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I can do some kung fu and play basketball.')">I can do some kung fu and play basketball.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I often do some kung fu on the weekend.')">I often do some kung fu on the weekend.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('My favourite food is dumplings.')">My favourite food is dumplings.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('They are delicious.')">They're delicious.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('My favourite drink is tea.')">My favourite drink is tea.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('How about you?')">How about you?</span><br><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Yours,')">Yours,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Jim')">Jim</span>
                         </div>
                     </div>
                 </div>
@@ -2913,20 +2913,20 @@
                     <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
                         <div class="composition-title">
                             <span>2. 交友：介绍周末活动</span>
-                            <button class="full-read-btn" onclick="speak('Dear Amy, Hello, I am Lucy. I do not go to school on the weekend. I often have an art class on Saturdays. I like drawing pictures. I often go to the park with my parents on Sundays. We often have a picnic there. I am always happy. I like my weekend. Yours, Lucy')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('Dear Amy, Hello, I am Lucy. I do not go to school on the weekend. I often have an art class on Saturdays. I like drawing pictures. I often go to the park with my parents on Sundays. We often have a picnic there. I am always happy. I like my weekend. Yours, Lucy')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text">
-                            <span class="sentence-item" onclick="speak('Dear Amy,')">Dear Amy,</span><br>
-                            <span class="sentence-item" onclick="speak('Hello, I am Lucy.')">Hello, I'm Lucy.</span>
-                            <span class="sentence-item" onclick="speak('I do not go to school on the weekend.')">I don't go to school on the weekend.</span>
-                            <span class="sentence-item" onclick="speak('I often have an art class on Saturdays.')">I often have an art class on Saturdays.</span>
-                            <span class="sentence-item" onclick="speak('I like drawing pictures.')">I like drawing pictures.</span>
-                            <span class="sentence-item" onclick="speak('I often go to the park with my parents on Sundays.')">I often go to the park with my parents on Sundays.</span>
-                            <span class="sentence-item" onclick="speak('We often have a picnic there.')">We often have a picnic there.</span>
-                            <span class="sentence-item" onclick="speak('I am always happy.')">I'm always happy.</span>
-                            <span class="sentence-item" onclick="speak('I like my weekend.')">I like my weekend.</span><br><br>
-                            <span class="sentence-item" onclick="speak('Yours,')">Yours,</span><br>
-                            <span class="sentence-item" onclick="speak('Lucy')">Lucy</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Dear Amy,')">Dear Amy,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Hello, I am Lucy.')">Hello, I'm Lucy.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I do not go to school on the weekend.')">I don't go to school on the weekend.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I often have an art class on Saturdays.')">I often have an art class on Saturdays.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I like drawing pictures.')">I like drawing pictures.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I often go to the park with my parents on Sundays.')">I often go to the park with my parents on Sundays.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('We often have a picnic there.')">We often have a picnic there.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am always happy.')">I'm always happy.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I like my weekend.')">I like my weekend.</span><br><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Yours,')">Yours,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Lucy')">Lucy</span>
                         </div>
                     </div>
                 </div>
@@ -2936,17 +2936,17 @@
                     <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
                         <div class="composition-title">
                             <span>3. 描述自然公园</span>
-                            <button class="full-read-btn" onclick="speak('The Nature Park. There is a nature park near my home. There are many hills and a long river in the nature park. There is a bridge over the river. There are some ducks on the river. We can go boating on the river. There are many trees beside the river. What a beautiful nature park!')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('The Nature Park. There is a nature park near my home. There are many hills and a long river in the nature park. There is a bridge over the river. There are some ducks on the river. We can go boating on the river. There are many trees beside the river. What a beautiful nature park!')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text text-center">
-                            <strong class="sentence-item d-block mb-2" onclick="speak('The Nature Park')">The Nature Park</strong>
-                            <span class="sentence-item" onclick="speak('There is a nature park near my home.')">There is a nature park near my home.</span>
-                            <span class="sentence-item" onclick="speak('There are many hills and a long river in the nature park.')">There are many hills and a long river in the nature park.</span>
-                            <span class="sentence-item" onclick="speak('There is a bridge over the river.')">There is a bridge over the river.</span>
-                            <span class="sentence-item" onclick="speak('There are some ducks on the river.')">There are some ducks on the river.</span>
-                            <span class="sentence-item" onclick="speak('We can go boating on the river.')">We can go boating on the river.</span>
-                            <span class="sentence-item" onclick="speak('There are many trees beside the river.')">There are many trees beside the river.</span>
-                            <span class="sentence-item" onclick="speak('What a beautiful nature park!')">What a beautiful nature park!</span>
+                            <strong class="sentence-item d-block mb-2" onclick="event.stopPropagation(); speak('The Nature Park')">The Nature Park</strong>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a nature park near my home.')">There is a nature park near my home.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There are many hills and a long river in the nature park.')">There are many hills and a long river in the nature park.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a bridge over the river.')">There is a bridge over the river.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There are some ducks on the river.')">There are some ducks on the river.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('We can go boating on the river.')">We can go boating on the river.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There are many trees beside the river.')">There are many trees beside the river.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('What a beautiful nature park!')">What a beautiful nature park!</span>
                         </div>
                     </div>
                 </div>
@@ -2956,22 +2956,22 @@
                     <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
                         <div class="composition-title">
                             <span>4. 交友：介绍自己的房间</span>
-                            <button class="full-read-btn" onclick="speak('Dear Sally, This is my bedroom. It is small but nice. There is a small bed, a desk and a chair. There is a clock on the wall. There is a doll on my bed. There are some books and a photo on the shelf. There is a computer and a plant on the desk. My bag is on the floor. I often read books in my bedroom. I like my bedroom very much. Yours, Rita')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('Dear Sally, This is my bedroom. It is small but nice. There is a small bed, a desk and a chair. There is a clock on the wall. There is a doll on my bed. There are some books and a photo on the shelf. There is a computer and a plant on the desk. My bag is on the floor. I often read books in my bedroom. I like my bedroom very much. Yours, Rita')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text">
-                            <span class="sentence-item" onclick="speak('Dear Sally,')">Dear Sally,</span><br>
-                            <span class="sentence-item" onclick="speak('This is my bedroom.')">This is my bedroom.</span>
-                            <span class="sentence-item" onclick="speak('It is small but nice.')">It's small but nice.</span>
-                            <span class="sentence-item" onclick="speak('There is a small bed, a desk and a chair.')">There is a small bed, a desk and a chair.</span>
-                            <span class="sentence-item" onclick="speak('There is a clock on the wall.')">There is a clock on the wall.</span>
-                            <span class="sentence-item" onclick="speak('There is a doll on my bed.')">There is a doll on my bed.</span>
-                            <span class="sentence-item" onclick="speak('There are some books and a photo on the shelf.')">There are some books and a photo on the shelf.</span>
-                            <span class="sentence-item" onclick="speak('There is a computer and a plant on the desk.')">There is a computer and a plant on the desk.</span>
-                            <span class="sentence-item" onclick="speak('My bag is on the floor.')">My bag is on the floor.</span>
-                            <span class="sentence-item" onclick="speak('I often read books in my bedroom.')">I often read books in my bedroom.</span>
-                            <span class="sentence-item" onclick="speak('I like my bedroom very much.')">I like my bedroom very much.</span><br><br>
-                            <span class="sentence-item" onclick="speak('Yours,')">Yours,</span><br>
-                            <span class="sentence-item" onclick="speak('Rita')">Rita</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Dear Sally,')">Dear Sally,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('This is my bedroom.')">This is my bedroom.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('It is small but nice.')">It's small but nice.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a small bed, a desk and a chair.')">There is a small bed, a desk and a chair.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a clock on the wall.')">There is a clock on the wall.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a doll on my bed.')">There is a doll on my bed.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There are some books and a photo on the shelf.')">There are some books and a photo on the shelf.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('There is a computer and a plant on the desk.')">There is a computer and a plant on the desk.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('My bag is on the floor.')">My bag is on the floor.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I often read books in my bedroom.')">I often read books in my bedroom.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I like my bedroom very much.')">I like my bedroom very much.</span><br><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Yours,')">Yours,</span><br>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Rita')">Rita</span>
                         </div>
                     </div>
                 </div>
@@ -2981,20 +2981,20 @@
                     <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
                         <div class="composition-title">
                             <span>5. 描述最喜爱的老师</span>
-                            <button class="full-read-btn" onclick="speak('My favourite teacher. Hello, I am Tom. I have many teachers at school. But my favourite teacher is Mr Liu. Mr Liu is my PE teacher. He has big eyes. He is tall and thin. He is young. He likes playing sports. He is nice. I like him very much.')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('My favourite teacher. Hello, I am Tom. I have many teachers at school. But my favourite teacher is Mr Liu. Mr Liu is my PE teacher. He has big eyes. He is tall and thin. He is young. He likes playing sports. He is nice. I like him very much.')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text">
-                            <strong class="sentence-item d-block mb-2 text-center" onclick="speak('My favourite teacher')">My favourite teacher</strong>
-                            <span class="sentence-item" onclick="speak('Hello, I am Tom.')">Hello, I'm Tom.</span>
-                            <span class="sentence-item" onclick="speak('I have many teachers at school.')">I have many teachers at school.</span>
-                            <span class="sentence-item" onclick="speak('But my favourite teacher is Mr Liu.')">But my favourite teacher is Mr Liu.</span>
-                            <span class="sentence-item" onclick="speak('Mr Liu is my PE teacher.')">Mr Liu is my PE teacher.</span>
-                            <span class="sentence-item" onclick="speak('He has big eyes.')">He has big eyes.</span>
-                            <span class="sentence-item" onclick="speak('He is tall and thin.')">He is tall and thin.</span>
-                            <span class="sentence-item" onclick="speak('He is young.')">He is young.</span>
-                            <span class="sentence-item" onclick="speak('He likes playing sports.')">He likes playing sports.</span>
-                            <span class="sentence-item" onclick="speak('He is nice.')">He is nice.</span>
-                            <span class="sentence-item" onclick="speak('I like him very much.')">I like him very much.</span>
+                            <strong class="sentence-item d-block mb-2 text-center" onclick="event.stopPropagation(); speak('My favourite teacher')">My favourite teacher</strong>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Hello, I am Tom.')">Hello, I'm Tom.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I have many teachers at school.')">I have many teachers at school.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('But my favourite teacher is Mr Liu.')">But my favourite teacher is Mr Liu.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('Mr Liu is my PE teacher.')">Mr Liu is my PE teacher.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('He has big eyes.')">He has big eyes.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('He is tall and thin.')">He is tall and thin.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('He is young.')">He is young.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('He likes playing sports.')">He likes playing sports.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('He is nice.')">He is nice.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I like him very much.')">I like him very much.</span>
                         </div>
                     </div>
                 </div>
@@ -3004,15 +3004,15 @@
                     <div class="composition-card animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
                         <div class="composition-title">
                             <span>6. 介绍周末的活动</span>
-                            <button class="full-read-btn" onclick="speak('My weekend. I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊 全文朗读</button>
+                            <button class="full-read-btn" onclick="event.stopPropagation(); speak('My weekend. I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊 全文朗读</button>
                         </div>
                         <div class="composition-text">
-                            <strong class="sentence-item d-block mb-2 text-center" onclick="speak('My weekend')">My weekend</strong>
-                            <span class="sentence-item" onclick="speak('I am always busy on the weekend.')">I'm always busy on the weekend.</span>
-                            <span class="sentence-item" onclick="speak('On Saturdays, I often do my homework in the morning.')">On Saturdays, I often do my homework in the morning.</span>
-                            <span class="sentence-item" onclick="speak('In the afternoon, I often play football with my friends in the park.')">In the afternoon, I often play football with my friends in the park.</span>
-                            <span class="sentence-item" onclick="speak('On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.')">On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.</span>
-                            <span class="sentence-item" onclick="speak('I like my weekends.')">I like my weekends.</span>
+                            <strong class="sentence-item d-block mb-2 text-center" onclick="event.stopPropagation(); speak('My weekend')">My weekend</strong>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I am always busy on the weekend.')">I'm always busy on the weekend.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('On Saturdays, I often do my homework in the morning.')">On Saturdays, I often do my homework in the morning.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('In the afternoon, I often play football with my friends in the park.')">In the afternoon, I often play football with my friends in the park.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.')">On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon.</span>
+                            <span class="sentence-item" onclick="event.stopPropagation(); speak('I like my weekends.')">I like my weekends.</span>
                         </div>
                     </div>
                 </div>
@@ -3594,89 +3594,91 @@
     function speak(text) {
         if (!text) return;
         
-        // 如果未解锁且不在主页，引导用户去解锁
+        // 如果未解锁，引导用户去解锁
         if (!voiceUnlocked) {
-            const btn = document.getElementById('btn-unlock-audio');
-            if (btn) {
-                btn.style.display = 'block';
-                btn.classList.add('animate__shakeX');
-                setTimeout(() => btn.classList.remove('animate__shakeX'), 1000);
-            }
+            showUnlockButton();
         }
 
-        // 清理文本中的多余空格和换行
+        // 清理文本
         const cleanText = text.replace(/\s+/g, ' ').trim();
 
-        // 优先使用 Web Speech API (离线、响应快)
         if ('speechSynthesis' in window) {
-            if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+            // 安卓兼容性核心：取消 -> 恢复 -> 延时播放
+            window.speechSynthesis.cancel();
             
-            // 核心：处理安卓端正在说话时的冲突
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-                // cancel 之后需要一点点时间让引擎释放
-                setTimeout(() => executeSpeak(cleanText), 50);
-            } else {
-                executeSpeak(cleanText);
+            // 确保引擎处于非暂停状态
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
             }
+            
+            // 延时执行以确保 cancel 生效
+            setTimeout(() => {
+                executeSpeak(cleanText);
+            }, 50);
         } else {
-            // 如果浏览器不支持 Web Speech API，使用在线补丁
             speakFallback(cleanText);
         }
     }
 
-    function executeSpeak(text) {
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'en-US';
-        msg.rate = 0.85;
-        msg.pitch = 1.0;
-        msg.volume = 1.0;
-        
-        if (!preferredVoice) initVoices();
-        if (preferredVoice) msg.voice = preferredVoice;
+    function showUnlockButton() {
+        const btn = document.getElementById('btn-unlock-audio');
+        if (btn) {
+            btn.style.display = 'block';
+            btn.classList.add('animate__shakeX');
+            setTimeout(() => btn.classList.remove('animate__shakeX'), 1000);
+        }
+    }
 
-        msg.onerror = (e) => {
-            console.error("Web Speech error, falling back:", e);
+    function executeSpeak(text) {
+        try {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            msg.lang = 'en-US';
+            msg.rate = 0.85;
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
+            
+            if (!preferredVoice) initVoices();
+            if (preferredVoice) msg.voice = preferredVoice;
+
+            msg.onerror = (e) => {
+                console.error("Web Speech error:", e);
+                // 如果是用户激活错误，显示解锁按钮
+                if (e.error === 'not-allowed' || e.error === 'network') {
+                    showUnlockButton();
+                }
+                speakFallback(text);
+            };
+            
+            window.speechSynthesis.speak(msg);
+        } catch (e) {
+            console.error("Execute speak failed:", e);
             speakFallback(text);
-        };
-        
-        window.speechSynthesis.speak(msg);
+        }
     }
 
     function speakFallback(text) {
         if (!text) return;
         
-        // 如果正在播放，先停止
         if (fallbackAudio) {
             fallbackAudio.pause();
-            fallbackAudio.onended = null;
             fallbackAudio = null;
         }
         
-        // 使用有道词典的高质量美音接口 (type=2)
         const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
         
         try {
-            fallbackAudio = new Audio();
-            fallbackAudio.src = url;
-            
-            // 安卓端 Audio 对象必须在用户手势回调中 play，
-            // 这里的 speakFallback 通常是在按钮点击或 speak() 的异步回调中
+            fallbackAudio = new Audio(url);
             const playPromise = fallbackAudio.play();
             
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
-                    console.error("Fallback TTS play failed:", e);
-                    // 只有在完全没解锁过的情况下才显示按钮
-                    if (!voiceUnlocked) {
-                        const btn = document.getElementById('btn-unlock-audio');
-                        if (btn) btn.style.display = 'block';
-                    }
+                    console.error("Fallback TTS failed:", e);
+                    showUnlockButton();
                 });
             }
         } catch (e) {
-            console.error("Audio object creation failed:", e);
+            console.error("Fallback creation failed:", e);
         }
     }
 
