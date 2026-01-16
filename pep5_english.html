@@ -3503,8 +3503,10 @@
     function unlockVoice() {
         if (!('speechSynthesis' in window)) return;
         
-        // 1. 解锁 Web Speech API
-        const msg = new SpeechSynthesisUtterance('');
+        // 安卓/iOS 核心修复：必须在点击事件的第一时间创建并播放一段非空内容
+        // 哪怕是一声“Hello”，只要能打破浏览器的静默策略
+        const msg = new SpeechSynthesisUtterance('Hello');
+        msg.volume = 0; // 即使静音播放也能解锁
         window.speechSynthesis.speak(msg);
         
         // 2. 解锁 HTML5 Audio 元素
@@ -3518,23 +3520,28 @@
             }
         });
         
-        // 重新初始化语音列表
-        initVoices();
-        
-        voiceUnlocked = true;
+        // 强制刷新语音列表
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                initVoices();
+                voiceUnlocked = true;
+                speak('Ready to speak!');
+            };
+        } else {
+            initVoices();
+            voiceUnlocked = true;
+            speak('Ready to speak!');
+        }
         
         // 更新按钮状态
         const btn = document.getElementById('btn-unlock-audio');
         if (btn) {
-            btn.innerHTML = '✅ 语音已启用';
+            btn.innerHTML = '✅ 语音已开启';
             btn.classList.replace('btn-light', 'btn-success');
             setTimeout(() => {
                 btn.style.display = 'none';
             }, 2000);
         }
-        
-        // 尝试打个招呼
-        speak('Audio system enabled. Let\'s learn English together!');
     }
 
     function initVoices() {
@@ -3577,31 +3584,38 @@
     function speak(text) {
         if (!('speechSynthesis' in window)) return;
 
-        // 如果是安卓且还没解锁，尝试自动解锁（虽然可能失败，但作为最后手段）
-        if (!voiceUnlocked && /Android/i.test(navigator.userAgent)) {
-            console.log("Attempting auto-unlock on Android...");
+        // 安卓兼容性核心修复：确保在 speak 之前 resume
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
         }
 
         window.speechSynthesis.cancel();
 
-        setTimeout(() => {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = text;
-            msg.lang = 'en-US';
-            msg.rate = 0.85;
-            msg.pitch = 1.0;
-            msg.volume = 1.0;
-            
-            if (!preferredVoice) {
-                initVoices();
-            }
+        // 移除 setTimeout，或者缩短到 0ms，以保持在用户手势链中
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = text;
+        msg.lang = 'en-US';
+        msg.rate = 0.85;
+        msg.pitch = 1.0;
+        msg.volume = 1.0;
+        
+        if (!preferredVoice) {
+            initVoices();
+        }
 
-            if (preferredVoice) {
-                msg.voice = preferredVoice;
+        if (preferredVoice) {
+            msg.voice = preferredVoice;
+        }
+
+        // 增加错误监听
+        msg.onerror = (e) => {
+            console.error("Speech error:", e);
+            if (e.error === 'not-allowed') {
+                document.getElementById('btn-unlock-audio').style.display = 'block';
             }
-            
-            window.speechSynthesis.speak(msg);
-        }, 50);
+        };
+        
+        window.speechSynthesis.speak(msg);
     }
 
     const phonicsQuizState = {};
