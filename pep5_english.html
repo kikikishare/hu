@@ -298,9 +298,13 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 2000;
+            z-index: 1000;
             cursor: pointer;
             transition: all 0.3s;
+        }
+        /* 语音可点击项 */
+        .flashcard-back, .sentence-card .flashcard-front, .model-text {
+            cursor: pointer;
         }
         .maruko-mascot:hover {
             transform: scale(1.1) rotate(-5deg);
@@ -3506,6 +3510,49 @@
     let lastSpeakId = 0; // 用于追踪最新的发音请求，防止并发冲突
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isAndroid = /Android/.test(navigator.userAgent);
+
+    // 全局点击发音监听
+    document.addEventListener('click', (e) => {
+        // 1. 作文拼图项
+        const puzzleItem = e.target.closest('.puzzle-item');
+        if (puzzleItem && !e.target.closest('.btn-speak')) {
+            const btn = puzzleItem.querySelector('.btn-speak');
+            if (btn) {
+                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
+                if (match && match[1]) speak(match[1]);
+            }
+        }
+        
+        // 2. 单词卡片背面
+        const flashcardBack = e.target.closest('.flashcard-back');
+        if (flashcardBack && !e.target.closest('.btn-speak')) {
+            const btn = flashcardBack.querySelector('.btn-speak');
+            if (btn) {
+                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
+                if (match && match[1]) speak(match[1]);
+            }
+        }
+
+        // 3. 句子卡片正面 (有些句子卡片正面也有喇叭)
+        const sentenceFront = e.target.closest('.sentence-card .flashcard-front');
+        if (sentenceFront && !e.target.closest('.btn-speak')) {
+            const btn = sentenceFront.querySelector('.btn-speak');
+            if (btn) {
+                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
+                if (match && match[1]) speak(match[1]);
+            }
+        }
+
+        // 4. 参考范文文本
+        const modelText = e.target.closest('.model-text');
+        if (modelText && !e.target.closest('.btn-speak')) {
+            const btn = modelText.querySelector('.btn-speak');
+            if (btn) {
+                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
+                if (match && match[1]) speak(match[1]);
+            }
+        }
+    });
 
     // 页面加载时自动检查状态
     window.addEventListener('DOMContentLoaded', () => {

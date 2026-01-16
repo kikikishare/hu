@@ -59,6 +59,11 @@
             margin-bottom: 10px;
         }
 
+        .clue-text-content {
+            cursor: pointer;
+            flex: 1;
+        }
+
         .btn-play-clue {
             background: none;
             border: none;
@@ -424,6 +429,19 @@
     let speakTimeout = null;
     let checkSpeakingInterval = null;
     let lastSpeakId = 0; // 用于追踪最新的发音请求，防止并发冲突
+
+    // 全局点击发音监听
+    document.addEventListener('click', (e) => {
+        // 1. 案件线索文本
+        const clueText = e.target.closest('.clue-text-content');
+        if (clueText && !e.target.closest('.btn-play-clue')) {
+            const btn = clueText.parentElement.querySelector('.btn-play-clue');
+            if (btn) {
+                const match = btn.getAttribute('onclick').match(/speak\(['"](.*?)['"]\)/);
+                if (match && match[1]) speak(match[1]);
+            }
+        }
+    });
 
     function speak(text) {
         if (!text) return;
