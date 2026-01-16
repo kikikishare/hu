@@ -3500,6 +3500,7 @@
     let preferredVoice = null;
     let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
     let fallbackAudio = null;
+    let currentUtterance = null; // 保持引用，防止安卓垃圾回收导致发音中断
 
     // 页面加载时自动检查状态
     window.addEventListener('DOMContentLoaded', () => {
@@ -3603,18 +3604,20 @@
         const cleanText = text.replace(/\s+/g, ' ').trim();
 
         if ('speechSynthesis' in window) {
-            // 安卓兼容性核心：取消 -> 恢复 -> 延时播放
-            window.speechSynthesis.cancel();
-            
-            // 确保引擎处于非暂停状态
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
+            // 安卓兼容性核心：彻底取消 -> 强制恢复 -> 延时播放
+            try {
+                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            } catch (e) {
+                console.error("Speech reset failed:", e);
             }
             
-            // 延时执行以确保 cancel 生效
+            // 延时执行以确保 cancel 生效，安卓建议 250ms+
             setTimeout(() => {
                 executeSpeak(cleanText);
-            }, 50);
+            }, 250);
         } else {
             speakFallback(cleanText);
         }
@@ -3631,28 +3634,60 @@
 
     function executeSpeak(text) {
         try {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = text;
-            msg.lang = 'en-US';
-            msg.rate = 0.85;
-            msg.pitch = 1.0;
-            msg.volume = 1.0;
+            // 1. 创建新的 Utterance
+            currentUtterance = new SpeechSynthesisUtterance();
+            currentUtterance.text = text;
+            currentUtterance.lang = 'en-US';
+            currentUtterance.rate = 0.85;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
             
+            // 2. 选择语音
             if (!preferredVoice) initVoices();
-            if (preferredVoice) msg.voice = preferredVoice;
+            if (preferredVoice) currentUtterance.voice = preferredVoice;
 
-            msg.onerror = (e) => {
+            // 3. 核心事件监听：防止内存泄露和卡顿
+            currentUtterance.onstart = () => {
+                // 安卓补丁：开始播放时再次确保没有暂停
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            };
+
+            currentUtterance.onend = () => {
+                currentUtterance = null;
+            };
+
+            currentUtterance.onerror = (e) => {
                 console.error("Web Speech error:", e);
+                currentUtterance = null;
                 // 如果是用户激活错误，显示解锁按钮
-                if (e.error === 'not-allowed' || e.error === 'network') {
+                if (e.error === 'not-allowed' || e.error === 'network' || e.error === 'interrupted') {
                     showUnlockButton();
                 }
+                // 发生错误时自动切换到备用引擎
                 speakFallback(text);
             };
             
-            window.speechSynthesis.speak(msg);
+            // 4. 执行朗读
+            window.speechSynthesis.speak(currentUtterance);
+
+            // 5. 安卓 Hack: 定时检查是否处于“假死”状态
+            // 每 2 秒检查一次，直到播放结束
+            const checkSpeaking = setInterval(() => {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.resume();
+                } else {
+                    clearInterval(checkSpeaking);
+                }
+            }, 2000);
+
+            // 确保不会无限循环
+            setTimeout(() => clearInterval(checkSpeaking), 15000);
+
         } catch (e) {
             console.error("Execute speak failed:", e);
+            currentUtterance = null;
             speakFallback(text);
         }
     }

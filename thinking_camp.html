@@ -26,6 +26,14 @@
             text-align: center;
             border-bottom: 5px solid var(--clue-gold);
             margin-bottom: 30px;
+            position: relative;
+        }
+
+        .btn-unlock-audio {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
         .clue-box {
@@ -42,6 +50,27 @@
             font-size: 1.4rem;
             color: #333;
             line-height: 1.6;
+        }
+
+        .clue-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .btn-play-clue {
+            background: none;
+            border: none;
+            color: var(--detective-blue);
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .btn-play-clue:hover {
+            opacity: 1;
         }
 
         .profile-card {
@@ -125,6 +154,7 @@
 
 <div class="header">
     <a href="index.html" class="btn-back">← 返回</a>
+    <button id="btn-unlock-audio" class="btn btn-warning btn-sm rounded-pill btn-unlock-audio" onclick="unlockVoice()">🔊 开启语音</button>
     <h1 class="animate__animated animate__fadeInDown">🕵️‍♂️ 英语思维训练营</h1>
     <p>小小侦探：根据线索找出正确的人物或事物！<br><small style="opacity: 0.5; font-size: 0.6rem;">Update: 2026.01.16.V2</small></p>
     <div class="level-indicator">第 <span id="levelNum">1</span> 关</div>
@@ -345,6 +375,123 @@
     let score = 0;
     const winModal = new bootstrap.Modal(document.getElementById('winModal'));
 
+    // --- 语音引擎逻辑 (适配安卓) ---
+    let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
+    let preferredVoice = null;
+    let currentUtterance = null;
+
+    function initVoices() {
+        if (!('speechSynthesis' in window)) return;
+        let voices = window.speechSynthesis.getVoices();
+        const trySelectVoice = () => {
+            if (voices.length > 0) {
+                preferredVoice = voices.find(v => (v.name === 'Google US English' || v.name === 'English (United States)') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.lang.startsWith('en-US')) ||
+                                 voices.find(v => v.lang.startsWith('en'));
+            }
+        };
+        if (voices.length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                voices = window.speechSynthesis.getVoices();
+                trySelectVoice();
+            };
+        } else {
+            trySelectVoice();
+        }
+    }
+
+    function unlockVoice() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.resume();
+            const msg = new SpeechSynthesisUtterance('Ready');
+            msg.volume = 0.1;
+            window.speechSynthesis.speak(msg);
+        }
+        voiceUnlocked = true;
+        localStorage.setItem('pep5_voice_unlocked', 'true');
+        const btn = document.getElementById('btn-unlock-audio');
+        if (btn) {
+            btn.innerHTML = '✅ 语音已开启';
+            btn.className = 'btn btn-success btn-sm rounded-pill btn-unlock-audio';
+            setTimeout(() => btn.style.display = 'none', 1500);
+        }
+        initVoices();
+    }
+
+    let fallbackAudio = null;
+
+    function speak(text) {
+        if (!text || !voiceUnlocked) return;
+        const cleanText = text.replace(/<[^>]*>/g, '').trim(); // 移除 HTML 标签
+        
+        if ('speechSynthesis' in window) {
+            try {
+                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+            } catch (e) {}
+
+            setTimeout(() => {
+                executeSpeak(cleanText);
+            }, 250);
+        } else {
+            speakFallback(cleanText);
+        }
+    }
+
+    function executeSpeak(text) {
+        try {
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.lang = 'en-US';
+            currentUtterance.rate = 0.85;
+            if (preferredVoice) currentUtterance.voice = preferredVoice;
+
+            currentUtterance.onstart = () => {
+                if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+            };
+            currentUtterance.onend = () => { currentUtterance = null; };
+            currentUtterance.onerror = (e) => { 
+                currentUtterance = null; 
+                speakFallback(text);
+            };
+
+            window.speechSynthesis.speak(currentUtterance);
+
+            const checkSpeaking = setInterval(() => {
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.resume();
+                } else {
+                    clearInterval(checkSpeaking);
+                }
+            }, 2000);
+            setTimeout(() => clearInterval(checkSpeaking), 15000);
+        } catch (e) {
+            speakFallback(text);
+        }
+    }
+
+    function speakFallback(text) {
+        if (!text) return;
+        if (fallbackAudio) {
+            fallbackAudio.pause();
+            fallbackAudio = null;
+        }
+        const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
+        try {
+            fallbackAudio = new Audio(url);
+            fallbackAudio.play().catch(e => console.error("Fallback audio failed", e));
+        } catch (e) {
+            console.error("Fallback audio creation failed", e);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (voiceUnlocked) {
+            const btn = document.getElementById('btn-unlock-audio');
+            if (btn) btn.style.display = 'none';
+            initVoices();
+        }
+    });
+
     function loadLevel() {
         const level = levels[currentLevel];
         document.getElementById('levelNum').innerText = currentLevel + 1;
@@ -353,11 +500,16 @@
         const clueDiv = document.getElementById('clueContent');
         clueDiv.innerHTML = '';
         level.clues.forEach((clue, index) => {
-            const p = document.createElement('p');
-            p.className = 'animate__animated animate__fadeIn';
-            p.style.animationDelay = (index * 0.5) + 's';
-            p.innerHTML = `• ${clue}`;
-            clueDiv.appendChild(p);
+            const div = document.createElement('div');
+            div.className = 'clue-item animate__animated animate__fadeIn';
+            div.style.animationDelay = (index * 0.3) + 's';
+            
+            // 处理 clue 文本（可能包含 HTML 标签如 <b>）
+            div.innerHTML = `
+                <span class="clue-text-content">• ${clue}</span>
+                <button class="btn-play-clue" onclick="speak('${clue.replace(/'/g, "\\'")}')">🔊</button>
+            `;
+            clueDiv.appendChild(div);
         });
 
         // Load Cards (随机打乱选项顺序)
@@ -368,7 +520,7 @@
             const col = document.createElement('div');
             col.className = 'col-6 col-lg-3';
             col.innerHTML = `
-                <div class="profile-card animate__animated animate__zoomIn" style="animation-delay: ${0.2 * index}s" onclick="checkAnswer('${profile.name}', this)">
+                <div class="profile-card animate__animated animate__zoomIn" style="animation-delay: ${0.1 * index}s" onclick="checkAnswer('${profile.name}', this)">
                     <div class="avatar">${profile.icon}</div>
                     <h5 class="mb-1">${profile.name}</h5>
                     <p class="text-muted small mb-2">${profile.job}</p>
