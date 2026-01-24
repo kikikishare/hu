@@ -8,136 +8,177 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         :root {
-            --primary-color: #64B5F6;
-            --secondary-color: #FFB74D;
-            --success-color: #81C784;
-            --accent-color: #BA68C8;
-            --bg-color: #F8F9FA;
-            --card-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            --header-gradient: linear-gradient(135deg, #4FC3F7, #64B5F6);
+            --primary-grad: linear-gradient(135deg, #6dd5ed, #2193b0);
+            --secondary-grad: linear-gradient(135deg, #ff9966, #ff5e62);
+            --success-grad: linear-gradient(135deg, #56ab2f, #a8e063);
+            --accent-grad: linear-gradient(135deg, #8e44ad, #c39bd3);
+            --bg-color: #f0f4f8;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --card-radius: 24px;
+            --glass-bg: rgba(255, 255, 255, 0.9);
         }
 
         body {
-            background-color: #E3F2FD;
-            background-image: radial-gradient(#BBDEFB 1px, transparent 1px);
-            background-size: 25px 25px;
-            font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            color: #455A64;
-            padding-bottom: 80px;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(109, 213, 237, 0.1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, rgba(255, 153, 102, 0.1) 0, transparent 50%);
+            font-family: 'Quicksand', 'PingFang SC', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
         }
 
         .header {
-            background: var(--header-gradient);
-            color: white;
-            padding: 5rem 0 4rem;
-            text-align: center;
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
-            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.2);
-            margin-bottom: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::after {
-            content: '✿';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 3rem;
-            color: rgba(255,255,255,0.2);
-        }
-
-        .nav-pills .nav-link {
-            border-radius: 30px;
-            color: #1976D2;
-            padding: 12px 25px;
-            font-weight: 500;
-            transition: all 0.3s;
             background: white;
-            margin: 0 8px;
-            border: 2px solid transparent;
+            padding: 3rem 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
         }
 
-        .nav-pills .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3);
-            border-color: #4FC3F7;
+        .welcome-title {
+            font-weight: 800;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
         }
+
+        .grade-section {
+            background: var(--glass-bg);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            height: 100%;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f1f1f1;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: white;
+        }
+
+        .grade-5-icon { background: var(--primary-grad); }
+        .grade-3-icon { background: var(--secondary-grad); }
 
         .classroom-card {
-            border: none;
-            border-radius: 30px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
             background: white;
-            box-shadow: var(--card-shadow);
+            border-radius: 20px;
+            padding: 1.5rem;
             height: 100%;
-            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
         }
 
         .classroom-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 15px 35px rgba(33, 150, 243, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border-color: #e9ecef;
         }
 
-        .card-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            transition: transform 0.3s;
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s;
         }
 
-        .classroom-card:hover .card-icon {
-            transform: scale(1.2) rotate(5deg);
+        .classroom-card:hover .card-icon-wrapper {
+            background: #e3f2fd;
+            transform: scale(1.1);
         }
 
-        .footer-badge {
-            background-color: white;
-            padding: 10px 25px;
-            border-radius: 50px;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
-            color: #90A4AE;
-        }
-
-        .section-title {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 2rem;
+        .card-title {
             font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60%;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
         }
 
-        .quick-link-btn {
-            border-radius: 15px;
-            padding: 15px;
-            background: white;
-            border: 2px solid #E3F2FD;
-            text-align: center;
-            transition: all 0.2s;
+        .action-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
             text-decoration: none;
-            color: #455A64;
-            display: block;
+            display: inline-block;
         }
 
-        .quick-link-btn:hover {
-            background: #E3F2FD;
-            border-color: var(--primary-color);
-            color: #1976D2;
+        .btn-g5 { background: #e3f2fd; color: #2193b0; }
+        .btn-g5:hover { background: #2193b0; color: white; }
+
+        .btn-g3 { background: #fff3e0; color: #ff5e62; }
+        .btn-g3:hover { background: #ff5e62; color: white; }
+
+        .main-feat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #f8f9fa;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .main-feat-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .footer-info {
+            margin-top: 4rem;
+            padding-bottom: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .badge-pill {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -145,43 +186,51 @@
 
 <div class="header">
     <div class="container">
-        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🏠 胡老师的小课堂</h1>
-        <p class="lead animate__animated animate__fadeInUp animate__delay-1s">寓教于乐，在这里发现学习的乐趣</p>
+        <h1 class="display-4 welcome-title animate__animated animate__fadeInDown">胡老师的小课堂</h1>
+        <p class="text-muted lead animate__animated animate__fadeInUp">在这里，学习是一场奇妙的探险 🚀</p>
     </div>
 </div>
 
 <div class="container">
-    <div class="row g-4 mb-5">
+    <div class="row g-5">
         <!-- 五年级板块 -->
         <div class="col-lg-6">
-            <div class="section-title h2 mb-4">🏆 五年级·高效复习区</div>
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="classroom-card p-4 animate__animated animate__fadeInLeft">
-                        <div class="d-flex align-items-center">
-                            <div class="card-icon me-4">📚</div>
-                            <div>
-                                <h3>PEP 5 英语复习助手</h3>
-                                <p class="text-muted mb-0">词汇句型闯关、小作文拼图、语音互动</p>
-                            </div>
-                        </div>
-                        <div class="text-end mt-3">
-                            <a href="pep5_english.html" class="btn btn-primary rounded-pill px-4">立即进入</a>
-                        </div>
+            <div class="grade-section animate__animated animate__fadeInLeft">
+                <div class="section-header">
+                    <div class="section-icon grade-5-icon">🎓</div>
+                    <div>
+                        <h2 class="h4 mb-0 fw-bold">五年级 · 高效复习</h2>
+                        <small class="text-muted">PEP 5 英语专项强化</small>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
-                        <div class="card-icon">🧩</div>
-                        <h4>单词消消乐</h4>
-                        <a href="word_game.html" class="btn btn-sm btn-outline-success rounded-pill mt-2">开始游戏</a>
+
+                <a href="pep5_english.html" class="main-feat-card">
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon-wrapper me-3 mb-0" style="width: 50px; height: 50px; font-size: 1.5rem;">📚</div>
+                        <div>
+                            <div class="fw-bold">英语复习助手</div>
+                            <small class="text-muted">词汇、句型、小作文全覆盖</small>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp animate__delay-1s">
-                        <div class="card-icon">🧠</div>
-                        <h4>思维训练营</h4>
-                        <a href="thinking_camp.html" class="btn btn-sm btn-outline-info rounded-pill mt-2">立即挑战</a>
+                    <div class="action-btn btn-g5">进入</div>
+                </a>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="word_game.html" class="classroom-card">
+                            <div class="card-icon-wrapper">🧩</div>
+                            <div class="card-title">单词消消乐</div>
+                            <div class="card-desc">趣味记忆单词</div>
+                            <div class="action-btn btn-g5">开始</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="thinking_camp.html" class="classroom-card">
+                            <div class="card-icon-wrapper">🧠</div>
+                            <div class="card-title">思维训练营</div>
+                            <div class="card-desc">挑战逻辑极限</div>
+                            <div class="action-btn btn-g5">挑战</div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -189,51 +238,56 @@
 
         <!-- 三年级板块 -->
         <div class="col-lg-6">
-            <div class="section-title h2 mb-4">🌳 三年级·元气森林</div>
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="classroom-card p-4 animate__animated animate__fadeInRight" style="background: linear-gradient(135deg, #FFF9C4, #FFF59D);">
-                        <div class="d-flex align-items-center">
-                            <div class="card-icon me-4">🎡</div>
-                            <div>
-                                <h3>三年级·备考特训</h3>
-                                <p class="text-muted mb-0">英语 Q&A、Phonics 语音、同步作文、古诗词</p>
-                            </div>
+            <div class="grade-section animate__animated animate__fadeInRight">
+                <div class="section-header">
+                    <div class="section-icon grade-3-icon">🌳</div>
+                    <div>
+                        <h2 class="h4 mb-0 fw-bold">三年级 · 备考特训</h2>
+                        <small class="text-muted">期末冲刺专项练习</small>
+                    </div>
+                </div>
+
+                <a href="grade3_exam.html" class="main-feat-card" style="border-left: 4px solid #ff9966;">
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon-wrapper me-3 mb-0" style="width: 50px; height: 50px; font-size: 1.5rem;">🎡</div>
+                        <div>
+                            <div class="fw-bold">全科备考神器</div>
+                            <small class="text-muted">英语 Q&A / Phonics / 作文 / 古诗</small>
                         </div>
-                        <div class="text-end mt-3">
-                            <a href="grade3_exam.html" class="btn btn-warning rounded-pill px-4">开启冲刺</a>
-                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
-                        <div class="card-icon">🗣️</div>
-                        <h4>语音达人</h4>
-                        <a href="grade3_exam.html#phonics-zone" class="btn btn-sm btn-outline-primary rounded-pill mt-2">练习拼读</a>
+                    <div class="action-btn btn-g3">进入</div>
+                </a>
+
+                <div class="row g-3">
+                    <div class="col-4">
+                        <a href="grade3_exam.html#phonics-zone" class="classroom-card">
+                            <div class="badge-pill bg-info text-white">语音</div>
+                            <div class="card-icon-wrapper" style="width: 50px; height: 50px; font-size: 1.5rem;">🗣️</div>
+                            <div class="fw-bold" style="font-size: 0.9rem;">语音达人</div>
+                        </a>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
-                        <div class="card-icon">📖</div>
-                        <h4>作文天地</h4>
-                        <a href="grade3_exam.html#chinese-zone" class="btn btn-sm btn-outline-success rounded-pill mt-2">阅读范文</a>
+                    <div class="col-4">
+                        <a href="grade3_exam.html#chinese-zone" class="classroom-card">
+                            <div class="badge-pill bg-success text-white">作文</div>
+                            <div class="card-icon-wrapper" style="width: 50px; height: 50px; font-size: 1.5rem;">📖</div>
+                            <div class="fw-bold" style="font-size: 0.9rem;">作文天地</div>
+                        </a>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="classroom-card p-4 text-center animate__animated animate__fadeInUp">
-                        <div class="card-icon">🏮</div>
-                        <h4>必背古诗</h4>
-                        <a href="grade3_exam.html#poetry-zone" class="btn btn-sm btn-outline-warning rounded-pill mt-2">开始背诵</a>
+                    <div class="col-4">
+                        <a href="grade3_exam.html#poetry-zone" class="classroom-card">
+                            <div class="badge-pill bg-warning text-dark">古诗</div>
+                            <div class="card-icon-wrapper" style="width: 50px; height: 50px; font-size: 1.5rem;">🏮</div>
+                            <div class="fw-bold" style="font-size: 0.9rem;">必背古诗</div>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="text-center mt-5">
-        <div class="footer-badge">
-            Powered by Catherine Hu & SanMei Assistant
-        </div>
+    <div class="footer-info text-center">
+        <p class="mb-1">🌈 快乐学习，共同成长</p>
+        <p class="opacity-50">Powered by Catherine Hu & SanMei Assistant</p>
     </div>
 </div>
 
