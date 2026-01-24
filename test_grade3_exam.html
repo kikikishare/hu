@@ -692,53 +692,59 @@
         alert("语音功能已开启！");
     }
 
-    let utterQueue = []; // 保持引用，防止垃圾回收导致 onend 不触发
+    let utterQueue = []; 
     function speak(text, rate = 1.0, callback) {
         if (!window.speechSynthesis) return;
         
-        // 停止之前的朗读
+        // 如果是快速重复点击同一个词，可以考虑不 cancel 而是排队
+        // 但为了交互即时性，通常还是 cancel
         window.speechSynthesis.cancel();
         
-        // 某些浏览器在 cancel 后会处于 paused 状态，需要 resume
-        if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-        }
-
-        if (!text) {
-            if (callback) callback();
-            return;
-        }
-
-        const utter = new SpeechSynthesisUtterance(text);
-        // 自动识别中英文
-        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
-        utter.rate = rate;
-        
-        // 这里的逻辑要非常稳健
-        let callbackCalled = false;
-        const safeCallback = () => {
-            if (callback && !callbackCalled) {
-                callbackCalled = true;
-                callback();
+        // 关键：cancel 之后给浏览器一点点喘息时间（50ms），否则下一条 speak 可能被忽略
+        setTimeout(() => {
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
             }
-        };
 
-        utter.onend = safeCallback;
-        utter.onerror = (e) => {
-            console.error('Speech error:', e);
-            safeCallback();
-        };
+            if (!text) {
+                if (callback) callback();
+                return;
+            }
 
-        // 终极兜底：如果朗读没反应，2秒后强制执行回调（根据字数动态调整时间）
-        if (callback) {
-            const timeout = Math.max(2000, text.length * 500 / rate);
-            setTimeout(safeCallback, timeout);
-        }
+            const utter = new SpeechSynthesisUtterance(text);
+            // 改进：针对单字母或简单音标做特殊处理
+            if (text.length <= 2 && !text.match(/[\u4e00-\u9fa5]/)) {
+                utter.lang = 'en-US';
+                // 字母发音可以稍微慢一点点
+                utter.rate = rate * 0.9;
+            } else {
+                utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
+                utter.rate = rate;
+            }
+            
+            let callbackCalled = false;
+            const safeCallback = () => {
+                if (callback && !callbackCalled) {
+                    callbackCalled = true;
+                    callback();
+                }
+            };
 
-        utterQueue.push(utter);
-        if (utterQueue.length > 10) utterQueue.shift(); // 只保留最近10个引用
+            utter.onend = safeCallback;
+            utter.onerror = safeCallback;
 
-        window.speechSynthesis.speak(utter);
+            // 保持引用
+            utterQueue.push(utter);
+            if (utterQueue.length > 10) utterQueue.shift();
+
+            window.speechSynthesis.speak(utter);
+
+            // 只有当有回调时才设置兜底，且时间要设得足够长，避免抢跑
+            if (callback) {
+                const estimatedMs = Math.max(3000, text.length * 800 / rate); 
+                setTimeout(safeCallback, estimatedMs);
+            }
+        }, 50); 
     }
 
     // --- 英语逻辑 ---
