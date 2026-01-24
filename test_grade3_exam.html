@@ -692,59 +692,52 @@
         alert("语音功能已开启！");
     }
 
-    let utterQueue = []; 
+    // 终极修复：使用最稳健的语音播放方案
+    let activeUtterance = null; // 保持全局引用，防止垃圾回收
     function speak(text, rate = 1.0, callback) {
         if (!window.speechSynthesis) return;
         
-        // 如果是快速重复点击同一个词，可以考虑不 cancel 而是排队
-        // 但为了交互即时性，通常还是 cancel
+        // 1. 立即停止之前的声音
         window.speechSynthesis.cancel();
         
-        // 关键：cancel 之后给浏览器一点点喘息时间（50ms），否则下一条 speak 可能被忽略
-        setTimeout(() => {
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-            }
+        // 2. 如果是空文本，直接执行回调并返回
+        if (!text) {
+            if (callback) callback();
+            return;
+        }
 
-            if (!text) {
-                if (callback) callback();
-                return;
-            }
+        // 3. 创建语音对象
+        const utter = new SpeechSynthesisUtterance(text);
+        activeUtterance = utter; // 关键：全局引用防止 GC
+        
+        // 4. 设置语言和语速
+        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
+        utter.rate = rate;
+        
+        // 5. 健壮的回调处理
+        let hasCalled = false;
+        const handleEnd = () => {
+            if (hasCalled) return;
+            hasCalled = true;
+            if (callback) callback();
+        };
 
-            const utter = new SpeechSynthesisUtterance(text);
-            // 改进：针对单字母或简单音标做特殊处理
-            if (text.length <= 2 && !text.match(/[\u4e00-\u9fa5]/)) {
-                utter.lang = 'en-US';
-                // 字母发音可以稍微慢一点点
-                utter.rate = rate * 0.9;
-            } else {
-                utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
-                utter.rate = rate;
-            }
-            
-            let callbackCalled = false;
-            const safeCallback = () => {
-                if (callback && !callbackCalled) {
-                    callbackCalled = true;
-                    callback();
-                }
-            };
+        utter.onend = handleEnd;
+        utter.onerror = handleEnd; // 出错也继续，防止卡死
 
-            utter.onend = safeCallback;
-            utter.onerror = safeCallback;
+        // 6. 兜底逻辑：防止某些浏览器不触发 onend
+        if (callback) {
+            const timeoutMs = Math.max(3000, text.length * 1000); // 给足够时间读完
+            setTimeout(handleEnd, timeoutMs);
+        }
 
-            // 保持引用
-            utterQueue.push(utter);
-            if (utterQueue.length > 10) utterQueue.shift();
+        // 7. 某些浏览器需要 resume 才能播放
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
 
-            window.speechSynthesis.speak(utter);
-
-            // 只有当有回调时才设置兜底，且时间要设得足够长，避免抢跑
-            if (callback) {
-                const estimatedMs = Math.max(3000, text.length * 800 / rate); 
-                setTimeout(safeCallback, estimatedMs);
-            }
-        }, 50); 
+        // 8. 真正的播放指令
+        window.speechSynthesis.speak(utter);
     }
 
     // --- 英语逻辑 ---
