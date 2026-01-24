@@ -246,6 +246,24 @@
             font-size: 0.85rem;
         }
 
+        .word-block {
+            background: #E3F2FD;
+            padding: 8px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            user-select: none;
+            font-weight: 600;
+        }
+
+        .word-block:hover {
+            border-color: var(--primary-color);
+            background: #BBDEFB;
+        }
+
+        .min-vh-10 { min-height: 80px; }
+
         .leaderboard-table tr {
             background: white;
             margin-bottom: 10px;
@@ -339,8 +357,8 @@
                 <div class="col-md-8">
                     <div class="oral-card animate__animated animate__fadeIn">
                         <div id="oral-game-start">
-                            <h3>🎤 口语问答挑战 (20题)</h3>
-                            <p class="text-muted mb-4">听问题，大声说出你的答案，点击查看参考范例。</p>
+                            <h3>🎤 问答拼图挑战 (20题)</h3>
+                            <p class="text-muted mb-4">听问题，按正确顺序拼出答案，边拼边读！</p>
                             <button class="btn btn-primary btn-lg rounded-pill px-5" onclick="startOralChallenge()">开始挑战</button>
                         </div>
                         <div id="oral-game-play" style="display:none;">
@@ -349,40 +367,31 @@
                             </div>
                             <div class="question-text" id="current-question">Question Text Here</div>
                             
-                            <!-- 语音录入区域 -->
-                            <div class="voice-input-area my-4">
-                                <button id="record-btn" class="btn-record" onclick="toggleRecording()">
-                                    <i class="bi bi-mic-fill"></i>
-                                </button>
-                                <p id="record-status" class="text-muted small mt-2">点击麦克风开始回答</p>
-                                
-                                <div id="recognition-result" class="recognition-box animate__animated" style="display:none;">
-                                    <p class="text-secondary small mb-1">识别到的回答：</p>
-                                    <h5 id="recognized-text" class="mb-0">...</h5>
+                            <!-- 拼图区域 -->
+                            <div class="oral-puzzle-area my-4">
+                                <div id="oral-answer-display" class="p-3 border rounded-4 bg-light min-vh-10 mb-3 text-start d-flex flex-wrap gap-2 align-items-center">
+                                    <p class="text-muted small m-0">请按顺序点击下方单词拼出答案...</p>
                                 </div>
-                                
-                                <div id="scoring-area" class="animate__animated" style="display:none;">
-                                    <div class="score-result" id="oral-score-display">0</div>
-                                    <p id="score-comment" class="fw-bold">继续加油！</p>
+                                <div id="oral-word-pool" class="d-flex flex-wrap justify-content-center gap-2">
+                                    <!-- 单词方块动态加载 -->
                                 </div>
                             </div>
 
                             <div class="d-grid gap-3 d-sm-block mt-4">
                                 <button class="btn btn-info btn-lg rounded-pill text-white px-4 me-sm-2" onclick="hearQuestion()">🔊 听问题</button>
-                                <button class="btn btn-warning btn-lg rounded-pill text-white px-4" onclick="showOralAnswer()">💡 看参考答案</button>
+                                <button class="btn btn-warning btn-lg rounded-pill text-white px-4" id="btn-show-hint" onclick="showOralHint()">💡 提示一下</button>
                             </div>
-                            <div class="sample-answer animate__animated animate__fadeIn" id="oral-sample">
-                                <p class="mb-2 fw-bold text-secondary">参考答案：</p>
-                                <h4 id="sample-text">Sample Answer Here</h4>
-                                <button class="btn btn-sm btn-outline-primary rounded-pill mt-2" onclick="hearAnswer()">🔊 听发音</button>
-                            </div>
-                            <div class="mt-5">
-                                <button class="btn btn-success btn-lg rounded-pill px-5" onclick="nextOralQuestion()">✅ 我答对了，下一题</button>
+
+                            <div id="oral-result-msg" class="mt-4 animate__animated" style="display:none;">
+                                <h5 class="text-success fw-bold">🎉 太棒了！拼对啦！</h5>
+                                <p class="text-muted small">跟我读一遍：</p>
+                                <h4 id="completed-answer-text" class="text-primary fw-bold">Answer Text</h4>
+                                <button class="btn btn-success btn-lg rounded-pill px-5 mt-3" onclick="nextOralQuestion()">✅ 下一题</button>
                             </div>
                         </div>
                         <div id="oral-game-end" style="display:none;">
-                            <h2 class="text-success mb-3">太棒了！</h2>
-                            <p>你完成了口语大作战，获得了大量积分！</p>
+                            <h2 class="text-success mb-3">挑战成功！</h2>
+                            <p>你完成了所有问答拼图，真是个逻辑小达人！</p>
                             <button class="btn btn-outline-primary rounded-pill px-4" onclick="startOralChallenge()">再次挑战</button>
                         </div>
                     </div>
@@ -513,9 +522,9 @@
 
     const allQuestions = [
         {q: "What's the robot like?", a: "It's very clever and helpful."},
-        {q: "Are there any robots in your home?", a: "Yes, there are. / No, there aren't."},
+        {q: "Are there any robots in your home?", a: "Yes, there are."},
         {q: "What can the robot do?", a: "It can speak English and clean the room."},
-        {q: "Is there a river in your hometown?", a: "Yes, there is. / No, there isn't."},
+        {q: "Is there a river in your hometown?", a: "Yes, there is."},
         {q: "What's in the nature park?", a: "There is a lake and many trees."},
         {q: "What's in your living room?", a: "There is a big sofa and a clock."},
         {q: "Where is your schoolbag?", a: "It's on the desk."},
@@ -523,7 +532,7 @@
         {q: "What's your favorite sport?", a: "My favorite sport is football."},
         {q: "What's your favorite food?", a: "My favorite food is salad."},
         {q: "What's your favorite drink?", a: "My favorite drink is milk."},
-        {q: "Can your father swim?", a: "Yes, he can. / No, he can't."},
+        {q: "Can your father swim?", a: "Yes, he can."},
         {q: "What do you often do on the weekend?", a: "I often wash my clothes and watch TV."},
         {q: "What would you like for lunch?", a: "I'd like some beef and rice."},
         {q: "How many subjects do you have at school?", a: "I have six subjects."},
@@ -542,114 +551,9 @@
         puzzleOrder: [],
         oralIndex: 0,
         oralQueue: [],
-        vocabTestMode: true, // 默认开启检测模式（显示中文）
-        recognition: null,
-        isRecording: false
+        oralPuzzleOrder: [],
+        vocabTestMode: true
     };
-
-    // --- 语音识别初始化 ---
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        state.recognition = new SpeechRecognition();
-        state.recognition.lang = 'en-US';
-        state.recognition.continuous = false;
-        state.recognition.interimResults = false;
-
-        state.recognition.onstart = () => {
-            state.isRecording = true;
-            const btn = document.getElementById('record-btn');
-            btn.classList.add('recording');
-            document.getElementById('record-status').innerText = "🎤 正在倾听，请说话...";
-        };
-
-        state.recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            processOralResult(transcript);
-        };
-
-        state.recognition.onerror = (event) => {
-            console.error("Speech Recognition Error:", event.error);
-            stopRecordingUI();
-            alert("语音识别出错了: " + event.error);
-        };
-
-        state.recognition.onend = () => {
-            stopRecordingUI();
-        };
-    }
-
-    function stopRecordingUI() {
-        state.isRecording = false;
-        const btn = document.getElementById('record-btn');
-        btn.classList.remove('recording');
-        document.getElementById('record-status').innerText = "点击麦克风重新回答";
-    }
-
-    function toggleRecording() {
-        if (!state.recognition) {
-            alert("抱歉，您的浏览器不支持语音识别。建议使用 Chrome 或 Safari。");
-            return;
-        }
-        if (state.isRecording) {
-            state.recognition.stop();
-        } else {
-            // 重置 UI
-            document.getElementById('recognition-result').style.display = 'none';
-            document.getElementById('scoring-area').style.display = 'none';
-            state.recognition.start();
-        }
-    }
-
-    function processOralResult(transcript) {
-        document.getElementById('recognized-text').innerText = transcript;
-        document.getElementById('recognition-result').style.display = 'block';
-        document.getElementById('recognition-result').classList.add('animate__fadeInUp');
-        
-        const reference = state.oralQueue[state.oralIndex].a;
-        const score = calculateOralScore(transcript, reference);
-        
-        displayOralScore(score);
-    }
-
-    function calculateOralScore(input, reference) {
-        // 简单的关键词匹配评分逻辑
-        const clean = (str) => str.toLowerCase().replace(/[.,?!]/g, "").split(/\s+/);
-        const inputWords = clean(input);
-        const refWords = clean(reference);
-        
-        let matches = 0;
-        refWords.forEach(word => {
-            if (inputWords.includes(word)) matches++;
-        });
-        
-        const percentage = Math.round((matches / refWords.length) * 100);
-        return percentage;
-    }
-
-    function displayOralScore(score) {
-        const area = document.getElementById('scoring-area');
-        const display = document.getElementById('oral-score-display');
-        const comment = document.getElementById('score-comment');
-        
-        area.style.display = 'block';
-        area.classList.add('animate__zoomIn');
-        display.innerText = score + "分";
-        
-        if (score >= 90) {
-            display.style.color = "#4CAF50";
-            comment.innerText = "🌟 太完美了！发音很标准！";
-            updateScore(15);
-        } else if (score >= 60) {
-            display.style.color = "#FF9800";
-            comment.innerText = "👍 很棒，继续努力！";
-            updateScore(10);
-        } else {
-            display.style.color = "#f44336";
-            comment.innerText = "😅 没关系，再试一次吧！";
-            updateScore(5);
-        
-        }
-    }
 
     // --- 核心语音功能 (安卓/苹果适配) ---
     let voiceInterval = null;
@@ -838,54 +742,103 @@
         updateScore(5);
     }
 
-    // --- 口语挑战逻辑 ---
+    // --- 口语挑战逻辑 (问答拼图) ---
     function startOralChallenge() {
         state.oralQueue = [...allQuestions].sort(() => Math.random() - 0.5);
         state.oralIndex = 0;
         document.getElementById('oral-game-start').style.display = 'none';
         document.getElementById('oral-game-end').style.display = 'none';
         document.getElementById('oral-game-play').style.display = 'block';
-        showOralQuestion();
+        loadOralPuzzle();
     }
 
-    function showOralQuestion() {
+    function loadOralPuzzle() {
         const q = state.oralQueue[state.oralIndex];
         document.getElementById('current-question').innerText = q.q;
-        document.getElementById('oral-sample').style.display = 'none';
-        
-        // 重置录音和评分显示
-        document.getElementById('recognition-result').style.display = 'none';
-        document.getElementById('scoring-area').style.display = 'none';
-        document.getElementById('recognized-text').innerText = "...";
-        
         document.getElementById('oral-progress').style.width = `${(state.oralIndex / state.oralQueue.length) * 100}%`;
+        document.getElementById('oral-result-msg').style.display = 'none';
+        document.getElementById('oral-answer-display').innerHTML = '<p class="text-muted small m-0">请按顺序点击下方单词拼出答案...</p>';
+        
+        state.oralPuzzleOrder = [];
+        
+        // 准备单词池：按空格分割并打乱
+        const words = q.a.split(' ');
+        const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+        
+        const pool = document.getElementById('oral-word-pool');
+        pool.innerHTML = shuffledWords.map((w, i) => `
+            <div class="word-block shadow-sm" onclick="selectOralWord('${w.replace(/'/g, "\\'")}', this)">
+                ${w}
+            </div>
+        `).join('');
+
         speak(q.q);
     }
 
-    function hearQuestion() {
-        speak(state.oralQueue[state.oralIndex].q);
-    }
-
-    function showOralAnswer() {
+    function selectOralWord(word, element) {
+        if (element.style.visibility === 'hidden') return;
+        
         const q = state.oralQueue[state.oralIndex];
-        document.getElementById('sample-text').innerText = q.a;
-        document.getElementById('oral-sample').style.display = 'block';
+        const words = q.a.split(' ');
+        const expectedWord = words[state.oralPuzzleOrder.length];
+        
+        if (word === expectedWord) {
+            state.oralPuzzleOrder.push(word);
+            element.style.visibility = 'hidden';
+            
+            const display = document.getElementById('oral-answer-display');
+            if (state.oralPuzzleOrder.length === 1) display.innerHTML = '';
+            
+            display.innerHTML += `<span class="badge bg-white text-primary border border-primary p-2 animate__animated animate__fadeIn">${word}</span>`;
+            speak(word); // 拼对一个单词读一个
+            
+            if (state.oralPuzzleOrder.length === words.length) {
+                showOralSuccess();
+            }
+        } else {
+            element.classList.add('animate__shakeX', 'bg-danger', 'text-white');
+            setTimeout(() => element.classList.remove('animate__shakeX', 'bg-danger', 'text-white'), 500);
+            speak("Try again");
+        }
     }
 
-    function hearAnswer() {
-        speak(state.oralQueue[state.oralIndex].a);
+    function showOralSuccess() {
+        const q = state.oralQueue[state.oralIndex];
+        document.getElementById('oral-result-msg').style.display = 'block';
+        document.getElementById('oral-result-msg').classList.add('animate__fadeInUp');
+        document.getElementById('completed-answer-text').innerText = q.a;
+        
+        speak(q.a); // 拼完读全句
+        updateScore(5);
+    }
+
+    function showOralHint() {
+        const q = state.oralQueue[state.oralIndex];
+        const display = document.getElementById('oral-answer-display');
+        const originalContent = display.innerHTML;
+        display.innerHTML = `<span class="text-warning fw-bold">💡 提示：${q.a}</span>`;
+        setTimeout(() => {
+            if (state.oralPuzzleOrder.length === 0) {
+                display.innerHTML = '<p class="text-muted small m-0">请按顺序点击下方单词拼出答案...</p>';
+            } else {
+                display.innerHTML = state.oralPuzzleOrder.map(w => `<span class="badge bg-white text-primary border border-primary p-2">${w}</span>`).join('');
+            }
+        }, 2000);
     }
 
     function nextOralQuestion() {
-        updateScore(5);
         state.oralIndex++;
         if (state.oralIndex < state.oralQueue.length) {
-            showOralQuestion();
+            loadOralPuzzle();
         } else {
             document.getElementById('oral-game-play').style.display = 'none';
             document.getElementById('oral-game-end').style.display = 'block';
             updateScore(50); // 通关奖励
         }
+    }
+
+    function hearQuestion() {
+        speak(state.oralQueue[state.oralIndex].q);
     }
 
     function marukoTalk() {
