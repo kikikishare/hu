@@ -688,27 +688,66 @@
 
     function unlockAudio() {
         state.unlocked = true;
-        speak("加油加油！");
-        alert("语音功能已开启！");
+        // 尝试播放一个极短的静音音频来唤醒某些浏览器的音频上下文
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        
+        speak("语音功能已开启，加油加油！");
+        alert("语音功能已开启！如果还是没声音，请确保电脑音量已打开，并刷新页面重试。");
     }
 
+    // 极简稳健的语音函数
+    window._voiceQueue = []; 
+
     function speak(text, rate = 1.0, callback) {
-        if (!window.speechSynthesis) return;
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
-        utter.rate = rate;
-        if (callback) {
-            utter.onend = callback;
-            // 兜底：如果语音没响或没触发结束，3秒后自动执行回调，防止页面卡死
-            setTimeout(() => {
-                if (utter.onend) {
-                    utter.onend = null;
-                    callback();
-                }
-            }, 3000);
+        if (!window.speechSynthesis) {
+            if (callback) callback();
+            return;
         }
-        window.speechSynthesis.speak(utter);
+
+        // 停止之前的
+        window.speechSynthesis.cancel();
+        
+        // 强制 resume，处理某些浏览器 cancel 后的暂停状态
+        setTimeout(() => {
+            window.speechSynthesis.resume();
+            
+            if (!text) {
+                if (callback) callback();
+                return;
+            }
+
+            try {
+                const utter = new SpeechSynthesisUtterance(text.toString());
+                utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
+                utter.rate = rate;
+                utter.volume = 1.0;
+
+                let called = false;
+                const finish = () => {
+                    if (!called) {
+                        called = true;
+                        if (callback) callback();
+                    }
+                };
+
+                utter.onend = finish;
+                utter.onerror = finish;
+                
+                // 存入全局防止被回收
+                window._voiceQueue.push(utter);
+                if (window._voiceQueue.length > 10) window._voiceQueue.shift();
+
+                window.speechSynthesis.speak(utter);
+
+                // 兜底：根据长度动态计算时间，最低 3 秒
+                const timeout = Math.max(3000, text.length * 400); 
+                setTimeout(finish, timeout);
+            } catch (e) {
+                console.error(e);
+                if (callback) callback();
+            }
+        }, 50); // 给 cancel() 一点处理时间
     }
 
     // --- 英语逻辑 ---
