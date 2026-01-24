@@ -337,6 +337,24 @@
                     <div class="module-card">
                         <h3 class="mb-4 text-center">🗣️ 三上 Phonics 语音闯关</h3>
                         <p class="text-muted text-center mb-4">观察单词结构，练习自然拼读，掌握字母发音规律！</p>
+                        <div class="text-center mb-4">
+                            <button class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="startPhonicsTest()">
+                                🎧 听音选词大检测
+                            </button>
+                        </div>
+                        <div id="phonics-test-container" class="exercise-container text-center mb-4">
+                            <div class="mb-3"><span class="badge bg-primary">听力检测中...</span></div>
+                            <div class="exercise-sentence">
+                                <button class="btn btn-lg btn-info text-white rounded-circle shadow-sm" onclick="replayPhonicsSentence()">
+                                    <i class="bi bi-volume-up-fill"></i>
+                                </button>
+                                <div class="mt-3 fw-bold text-muted" id="phonics-test-prompt">请听句子，选出你听到的单词</div>
+                            </div>
+                            <div id="phonics-test-options" class="d-flex flex-wrap justify-content-center mt-3"></div>
+                            <div class="mt-4">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="stopPhonicsTest()">返回学习</button>
+                            </div>
+                        </div>
                         <div id="phonics-container" class="row g-4"></div>
                     </div>
                 </div>
@@ -511,6 +529,19 @@
         { letter: "Xx", sound: "/ ks /", words: ["box", "six", "fix", "tax", "taxi", "fox", "mix", "sex"] },
         { letter: "Yy", sound: "/ j /", words: ["yum", "yo-yo", "yellow", "yes", "year", "yell", "you", "yard", "young", "yeah", "your"] },
         { letter: "Zz", sound: "/ z /", words: ["Zip", "zero", "zig", "zebra", "zoo", "size", "lazy", "zone"] }
+    ];
+
+    const phonicsTestData = [
+        { s: "The cat is on the mat.", a: "cat", options: ["cat", "cap", "can", "cab"] },
+        { s: "I have a big red bag.", a: "bag", options: ["bag", "bad", "big", "bug"] },
+        { s: "The dog is in the mud.", a: "dog", options: ["dog", "dot", "dad", "dig"] },
+        { s: "I like to eat a red apple.", a: "apple", options: ["apple", "ant", "and", "am"] },
+        { s: "The ten men are in the tent.", a: "ten", options: ["ten", "tan", "tin", "ton"] },
+        { s: "Six pigs are under the tree.", a: "pigs", options: ["pigs", "pins", "pics", "pits"] },
+        { s: "The fox is in the box.", a: "fox", options: ["fox", "box", "fog", "fix"] },
+        { s: "The duck is very lucky.", a: "duck", options: ["duck", "dock", "dick", "deck"] },
+        { s: "He has a blue pen and a red pencil.", a: "pen", options: ["pen", "pan", "pin", "pun"] },
+        { s: "I see a big fish in the river.", a: "fish", options: ["fish", "dish", "wish", "finish"] }
     ];
 
     let state = {
@@ -713,6 +744,57 @@
                 speak(letter[0], 0.6); 
             }, 500);
         });
+    }
+
+    let phonicsTestState = { current: null };
+    function startPhonicsTest() {
+        document.getElementById('phonics-container').style.display = 'none';
+        document.getElementById('phonics-test-container').style.display = 'block';
+        nextPhonicsTestQuestion();
+    }
+
+    function stopPhonicsTest() {
+        document.getElementById('phonics-container').style.display = 'flex';
+        document.getElementById('phonics-test-container').style.display = 'none';
+    }
+
+    function nextPhonicsTestQuestion() {
+        const item = phonicsTestData[Math.floor(Math.random() * phonicsTestData.length)];
+        phonicsTestState.current = item;
+        
+        const optionsDiv = document.getElementById('phonics-test-options');
+        optionsDiv.innerHTML = '';
+        
+        const options = [...item.options].sort(() => Math.random() - 0.5);
+        options.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'exercise-option animate__animated animate__fadeIn';
+            btn.innerText = opt;
+            btn.onclick = () => checkPhonicsTestAnswer(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+        
+        replayPhonicsSentence();
+    }
+
+    function replayPhonicsSentence() {
+        if(phonicsTestState.current) {
+            speak(phonicsTestState.current.s, 0.85);
+        }
+    }
+
+    function checkPhonicsTestAnswer(selected, btn) {
+        if(selected === phonicsTestState.current.a) {
+            btn.classList.add('correct');
+            speak(`太棒了！单词是 ${selected}`);
+            updateScore(5);
+            setTimeout(nextPhonicsTestQuestion, 1500);
+        } else {
+            btn.classList.add('wrong');
+            speak("不对哦，再听一遍吧");
+            setTimeout(() => btn.classList.remove('wrong'), 1000);
+            replayPhonicsSentence();
+        }
     }
 
     // --- 古诗逻辑 ---
