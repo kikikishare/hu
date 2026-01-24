@@ -197,6 +197,49 @@
             font-size: 1.2rem;
         }
 
+        /* 录音按钮动画 */
+        .btn-record {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: var(--danger-color);
+            color: white;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(229, 115, 115, 0.4);
+        }
+
+        .btn-record.recording {
+            animation: pulse-red 1.5s infinite;
+            background: #ff5252;
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(255, 82, 82, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+        }
+
+        .recognition-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .score-result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
         .filter-btn {
             border-radius: 20px;
             margin: 2px;
@@ -305,7 +348,26 @@
                                 <div id="oral-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
                             </div>
                             <div class="question-text" id="current-question">Question Text Here</div>
-                            <div class="d-grid gap-3 d-sm-block">
+                            
+                            <!-- 语音录入区域 -->
+                            <div class="voice-input-area my-4">
+                                <button id="record-btn" class="btn-record" onclick="toggleRecording()">
+                                    <i class="bi bi-mic-fill"></i>
+                                </button>
+                                <p id="record-status" class="text-muted small mt-2">点击麦克风开始回答</p>
+                                
+                                <div id="recognition-result" class="recognition-box animate__animated" style="display:none;">
+                                    <p class="text-secondary small mb-1">识别到的回答：</p>
+                                    <h5 id="recognized-text" class="mb-0">...</h5>
+                                </div>
+                                
+                                <div id="scoring-area" class="animate__animated" style="display:none;">
+                                    <div class="score-result" id="oral-score-display">0</div>
+                                    <p id="score-comment" class="fw-bold">继续加油！</p>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-3 d-sm-block mt-4">
                                 <button class="btn btn-info btn-lg rounded-pill text-white px-4 me-sm-2" onclick="hearQuestion()">🔊 听问题</button>
                                 <button class="btn btn-warning btn-lg rounded-pill text-white px-4" onclick="showOralAnswer()">💡 看参考答案</button>
                             </div>
@@ -480,8 +542,114 @@
         puzzleOrder: [],
         oralIndex: 0,
         oralQueue: [],
-        vocabTestMode: false
+        vocabTestMode: false,
+        recognition: null,
+        isRecording: false
     };
+
+    // --- 语音识别初始化 ---
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        state.recognition = new SpeechRecognition();
+        state.recognition.lang = 'en-US';
+        state.recognition.continuous = false;
+        state.recognition.interimResults = false;
+
+        state.recognition.onstart = () => {
+            state.isRecording = true;
+            const btn = document.getElementById('record-btn');
+            btn.classList.add('recording');
+            document.getElementById('record-status').innerText = "🎤 正在倾听，请说话...";
+        };
+
+        state.recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            processOralResult(transcript);
+        };
+
+        state.recognition.onerror = (event) => {
+            console.error("Speech Recognition Error:", event.error);
+            stopRecordingUI();
+            alert("语音识别出错了: " + event.error);
+        };
+
+        state.recognition.onend = () => {
+            stopRecordingUI();
+        };
+    }
+
+    function stopRecordingUI() {
+        state.isRecording = false;
+        const btn = document.getElementById('record-btn');
+        btn.classList.remove('recording');
+        document.getElementById('record-status').innerText = "点击麦克风重新回答";
+    }
+
+    function toggleRecording() {
+        if (!state.recognition) {
+            alert("抱歉，您的浏览器不支持语音识别。建议使用 Chrome 或 Safari。");
+            return;
+        }
+        if (state.isRecording) {
+            state.recognition.stop();
+        } else {
+            // 重置 UI
+            document.getElementById('recognition-result').style.display = 'none';
+            document.getElementById('scoring-area').style.display = 'none';
+            state.recognition.start();
+        }
+    }
+
+    function processOralResult(transcript) {
+        document.getElementById('recognized-text').innerText = transcript;
+        document.getElementById('recognition-result').style.display = 'block';
+        document.getElementById('recognition-result').classList.add('animate__fadeInUp');
+        
+        const reference = state.oralQueue[state.oralIndex].a;
+        const score = calculateOralScore(transcript, reference);
+        
+        displayOralScore(score);
+    }
+
+    function calculateOralScore(input, reference) {
+        // 简单的关键词匹配评分逻辑
+        const clean = (str) => str.toLowerCase().replace(/[.,?!]/g, "").split(/\s+/);
+        const inputWords = clean(input);
+        const refWords = clean(reference);
+        
+        let matches = 0;
+        refWords.forEach(word => {
+            if (inputWords.includes(word)) matches++;
+        });
+        
+        const percentage = Math.round((matches / refWords.length) * 100);
+        return percentage;
+    }
+
+    function displayOralScore(score) {
+        const area = document.getElementById('scoring-area');
+        const display = document.getElementById('oral-score-display');
+        const comment = document.getElementById('score-comment');
+        
+        area.style.display = 'block';
+        area.classList.add('animate__zoomIn');
+        display.innerText = score + "分";
+        
+        if (score >= 90) {
+            display.style.color = "#4CAF50";
+            comment.innerText = "🌟 太完美了！发音很标准！";
+            updateScore(15);
+        } else if (score >= 60) {
+            display.style.color = "#FF9800";
+            comment.innerText = "👍 很棒，继续努力！";
+            updateScore(10);
+        } else {
+            display.style.color = "#f44336";
+            comment.innerText = "😅 没关系，再试一次吧！";
+            updateScore(5);
+        
+        }
+    }
 
     // --- 核心语音功能 (安卓/苹果适配) ---
     let voiceInterval = null;
@@ -684,6 +852,12 @@
         const q = state.oralQueue[state.oralIndex];
         document.getElementById('current-question').innerText = q.q;
         document.getElementById('oral-sample').style.display = 'none';
+        
+        // 重置录音和评分显示
+        document.getElementById('recognition-result').style.display = 'none';
+        document.getElementById('scoring-area').style.display = 'none';
+        document.getElementById('recognized-text').innerText = "...";
+        
         document.getElementById('oral-progress').style.width = `${(state.oralIndex / state.oralQueue.length) * 100}%`;
         speak(q.q);
     }
