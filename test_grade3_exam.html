@@ -266,6 +266,9 @@
             <button class="btn btn-light rounded-pill px-4 shadow-sm" onclick="unlockAudio()">
                 🔊 开启学习配音
             </button>
+            <button class="btn btn-outline-light btn-sm rounded-pill px-3 ms-2" onclick="testVoice()">
+                测试声音
+            </button>
         </div>
     </div>
 </div>
@@ -688,16 +691,26 @@
 
     function unlockAudio() {
         state.unlocked = true;
-        // 尝试播放一个极短的静音音频来唤醒某些浏览器的音频上下文
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        if (ctx.state === 'suspended') ctx.resume();
+        // 尝试激活 AudioContext
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (ctx.state === 'suspended') ctx.resume();
+        } catch(e) {}
         
-        speak("语音功能已开启，加油加油！");
-        alert("语音功能已开启！如果还是没声音，请确保电脑音量已打开，并刷新页面重试。");
+        // 强制重置语音引擎
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        
+        speak("语音功能已开启，宝贝加油！", 1.0);
+        alert("语音功能已开启！\n\n如果还是没声音：\n1. 请检查电脑是否静音\n2. 请使用 Chrome 或 Safari 浏览器\n3. 刷新页面再点一次此按钮");
     }
 
-    // 极简稳健的语音函数
-    window._voiceQueue = []; 
+    function testVoice() {
+        speak("测试声音，一二三，听到请回答", 1.1);
+    }
+
+    // 终极稳定版语音函数
+    window._voiceRef = null; // 保持单例引用防止被 GC
 
     function speak(text, rate = 1.0, callback) {
         if (!window.speechSynthesis) {
@@ -705,49 +718,42 @@
             return;
         }
 
-        // 停止之前的
+        // 核心：先 resume 再 cancel 是解决很多浏览器卡死的关键
+        window.speechSynthesis.resume();
         window.speechSynthesis.cancel();
-        
-        // 强制 resume，处理某些浏览器 cancel 后的暂停状态
+
+        if (!text) {
+            if (callback) callback();
+            return;
+        }
+
+        // 稍微延迟一下 speak，给 cancel 留出反应时间
         setTimeout(() => {
-            window.speechSynthesis.resume();
+            const utter = new SpeechSynthesisUtterance(text.toString());
+            utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
+            utter.rate = rate;
+            utter.volume = 1.0;
+
+            let isFinished = false;
+            const finish = () => {
+                if (!isFinished) {
+                    isFinished = true;
+                    if (callback) callback();
+                }
+            };
+
+            utter.onend = finish;
+            utter.onerror = finish;
             
-            if (!text) {
-                if (callback) callback();
-                return;
-            }
+            // 解决 Chrome 超过 15 秒自动停止的 Bug
+            window._voiceRef = utter; 
 
-            try {
-                const utter = new SpeechSynthesisUtterance(text.toString());
-                utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
-                utter.rate = rate;
-                utter.volume = 1.0;
+            window.speechSynthesis.speak(utter);
 
-                let called = false;
-                const finish = () => {
-                    if (!called) {
-                        called = true;
-                        if (callback) callback();
-                    }
-                };
-
-                utter.onend = finish;
-                utter.onerror = finish;
-                
-                // 存入全局防止被回收
-                window._voiceQueue.push(utter);
-                if (window._voiceQueue.length > 10) window._voiceQueue.shift();
-
-                window.speechSynthesis.speak(utter);
-
-                // 兜底：根据长度动态计算时间，最低 3 秒
-                const timeout = Math.max(3000, text.length * 400); 
-                setTimeout(finish, timeout);
-            } catch (e) {
-                console.error(e);
-                if (callback) callback();
-            }
-        }, 50); // 给 cancel() 一点处理时间
+            // 兜底时间：字数 * 0.5秒 + 2秒
+            const timeout = Math.max(3000, (text.length * 500) + 2000);
+            setTimeout(finish, timeout);
+        }, 100);
     }
 
     // --- 英语逻辑 ---
