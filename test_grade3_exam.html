@@ -692,68 +692,23 @@
         alert("语音功能已开启！");
     }
 
-    // 终极修复：采用最兼容、最稳健的语音引擎方案
-    let utterQueue = []; // 维持引用防止垃圾回收
     function speak(text, rate = 1.0, callback) {
-        if (!window.speechSynthesis) {
-            console.error("浏览器不支持语音合成");
-            if (callback) callback();
-            return;
-        }
-        
-        // 1. 强制停止并清理队列
+        if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-        
-        if (!text) {
-            if (callback) callback();
-            return;
-        }
-
-        // 2. 延迟执行以确保 cancel() 生效（针对 Chrome 的 bug）
-        setTimeout(() => {
-            try {
-                const utter = new SpeechSynthesisUtterance(text);
-                
-                // 3. 智能语言识别
-                const isChinese = /[\u4e00-\u9fa5]/.test(text);
-                utter.lang = isChinese ? 'zh-CN' : 'en-US';
-                utter.rate = rate || 1.0;
-                utter.volume = 1.0;
-                utter.pitch = 1.0;
-
-                // 4. 引用保持
-                utterQueue.push(utter);
-                if (utterQueue.length > 5) utterQueue.shift();
-
-                // 5. 回调处理
-                let isFinished = false;
-                const finish = () => {
-                    if (isFinished) return;
-                    isFinished = true;
-                    if (callback) callback();
-                };
-
-                utter.onend = finish;
-                utter.onerror = (e) => {
-                    console.error("语音合成错误:", e);
-                    finish();
-                };
-
-                // 6. 兜底：如果 10 秒还没读完，强制结束
-                setTimeout(finish, 10000);
-
-                // 7. 播放
-                window.speechSynthesis.speak(utter);
-                
-                // 8. 针对部分移动端浏览器的补丁
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
+        utter.rate = rate;
+        if (callback) {
+            utter.onend = callback;
+            // 兜底：如果语音没响或没触发结束，3秒后自动执行回调，防止页面卡死
+            setTimeout(() => {
+                if (utter.onend) {
+                    utter.onend = null;
+                    callback();
                 }
-            } catch (e) {
-                console.error("语音执行异常:", e);
-                if (callback) callback();
-            }
-        }, 100); // 稍微长一点的延迟，更稳健
+            }, 3000);
+        }
+        window.speechSynthesis.speak(utter);
     }
 
     // --- 英语逻辑 ---
