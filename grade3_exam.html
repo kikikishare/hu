@@ -99,19 +99,46 @@
             padding: 20px;
             text-align: center;
             height: 100%;
-            transition: transform 0.3s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .poetry-card:hover {
-            transform: translateY(-5px);
+        .poetry-card.is-flipped {
+            transform: rotateY(180deg);
+            background: #F1F8E9;
         }
 
-        .poetry-title {
-            font-weight: bold;
-            color: #2E7D32;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+        .poetry-front, .poetry-back {
+            backface-visibility: hidden;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poetry-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+        }
+
+        .poetry-content-full {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #1B5E20;
+            word-break: break-all;
         }
 
         .score-badge {
@@ -213,7 +240,6 @@
     <ul class="nav nav-pills mb-4 justify-content-center sticky-top bg-transparent p-2" id="mainTabs">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#english-zone">🔤 英语口语</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#phonics-zone">🗣️ 语音达人</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#chinese-zone">✍️ 语文作文</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#poetry-zone">🏮 必背古诗</button></li>
     </ul>
 
@@ -276,18 +302,6 @@
             </div>
         </div>
 
-        <!-- 语文板块 -->
-        <div class="tab-pane fade" id="chinese-zone">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="module-card">
-                        <h3 class="mb-4">✍️ 语文 1-8 单元同步作文范文</h3>
-                        <p class="text-muted mb-4">精选期末常考题目，支持全文朗读，学习优美句式。</p>
-                        <div class="row g-3" id="composition-list"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- 古诗板块 -->
         <div class="tab-pane fade" id="poetry-zone">
@@ -462,7 +476,6 @@
     // --- 页面初始化 ---
     window.onload = () => {
         updateScore(0);
-        loadCompositions();
         loadPoetry();
         loadPhonics();
     };
@@ -639,23 +652,28 @@
 
     // --- 古诗逻辑 ---
     function loadPoetry() {
-        const list = document.getElementById('poetry-list');
-        poems.forEach((p, i) => {
-            list.innerHTML += `
-                <div class="col-6 col-md-4">
-                    <div class="poetry-card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s" onclick="showPoetry('${p.title}')">
-                        <div class="poetry-title">${p.title}</div>
-                        <div class="small text-muted">${p.author}</div>
+        const container = document.getElementById('poetry-list');
+        container.innerHTML = poems.map((p, idx) => `
+            <div class="col-md-4">
+                <div class="poetry-card" onclick="flipPoetry(this, ${idx})">
+                    <div class="poetry-front">
+                        <div class="poetry-title" style="font-weight: bold; color: #2E7D32; font-size: 1.3rem; margin-bottom: 10px;">${p.title}</div>
+                        <div class="text-muted small">${p.author}</div>
+                        <div class="mt-2 text-success"><i class="bi bi-arrow-repeat"></i> 点击翻转</div>
+                    </div>
+                    <div class="poetry-back">
+                        <div class="poetry-content-full">${p.content.split('。').join('。<br>')}</div>
                     </div>
                 </div>
-            `;
-        });
+            </div>
+        `).join('');
     }
 
-    function showPoetry(title) {
-        const p = poems.find(x => x.title === title);
-        alert(`【${p.title}】\n${p.author}\n\n${p.content}`);
-        speak(p.content, 0.8);
+    function flipPoetry(card, idx) {
+        card.classList.toggle('is-flipped');
+        if (card.classList.contains('is-flipped')) {
+            speak(poems[idx].title + "。" + poems[idx].author + "。" + poems[idx].content);
+        }
     }
 
     function marukoTalk() {
