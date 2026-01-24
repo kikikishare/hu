@@ -349,6 +349,7 @@
                                     <i class="bi bi-volume-up-fill"></i>
                                 </button>
                                 <div class="mt-3 fw-bold text-muted" id="phonics-test-prompt">请听句子，选出你听到的单词</div>
+                                <div id="phonics-subtitle" class="mt-2 text-primary fw-bold animate__animated animate__fadeIn" style="display:none; font-size: 1.2rem;"></div>
                             </div>
                             <div id="phonics-test-options" class="d-flex flex-wrap justify-content-center mt-3"></div>
                             <div class="mt-4">
@@ -750,17 +751,22 @@
     function startPhonicsTest() {
         document.getElementById('phonics-container').style.display = 'none';
         document.getElementById('phonics-test-container').style.display = 'block';
+        document.getElementById('phonics-subtitle').style.display = 'none';
         nextPhonicsTestQuestion();
     }
 
     function stopPhonicsTest() {
         document.getElementById('phonics-container').style.display = 'flex';
         document.getElementById('phonics-test-container').style.display = 'none';
+        document.getElementById('phonics-subtitle').style.display = 'none';
     }
 
     function nextPhonicsTestQuestion() {
         const item = phonicsTestData[Math.floor(Math.random() * phonicsTestData.length)];
         phonicsTestState.current = item;
+        
+        // 隐藏上一题的字幕
+        document.getElementById('phonics-subtitle').style.display = 'none';
         
         const optionsDiv = document.getElementById('phonics-test-options');
         optionsDiv.innerHTML = '';
@@ -786,14 +792,28 @@
     function checkPhonicsTestAnswer(selected, btn) {
         if(selected === phonicsTestState.current.a) {
             btn.classList.add('correct');
-            speak(`太棒了！单词是 ${selected}`);
-            updateScore(5);
-            setTimeout(nextPhonicsTestQuestion, 1500);
+            // 显示字幕
+            const subtitle = document.getElementById('phonics-subtitle');
+            subtitle.innerText = phonicsTestState.current.s;
+            subtitle.style.display = 'block';
+            
+            // 先说太棒了，结束之后再说单词，避免重叠
+            speak("太棒了！", 1.0, () => {
+                setTimeout(() => {
+                    speak(`单词是 ${selected}`, 0.9, () => {
+                        updateScore(5);
+                        setTimeout(nextPhonicsTestQuestion, 2000);
+                    });
+                }, 300);
+            });
         } else {
             btn.classList.add('wrong');
-            speak("不对哦，再听一遍吧");
-            setTimeout(() => btn.classList.remove('wrong'), 1000);
-            replayPhonicsSentence();
+            speak("不对哦，再听一遍吧", 1.0, () => {
+                setTimeout(() => {
+                    btn.classList.remove('wrong');
+                    replayPhonicsSentence();
+                }, 500);
+            });
         }
     }
 
