@@ -692,13 +692,52 @@
         alert("语音功能已开启！");
     }
 
+    let utterQueue = []; // 保持引用，防止垃圾回收导致 onend 不触发
     function speak(text, rate = 1.0, callback) {
         if (!window.speechSynthesis) return;
+        
+        // 停止之前的朗读
         window.speechSynthesis.cancel();
+        
+        // 某些浏览器在 cancel 后会处于 paused 状态，需要 resume
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+
+        if (!text) {
+            if (callback) callback();
+            return;
+        }
+
         const utter = new SpeechSynthesisUtterance(text);
+        // 自动识别中英文
         utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
         utter.rate = rate;
-        if(callback) utter.onend = callback;
+        
+        // 这里的逻辑要非常稳健
+        let callbackCalled = false;
+        const safeCallback = () => {
+            if (callback && !callbackCalled) {
+                callbackCalled = true;
+                callback();
+            }
+        };
+
+        utter.onend = safeCallback;
+        utter.onerror = (e) => {
+            console.error('Speech error:', e);
+            safeCallback();
+        };
+
+        // 终极兜底：如果朗读没反应，2秒后强制执行回调（根据字数动态调整时间）
+        if (callback) {
+            const timeout = Math.max(2000, text.length * 500 / rate);
+            setTimeout(safeCallback, timeout);
+        }
+
+        utterQueue.push(utter);
+        if (utterQueue.length > 10) utterQueue.shift(); // 只保留最近10个引用
+
         window.speechSynthesis.speak(utter);
     }
 
@@ -1006,9 +1045,10 @@
     function checkSynAnswer(selected, btn) {
         if(synExState.current.answer.includes(selected)) {
             btn.classList.add('correct');
-            speak(`答对啦！${synExState.current.word}的${synExState.current.type}是${selected}`);
-            updateScore(5);
-            setTimeout(nextSynQuestion, 1500);
+            speak(`答对啦！${synExState.current.word}的${synExState.current.type}是${selected}`, 1.0, () => {
+                updateScore(5);
+                setTimeout(nextSynQuestion, 1000);
+            });
         } else {
             btn.classList.add('wrong');
             speak("不对哦，再仔细想想");
@@ -1068,9 +1108,10 @@
     function checkIdiomAnswer(selected, btn) {
         if(selected === idiomExState.current.idiom) {
             btn.classList.add('correct');
-            speak(`太棒了！这就是成语${selected}的意思`);
-            updateScore(15);
-            setTimeout(nextIdiomQuestion, 2000);
+            speak(`太棒了！这就是成语${selected}的意思`, 1.0, () => {
+                updateScore(15);
+                setTimeout(nextIdiomQuestion, 1000);
+            });
         } else {
             btn.classList.add('wrong');
             speak("选错啦，再读读成语意思吧");
@@ -1112,9 +1153,10 @@
     function checkGrammarAnswer(selected, btn) {
         if(selected === grammarExState.current.right) {
             btn.classList.add('correct');
-            speak(`太棒了！这是${grammarExState.current.type}类病句。`);
-            updateScore(20);
-            setTimeout(nextGrammarQuestion, 2000);
+            speak(`太棒了！这是${grammarExState.current.type}类病句。`, 1.0, () => {
+                updateScore(20);
+                setTimeout(nextGrammarQuestion, 1000);
+            });
         } else {
             btn.classList.add('wrong');
             speak("不对哦，再仔细读读句子");
