@@ -489,25 +489,40 @@
         document.getElementById('btn-unlock').classList.add('d-none');
     }
 
+    let voiceInterval;
     function speak(text) {
         if (!window.speechSynthesis) {
             alert("您的浏览器不支持语音功能");
             return;
         }
+        
+        // 停止之前的计时器
+        if (voiceInterval) clearInterval(voiceInterval);
+        
+        // 强制取消正在播放的语音
         window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'en-US';
-        utter.rate = 0.85;
-        utter.pitch = 1.0;
         
-        // 关键：解决移动端锁屏或静音不发声
-        window.speechSynthesis.speak(utter);
-        
-        // Chrome/Safari 修复补丁
-        const r = setInterval(() => {
-            if (!window.speechSynthesis.speaking) clearInterval(r);
-            else { window.speechSynthesis.pause(); window.speechSynthesis.resume(); }
-        }, 5000);
+        // 延迟一小会儿再播放，给浏览器喘息时间
+        setTimeout(() => {
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = 0.85;
+            utter.pitch = 1.0;
+            
+            // 关键修复：iOS/Safari 必须在用户交互后触发，且容易因为长文本中断
+            window.speechSynthesis.speak(utter);
+            
+            // 解决移动端静默中断问题的终极方案：每2秒检查并维持播放状态
+            voiceInterval = setInterval(() => {
+                if (!window.speechSynthesis.speaking) {
+                    clearInterval(voiceInterval);
+                } else {
+                    // 仅在仍然播放时进行微小的暂停恢复，保持连接
+                    window.speechSynthesis.pause();
+                    window.speechSynthesis.resume();
+                }
+            }, 2000);
+        }, 50);
     }
 
     // --- 基础 UI 功能 ---
