@@ -59,88 +59,6 @@
             margin-bottom: 30px;
         }
 
-        .question-text {
-            font-size: 1.8rem;
-            color: #D84315;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .word-block {
-            background: #FFF3E0;
-            padding: 10px 18px;
-            border-radius: 15px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-            user-select: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .word-block:hover {
-            border-color: var(--primary-color);
-            background: #FFE0B2;
-        }
-
-        .composition-card {
-            border-left: 8px solid #FF7043;
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        .poetry-card {
-            background: #E8F5E9;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            height: 100%;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .poetry-card.is-flipped {
-            transform: rotateY(180deg);
-            background: #F1F8E9;
-        }
-
-        .poetry-front, .poetry-back {
-            backface-visibility: hidden;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .poetry-back {
-            transform: rotateY(180deg);
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 20px;
-        }
-
-        .poetry-content-full {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #1B5E20;
-            word-break: break-all;
-        }
-
         .score-badge {
             background: #FFD54F;
             color: #F57C00;
@@ -161,140 +79,6 @@
 
         .maruko-mascot:hover { transform: scale(1.1) rotate(-5deg); }
 
-        .translation-option {
-            border: 2px solid #FFE0B2;
-            border-radius: 15px;
-            padding: 12px;
-            transition: all 0.2s;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .translation-option:hover {
-            background-color: #FFF3E0;
-            border-color: var(--primary-color);
-        }
-
-        .phonics-card {
-            background: #F3E5F5;
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid #E1BEE7;
-            transition: all 0.3s;
-        }
-
-        .phonics-letter {
-            font-size: 2rem;
-            color: #7B1FA2;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .phonics-sound {
-            color: #9C27B0;
-            font-style: italic;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .phonics-word-item {
-            background: white;
-            border-radius: 12px;
-            padding: 8px 12px;
-            margin: 4px;
-            display: inline-block;
-            cursor: pointer;
-            transition: transform 0.2s;
-            font-size: 0.95rem;
-        }
-
-        .phonics-word-item:hover {
-            transform: scale(1.1);
-            background: #EDE7F6;
-        }
-
-        .min-vh-10 { min-height: 80px; }
-        /* 多音字卡片 */
-        .poly-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            height: 100%;
-            transition: all 0.3s;
-            border: 2px solid #E3F2FD;
-            position: relative;
-            overflow: hidden;
-        }
-        .poly-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-color: #2196F3;
-        }
-        .poly-char {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #1976D2;
-            margin-bottom: 15px;
-            display: block;
-        }
-        .poly-item {
-            background: #F5F5F5;
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .poly-pinyin {
-            color: #D32F2F;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .poly-examples {
-            font-size: 0.9rem;
-            color: #616161;
-        }
-
-        /* 关联词卡片 */
-        .conj-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            border-left: 5px solid #FF9800;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-        .conj-card:hover {
-            box-shadow: var(--card-shadow);
-            transform: scale(1.01);
-        }
-        .conj-category {
-            display: inline-block;
-            background: #FFF3E0;
-            color: #E65100;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .conj-pair {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .conj-sentence {
-            background: #FAFAFA;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .conj-sentence:hover {
-            background: #EEEEEE;
-        }
         /* 练习容器 */
         .exercise-container {
             display: none;
@@ -333,23 +117,14 @@
             margin-bottom: 20px;
             line-height: 2;
         }
-        .exercise-blank {
-            display: inline-block;
-            min-width: 80px;
-            border-bottom: 2px solid #795548;
-            margin: 0 10px;
-            text-align: center;
-            color: #D84315;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="container">
-        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🎒 三年级期末备考特训</h1>
-        <p class="lead">英语、语文、古诗，全科通关！✨</p>
+        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🎒 三年级语文备考特训</h1>
+        <p class="lead">语文核心素养提升，助你拿高分！✨</p>
         <div class="mt-3">
             <button class="btn btn-light rounded-pill px-4 shadow-sm" onclick="unlockAudio()">
                 🔊 开启学习配音
@@ -365,138 +140,13 @@
     </div>
 
     <ul class="nav nav-pills mb-4 justify-content-center sticky-top bg-transparent p-2" id="mainTabs">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#english-zone">🔤 英语口语</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#phonics-zone">🗣️ 语音达人</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#poetry-zone">🏮 必背古诗</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#poly-zone">🔤 多音字</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#conj-zone">🔗 关联词</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#syn-zone">🌓 近/反义词</button></li>
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#syn-zone">🌓 近/反义词</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#idiom-zone">🧠 成语挑战</button></li>
     </ul>
 
     <div class="tab-content">
-        <!-- 英语板块 -->
-        <div class="tab-pane fade show active" id="english-zone">
-            <div class="row justify-content-center">
-                <div class="col-md-9">
-                    <div class="module-card text-center animate__animated animate__fadeIn">
-                        <div id="english-game-start">
-                            <h3 class="mb-4">🎤 三上期末口语 Q&A 练习 (28题)</h3>
-                            <p class="text-muted mb-4">全面覆盖期末必考对话，拼图挑战，加深记忆！</p>
-                            <button class="btn btn-primary btn-lg rounded-pill px-5" onclick="startEnglishChallenge()">开启闯关</button>
-                        </div>
-                        <div id="english-game-play" style="display:none;">
-                            <div class="progress mb-4" style="height: 10px; border-radius: 10px;">
-                                <div id="english-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
-                            </div>
-                            <div class="question-text" id="current-question">Question?</div>
-                            
-                            <div id="translation-phase" class="mb-4">
-                                <p class="fw-bold text-muted small mb-3">这句话的意思是：</p>
-                                <div id="translation-options" class="d-grid gap-2"></div>
-                            </div>
-
-                            <div id="puzzle-phase" style="display:none;">
-                                <div id="answer-display" class="p-3 border rounded-4 bg-light min-vh-10 mb-3 text-start d-flex flex-wrap gap-2 align-items-center">
-                                    <p class="text-muted small m-0">请按顺序点击单词拼出答案...</p>
-                                </div>
-                                <div id="word-pool" class="d-flex flex-wrap justify-content-center gap-2"></div>
-                            </div>
-
-                            <div class="mt-4" id="english-controls">
-                                <button class="btn btn-info rounded-pill text-white px-4" onclick="hearQuestion()">🔊 听问题</button>
-                                <button class="btn btn-warning rounded-pill text-white px-4" onclick="showHint()">💡 提示</button>
-                            </div>
-
-                            <div id="english-result" class="mt-4 animate__animated" style="display:none;">
-                                <h4 class="text-success fw-bold">太棒了！拼对啦！🎉</h4>
-                                <p class="text-muted">跟我读一遍：</p>
-                                <h3 id="correct-answer" class="text-primary p-3 bg-light rounded-4 border">Answer</h3>
-                                <button class="btn btn-success rounded-pill px-5 mt-3" onclick="nextEnglishQuestion()">下一题 ✅</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 语音达人板块 -->
-        <div class="tab-pane fade" id="phonics-zone">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="module-card">
-                        <h3 class="mb-4 text-center">🗣️ 三上 Phonics 语音闯关</h3>
-                        <p class="text-muted text-center mb-4">观察单词结构，练习自然拼读，掌握字母发音规律！</p>
-                        <div id="phonics-container" class="row g-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- 古诗板块 -->
-        <div class="tab-pane fade" id="poetry-zone">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="module-card">
-                        <h3 class="mb-4">🏮 小学生课标必背古诗词 (精选)</h3>
-                        <p class="text-muted mb-4">点击卡片查看全文并听朗读，挑战背诵吧！</p>
-                        <div class="row g-3" id="poetry-list"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 多音字板块 -->
-        <div class="tab-pane fade" id="poly-zone">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="module-card">
-                        <h3 class="mb-4 text-center">🔤 多音字趣味挑战</h3>
-                        <p class="text-muted text-center mb-4">一个字有多种读音，你能全部掌握吗？点击发音听一听！</p>
-                        <div class="text-center mb-4">
-                            <button class="btn btn-warning rounded-pill px-4" onclick="startPolyExercise()">🎯 开始练习模式</button>
-                        </div>
-                        <div id="poly-exercise" class="exercise-container text-center">
-                            <div class="mb-3"><span class="badge bg-warning text-dark">练习中...</span></div>
-                            <div class="exercise-sentence" id="poly-ex-sentence"></div>
-                            <div id="poly-ex-options"></div>
-                            <div class="mt-4">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="stopPolyExercise()">退出练习</button>
-                            </div>
-                        </div>
-                        <div id="poly-container" class="row g-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 关联词板块 -->
-        <div class="tab-pane fade" id="conj-zone">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="module-card">
-                        <h3 class="mb-4 text-center">🔗 关联词达人</h3>
-                        <p class="text-muted text-center mb-4">掌握句子间的逻辑关系，让表达更清晰！</p>
-                        <div class="text-center mb-4">
-                            <button class="btn btn-warning rounded-pill px-4" onclick="startConjExercise()">🎯 开始挑战模式</button>
-                        </div>
-                        <div id="conj-exercise" class="exercise-container text-center">
-                            <div class="mb-3"><span class="badge bg-warning text-dark">挑战中...</span></div>
-                            <div class="exercise-sentence" id="conj-ex-sentence"></div>
-                            <div id="conj-ex-options" class="d-flex flex-wrap justify-content-center"></div>
-                            <div class="mt-4">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="stopConjExercise()">退出挑战</button>
-                            </div>
-                        </div>
-                        <div id="conj-container" class="row g-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- 近/反义词板块 -->
-        <div class="tab-pane fade" id="syn-zone">
+        <div class="tab-pane fade show active" id="syn-zone">
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div class="module-card">
@@ -553,99 +203,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // --- 完整英语 Q&A 数据 (28题) ---
-    const englishQuestions = [
-        {q: "Good morning.", a: "Good morning.", cn: "早上好。"},
-        {q: "What's your name?", a: "My name is Lily.", cn: "你叫什么名字？"},
-        {q: "How old are you?", a: "I'm nine years old.", cn: "你几岁了？"},
-        {q: "Nice to meet you.", a: "Nice to meet you too.", cn: "很高兴认识你。"},
-        {q: "Do you have a pet?", a: "Yes, I do.", cn: "你有宠物吗？"},
-        {q: "What color is it?", a: "It is red.", cn: "它是什么颜色的？"},
-        {q: "Let's go to the zoo.", a: "Great idea.", cn: "我们去动物园吧。"},
-        {q: "How many apples do you have?", a: "I have five apples.", cn: "你有多少个苹果？"},
-        {q: "Happy birthday!", a: "Thank you!", cn: "生日快乐！"},
-        {q: "What do plants need?", a: "Plants need water and sun.", cn: "植物需要什么？"},
-        {q: "What color is your dog?", a: "It is black and white.", cn: "你的狗是什么颜色的？"},
-        {q: "Is this your photo?", a: "Yes, it is.", cn: "这是你的照片吗？"},
-        {q: "What colours make green?", a: "Blue and yellow make green.", cn: "什么颜色混合能变成绿色？"},
-        {q: "What colours do you like?", a: "I like red and pink.", cn: "你喜欢什么颜色？"},
-        {q: "Do you have a big family?", a: "Yes, I do.", cn: "你有一个大家庭吗？"},
-        {q: "What can plants give us?", a: "Plants can give us fresh air.", cn: "植物能给我们带来什么？"},
-        {q: "Are you a good friend?", a: "Yes, I am. I help others.", cn: "你是一个好朋友吗？"},
-        {q: "What's that?", a: "It's a tiger.", cn: "那是什么？"},
-        {q: "How many tigers do you see?", a: "I see three tigers.", cn: "你看到了几只老虎？"},
-        {q: "What colours make purple?", a: "Red and blue make purple.", cn: "什么颜色混合能变成紫色？"},
-        {q: "What colours make orange?", a: "Red and yellow make orange.", cn: "什么颜色混合能变成橙色？"},
-        {q: "What colours make pink?", a: "Red and white make pink.", cn: "什么颜色混合能变成粉色？"},
-        {q: "What colours make gray?", a: "Black and white make gray.", cn: "什么颜色混合能变成灰色？"},
-        {q: "Your dog is very cute!", a: "Thank you!", cn: "你的狗真可爱！"},
-        {q: "We can share.", a: "Thank you.", cn: "我们可以分享。"},
-        {q: "Is that your brother?", a: "No, it isn't.", cn: "那是你弟弟吗？"},
-        {q: "What do friends do?", a: "Friends help and share.", cn: "朋友之间会做什么？"},
-        {q: "What colour is the grass?", a: "It is green.", cn: "草是什么颜色的？"}
-    ];
-
-    // --- 多音字数据 ---
-    const polyData = [
-        {"char": "落", "pronunciations": [{"pinyin": "là", "examples": ["落了两个字", "落在家里", "落在后面"]}, {"pinyin": "luò", "examples": ["落泪", "落幕", "没落", "破落", "落榜", "落成", "落地", "落第"]}]},
-        {"char": "空", "pronunciations": [{"pinyin": "kōng", "examples": ["空想", "天空", "落空", "空荡荡", "空旷"]}, {"pinyin": "kòng", "examples": ["空格", "空白", "空地", "填空", "抽空", "空闲"]}]},
-        {"char": "壳", "pronunciations": [{"pinyin": "ké", "examples": ["贝壳", "脑壳", "鸡蛋壳"]}, {"pinyin": "qiào", "examples": ["地壳", "甲壳", "金蝉脱壳"]}]},
-        {"char": "看", "pronunciations": [{"pinyin": "kān", "examples": ["看门", "看管", "看护", "看守"]}, {"pinyin": "kàn", "examples": ["看书", "你看", "看望", "看见", "照看"]}]},
-        {"char": "卡", "pronunciations": [{"pinyin": "kǎ", "examples": ["卡片", "卡车", "卡通", "病历卡"]}, {"pinyin": "qiǎ", "examples": ["鱼刺卡在喉咙头", "卡住退路", "卡脖子", "发卡", "关卡"]}]},
-        {"char": "觉", "pronunciations": [{"pinyin": "jué", "examples": ["感觉", "觉悟", "觉得", "觉察", "觉醒"]}, {"pinyin": "jiào", "examples": ["睡觉", "午觉"]}]},
-        {"char": "圈", "pronunciations": [{"pinyin": "juàn", "examples": ["猪圈", "羊圈", "圈养"]}, {"pinyin": "quān", "examples": ["圈子", "项圈", "圈地", "圈出来", "圈套"]}]},
-        {"char": "禁", "pronunciations": [{"pinyin": "jīn", "examples": ["禁受", "弱不禁风", "不禁", "情不自禁"]}, {"pinyin": "jìn", "examples": ["禁止", "监禁", "紫禁城", "禁忌", "禁地"]}]},
-        {"char": "尽", "pronunciations": [{"pinyin": "jǐn", "examples": ["尽早", "尽管", "尽快", "尽量"]}, {"pinyin": "jìn", "examples": ["用尽", "自尽", "尽头", "尽心", "尽情", "尽职"]}]},
-        {"char": "角", "pronunciations": [{"pinyin": "jiǎo", "examples": ["牛角", "号角", "角落", "直角", "角度"]}, {"pinyin": "jué", "examples": ["角色", "丑角", "名角", "角逐", "主角"]}]},
-        {"char": "教", "pronunciations": [{"pinyin": "jiāo", "examples": ["教书", "教唱歌", "教小孩", "教给"]}, {"pinyin": "jiào", "examples": ["教导", "教育", "管教", "请教", "教练", "教学"]}]},
-        {"char": "降", "pronunciations": [{"pinyin": "jiàng", "examples": ["降落", "下降", "降价", "降低"]}, {"pinyin": "xiáng", "examples": ["投降", "降伏", "降龙伏虎", "诱降"]}]},
-        {"char": "间", "pronunciations": [{"pinyin": "jiān", "examples": ["中间", "空间", "时间", "房间"]}, {"pinyin": "jiàn", "examples": ["间隔", "离间", "间谍", "间断", "间接", "亲密无间"]}]},
-        {"char": "假", "pronunciations": [{"pinyin": "jiǎ", "examples": ["真假", "假设", "假如", "不假思索"]}, {"pinyin": "jià", "examples": ["请假", "暑假", "假期", "假日"]}]},
-        {"char": "系", "pronunciations": [{"pinyin": "jì", "examples": ["系鞋带", "系围裙"]}, {"pinyin": "xì", "examples": ["系统", "联系", "系念", "确系实情"]}]},
-        {"char": "几", "pronunciations": [{"pinyin": "jī", "examples": ["茶几", "窗明几净", "几乎", "几率"]}, {"pinyin": "jǐ", "examples": ["几个", "十几岁", "几何", "几次"]}]},
-        {"char": "给", "pronunciations": [{"pinyin": "gěi", "examples": ["给我", "送给", "给面子"]}, {"pinyin": "jǐ", "examples": ["供给", "给养", "自给自足", "给予"]}]},
-        {"char": "晃", "pronunciations": [{"pinyin": "huǎng", "examples": ["晃眼", "虚晃一枪", "一晃就消失了"]}, {"pinyin": "huàng", "examples": ["晃动", "晃悠", "晃荡", "摇头晃脑"]}]},
-        {"char": "哄", "pronunciations": [{"pinyin": "hōng", "examples": ["哄堂", "哄抬", "哄抢", "哄传"]}, {"pinyin": "hòng", "examples": ["起哄", "一哄而散"]}, {"pinyin": "hǒng", "examples": ["哄骗", "哄逗", "哄弄"]}]},
-        {"char": "号", "pronunciations": [{"pinyin": "háo", "examples": ["号叫", "哀号", "怒号", "号啕"]}, {"pinyin": "hào", "examples": ["号令", "吹号", "冲锋号", "号召"]}]},
-        {"char": "似", "pronunciations": [{"pinyin": "sì", "examples": ["相似", "似乎"]}, {"pinyin": "shì", "examples": ["似的"]}]},
-        {"char": "扇", "pronunciations": [{"pinyin": "shān", "examples": ["扇耳光", "扇扇子", "扇动"]}, {"pinyin": "shàn", "examples": ["蒲扇", "电扇", "一扇窗", "扇贝"]}]},
-        {"char": "撒", "pronunciations": [{"pinyin": "sā", "examples": ["撒手", "撒网", "撒娇", "撒野"]}, {"pinyin": "sǎ", "examples": ["撒种", "撒播"]}]},
-        {"char": "铺", "pronunciations": [{"pinyin": "pū", "examples": ["铺床", "铺垫", "铺设", "铺张"]}, {"pinyin": "pù", "examples": ["铺子", "店铺", "床铺", "铺位"]}]},
-        {"char": "盛", "pronunciations": [{"pinyin": "chéng", "examples": ["盛饭", "盛东西"]}, {"pinyin": "shèng", "examples": ["盛开", "盛产", "盛大", "旺盛"]}]}
-    ];
-
-    // --- 关联词数据 ---
-    const conjData = [
-        {
-            "category": "条件关系",
-            "items": [
-                {"pair": "只要……就……", "sentences": ["只要我们努力读书，将来就有机会成为祖国的栋梁。", "只要有付出，就一定有收获。"]},
-                {"pair": "只有……才……", "sentences": ["只有我们平时打好基础，测试时才能得心应手。", "只有不断努力，才能有美好的明天！"]}
-            ]
-        },
-        {
-            "category": "并列关系",
-            "items": [
-                {"pair": "一边……一边……", "sentences": ["我一边在一家工艺美术的小厂工作，一边进行自学。", "我一边听音乐，一边写字。"]},
-                {"pair": "既……又……", "sentences": ["春天既美丽又可爱，既温馨又多彩。", "树木既能绿化环境，又能制造出新鲜空气。"]}
-            ]
-        },
-        {
-            "category": "因果关系",
-            "items": [
-                {"pair": "因为……所以……", "sentences": ["因为明天下雨，所以郊游取消。", "因为他病了，所以没有上学!"]},
-                {"pair": "既然……就……", "sentences": ["既然你认识到自己错了，就应该立即改正！", "既然外面风这么大，那么我们就别出去了。"]}
-            ]
-        },
-        {
-            "category": "转折关系",
-            "items": [
-                {"pair": "虽然……但是……", "sentences": ["虽然小明今天生病了，但仍然坚持来上学。", "虽然天气很热，但是农民伯伯依然到田里干活。"]},
-                {"pair": "尽管……可是……", "sentences": ["尽管生病了，可是他还是坚持工作。", "尽管学习很累，可是我仍旧坚持着。"]}
-            ]
-        }
-    ];
-
     // --- 近/反义词数据 ---
     const synonymsData = [
         {"word": "漂亮", "synonyms": ["美丽", "好看"], "antonyms": ["丑陋", "难看"]},
@@ -674,93 +231,14 @@
         {"idiom": "十全十美", "meaning": "指各方面都非常完美，毫无缺陷。", "example": "世界上没有十全十美的人。"}
     ];
 
-    const poems = [
-        {title: "所见", author: "袁枚", content: "牧童骑黄牛，歌声振林樾。意欲捕鸣蝉，忽然闭口立。"},
-        {title: "山行", author: "杜牧", content: "远上寒山石径斜，白云生处有人家。停车坐爱枫林晚，霜叶红于二月花。"},
-        {title: "赠刘景文", author: "苏轼", content: "荷尽已无擎雨盖，菊残犹有傲霜枝。一年好景君须记，最是橙黄橘绿时。"},
-        {title: "夜书所见", author: "叶绍翁", content: "萧萧梧叶送寒声，江上秋风动客情。知有儿童挑促织，夜深篱落一灯明。"},
-        {title: "望天门山", author: "李白", content: "天门中断楚江开，碧水东流至此回。两岸青山相对出，孤帆一片日边来。"},
-        {title: "饮湖上初晴后雨", author: "苏轼", content: "水光潋滟晴方好，山色空蒙雨亦奇。欲把西湖比西子，淡妆浓抹总相宜。"},
-        {title: "望洞庭", author: "刘禹锡", content: "湖光秋月两相和，潭面无风镜未磨。遥望洞庭山水翠，白银盘里一青螺。"},
-        {title: "早发白帝城", author: "李白", content: "朝辞白帝彩云间，千里江陵一日还。两岸猿声啼不住，轻舟已过万重山。"},
-        {title: "采莲曲", author: "王昌龄", content: "荷叶罗裙一色裁，芙蓉向脸两边开。乱入池中看不见，闻歌始觉有人来。"}
-    ];
-
     let state = {
         score: parseInt(localStorage.getItem('grade3_exam_score')) || 0,
-        englishIndex: 0,
-        puzzleOrder: [],
         unlocked: false
     };
-
-    // --- 语音逻辑 (Phonics) ---
-    const phonicsData = [
-        { letter: "Aa", sound: "/ æ /", words: ["bag", "can", "and", "cat", "bad", "dad", "cab", "mad", "apple", "sad", "ant", "rat", "hat", "bat", "cap", "rabbit", "have", "hand", "van", "jam", "map", "nap", "fan", "ham"] },
-        { letter: "Bb", sound: "/ b /", words: ["bed", "bag", "Bob", "cab", "big", "boy", "buy", "banana", "baby", "bear", "black", "blue", "back", "bread", "brown", "but"] },
-        { letter: "Cc", sound: "/ k /", words: ["cat", "cut", "can", "cab", "cup", "cake", "cute", "colour", "close", "clean", "class", "computer", "cap", "car", "card", "come"] },
-        { letter: "Dd", sound: "/ d /", words: ["dog", "bad", "dad", "sad", "dark", "day", "desk", "doll", "duck", "deer", "deep", "mud", "door", "down", "dance", "dinner"] },
-        { letter: "Ee", sound: "/ e /", words: ["egg", "pet", "leg", "web", "set", "elephant", "desk", "yellow", "member", "bed", "nest", "pen", "red", "seven", "ten", "men", "bell", "end", "vet", "wet", "fed", "hen", "help", "jet"] },
-        { letter: "Ff", sound: "/ f /", words: ["fish", "for", "from", "fire", "floor", "fruit", "five", "beef", "four", "fast", "fly", "fox", "friend", "family", "far", "food", "frog", "foot", "flower", "find", "farm", "funny", "fat", "fear"] },
-        { letter: "Gg", sound: "/ g /", words: ["go", "gift", "bug", "grass", "glad", "pig", "girl", "flag", "tag", "frog", "glass", "grape", "green", "grow", "give", "game", "tiger", "guess", "get", "leg"] },
-        { letter: "Hh", sound: "/ h /", words: ["hot", "help", "hit", "hear", "her", "his", "hat", "head", "hand", "have", "how", "home", "hope", "happy", "house", "hair"] },
-        { letter: "Ii", sound: "/ ɪ /", words: ["ill", "kid", "big", "dig", "sit", "six", "fix", "pig", "pin", "lip", "sip", "hit", "fit", "win", "fin", "bin", "pick", "little", "city", "window"] },
-        { letter: "Jj", sound: "/ dʒ /", words: ["job", "Jim", "joy", "jet", "jam", "juice", "June", "July", "jog", "jump", "jungle", "jacket"] },
-        { letter: "Kk", sound: "/ k /", words: ["Kim", "kite", "kid", "key", "kind", "keep", "kick", "kitchen", "cook", "milk", "drink", "look", "book", "dark", "park", "talk", "work", "mask", "risk", "bank"] },
-        { letter: "Ll", sound: "/ l /", words: ["leg", "lion", "lab", "link", "like", "love", "listen", "light", "little", "plant", "late", "long", "lamp", "lamb", "yellow", "let"] },
-        { letter: "Mm", sound: "/ m /", words: ["map", "mother", "mouse", "money", "mud", "men", "my", "maths", "mouth", "mum", "make", "monkey", "meet", "summer", "member", "Monday", "March", "me", "Miss", "Mr"] },
-        { letter: "Nn", sound: "/ n /", words: ["new", "pan", "need", "nose", "noodles", "not", "nap", "nine", "nice", "nurse", "fan", "no", "name", "night", "near", "now", "never", "net", "noon"] },
-        { letter: "Oo", sound: "/ ɒ /", words: ["box", "dot", "body", "lock", "orange", "job", "log", "shop", "sock", "hop", "cop", "top", "pot", "hot", "frog", "fog", "drop", "fox", "mop", "on"] },
-        { letter: "Pp", sound: "/ p /", words: ["cup", "pen", "pink", "pet", "plant", "sleep", "help", "party", "people", "parent", "pretty", "paint", "pig", "pan", "purple", "panda", "plane", "park", "hope", "piano", "happy", "peel", "polite", "put"] },
-        { letter: "Qq", sound: "/ kw /", words: ["quit", "quiet", "queen", "quick", "question", "quilt", "quiz", "quarter"] },
-        { letter: "Rr", sound: "/ r /", words: ["red", "ride", "from", "friend", "fresh", "fruit", "ruler", "race", "rock", "rat", "rest", "rude", "robot", "run", "read", "rabbit"] },
-        { letter: "Ss", sound: "/ s /", words: ["see", "say", "small", "some", "sister", "so", "set", "sea", "sun", "six", "school", "grass", "bus", "seven", "study", "goose"] },
-        { letter: "Tt", sound: "/ t /", words: ["Ted", "sit", "tall", "talk", "vet", "tea", "mat", "hat", "taste", "table", "tap", "tiger", "hit", "nut", "cut", "tub", "cat", "hot", "shirt", "eat"] },
-        { letter: "Uu", sound: "/ ʌ /", words: ["run", "up", "cut", "nut", "fun", "mud", "mug", "cup", "jump", "lucky", "sun", "bus", "uncle", "gum", "duck", "tub", "bug", "us", "plus", "hug"] },
-        { letter: "Vv", sound: "/ v /", words: ["van", "vet", "vat", "vest", "very", "visit", "vacation", "five", "give", "live", "drive", "over", "wave", "love", "river", "vegetable"] },
-        { letter: "Ww", sound: "/ w /", words: ["we", "win", "won", "with", "swim", "well", "wig", "will", "want", "week", "west", "wall", "wave", "wait", "walk", "warm", "water", "wind", "wood", "window"] },
-        { letter: "Xx", sound: "/ ks /", words: ["box", "six", "fix", "tax", "taxi", "fox", "mix", "sex"] },
-        { letter: "Yy", sound: "/ j /", words: ["yum", "yo-yo", "yellow", "yes", "year", "yell", "you", "yard", "young", "yeah", "your"] },
-        { letter: "Zz", sound: "/ z /", words: ["Zip", "zero", "zig", "zebra", "zoo", "size", "lazy", "zone"] }
-    ];
-
-    function loadPhonics() {
-        const container = document.getElementById('phonics-container');
-        phonicsData.forEach((item, i) => {
-            const card = document.createElement('div');
-            card.className = 'col-md-6 col-lg-4';
-            card.innerHTML = `
-                <div class="phonics-card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <span class="phonics-letter">${item.letter}</span>
-                            <span class="phonics-sound">${item.sound}</span>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary rounded-pill" onclick="playPhonicsSound('${item.letter}', '${item.sound}')">🔊 发音</button>
-                    </div>
-                    <div class="phonics-words">
-                        ${item.words.map(word => `<span class="phonics-word-item" onclick="speak('${word}')">${word}</span>`).join('')}
-                    </div>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    function playPhonicsSound(letter, sound) {
-        speak(letter[0], 0.8, () => {
-            setTimeout(() => {
-                speak(letter[0], 0.6); 
-            }, 500);
-        });
-    }
 
     // --- 页面初始化 ---
     window.onload = () => {
         updateScore(0);
-        loadPoetry();
-        loadPhonics();
-        loadPoly();
-        loadConj();
         loadSyn();
         loadIdiom();
     };
@@ -769,7 +247,7 @@
         state.score += pts;
         document.getElementById('user-score').innerText = state.score;
         localStorage.setItem('grade3_exam_score', state.score);
-        if(pts >= 0) showFeedback();
+        if(pts > 0) showFeedback();
     }
 
     function showFeedback() {
@@ -806,269 +284,6 @@
         window.speechSynthesis.speak(utter);
     }
 
-    // --- 英语逻辑 ---
-    function startEnglishChallenge() {
-        state.englishIndex = 0;
-        document.getElementById('english-game-start').style.display = 'none';
-        document.getElementById('english-game-play').style.display = 'block';
-        loadEnglishQuestion();
-    }
-
-    function loadEnglishQuestion() {
-        const q = englishQuestions[state.englishIndex];
-        document.getElementById('current-question').innerText = q.q;
-        document.getElementById('english-progress').style.width = `${(state.englishIndex / englishQuestions.length) * 100}%`;
-        
-        const optionsDiv = document.getElementById('translation-options');
-        optionsDiv.innerHTML = '';
-        const options = [q.cn];
-        while(options.length < 4) {
-            const randomCn = englishQuestions[Math.floor(Math.random()*englishQuestions.length)].cn;
-            if(!options.includes(randomCn)) options.push(randomCn);
-        }
-        options.sort(() => Math.random() - 0.5).forEach(opt => {
-            const btn = document.createElement('div');
-            btn.className = 'translation-option animate__animated animate__fadeIn';
-            btn.innerText = opt;
-            btn.onclick = () => checkTranslation(opt, btn);
-            optionsDiv.appendChild(btn);
-        });
-
-        document.getElementById('translation-phase').style.display = 'block';
-        document.getElementById('puzzle-phase').style.display = 'none';
-        document.getElementById('english-result').style.display = 'none';
-        speak(q.q);
-    }
-
-    function checkTranslation(selected, btn) {
-        const q = englishQuestions[state.englishIndex];
-        if(selected === q.cn) {
-            btn.classList.add('bg-success', 'text-white');
-            setTimeout(() => {
-                document.getElementById('translation-phase').style.display = 'none';
-                loadPuzzle();
-            }, 600);
-        } else {
-            btn.classList.add('bg-danger', 'text-white', 'animate__shakeX');
-            speak("不对哦，再想想");
-            setTimeout(() => btn.className = 'translation-option', 1000);
-        }
-    }
-
-    function loadPuzzle() {
-        const q = englishQuestions[state.englishIndex];
-        document.getElementById('puzzle-phase').style.display = 'block';
-        document.getElementById('answer-display').innerHTML = '<p class="text-muted small m-0">拼出英文回答...</p>';
-        state.puzzleOrder = [];
-        
-        const words = q.a.split(' ');
-        const pool = document.getElementById('word-pool');
-        pool.innerHTML = '';
-        [...words].sort(() => Math.random() - 0.5).forEach(w => {
-            const div = document.createElement('div');
-            div.className = 'word-block shadow-sm animate__animated animate__fadeIn';
-            div.innerText = w;
-            div.onclick = () => selectWord(w, div);
-            pool.appendChild(div);
-        });
-    }
-
-    function selectWord(word, el) {
-        if(el.style.visibility === 'hidden') return;
-        const q = englishQuestions[state.englishIndex];
-        const words = q.a.split(' ');
-        if(word === words[state.puzzleOrder.length]) {
-            state.puzzleOrder.push(word);
-            el.style.visibility = 'hidden';
-            const display = document.getElementById('answer-display');
-            if(state.puzzleOrder.length === 1) display.innerHTML = '';
-            display.innerHTML += `<span class="badge bg-primary p-2 animate__animated animate__bounceIn m-1">${word}</span> `;
-            speak(word);
-            if(state.puzzleOrder.length === words.length) {
-                showSuccess();
-            }
-        } else {
-            el.classList.add('bg-danger', 'text-white', 'animate__shakeX');
-            setTimeout(() => el.classList.remove('bg-danger', 'text-white', 'animate__shakeX'), 500);
-            speak("不对哦");
-        }
-    }
-
-    function showSuccess() {
-        const q = englishQuestions[state.englishIndex];
-        document.getElementById('english-result').style.display = 'block';
-        document.getElementById('correct-answer').innerText = q.a;
-        speak(q.a, 0.9, () => updateScore(10));
-    }
-
-    function nextEnglishQuestion() {
-        state.englishIndex++;
-        if(state.englishIndex < englishQuestions.length) {
-            loadEnglishQuestion();
-        } else {
-            alert("通关啦！宝贝你是最棒的！👏");
-            startEnglishChallenge();
-        }
-    }
-
-    function hearQuestion() {
-        speak(englishQuestions[state.englishIndex].q);
-    }
-
-    function showHint() {
-        alert("悄悄告诉你，答案是: " + englishQuestions[state.englishIndex].a);
-    }
-
-    // --- 语文逻辑: 多音字 ---
-    function loadPoly() {
-        const container = document.getElementById('poly-container');
-        container.innerHTML = polyData.map((item, i) => `
-            <div class="col-md-4">
-                <div class="poly-card animate__animated animate__fadeIn" style="animation-delay: ${i*0.05}s">
-                    <span class="poly-char">${item.char}</span>
-                    ${item.pronunciations.map(p => `
-                        <div class="poly-item" onclick="speak('${item.char}，读音${p.pinyin}，例如${p.examples.slice(0,2).join('、')}')">
-                            <div class="poly-pinyin">/ ${p.pinyin} /</div>
-                            <div class="poly-examples">${p.examples.join('、')}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // --- 语文逻辑: 关联词 ---
-    function loadConj() {
-        const container = document.getElementById('conj-container');
-        container.innerHTML = conjData.map((cat, i) => `
-            <div class="col-12">
-                <div class="fw-bold mb-3 mt-2 text-secondary">📍 ${cat.category}</div>
-                <div class="row">
-                    ${cat.items.map(item => `
-                        <div class="col-md-6">
-                            <div class="conj-card shadow-sm animate__animated animate__fadeInUp">
-                                <div class="conj-pair">${item.pair}</div>
-                                ${item.sentences.map(s => `
-                                    <div class="conj-sentence" onclick="speak('${s.replace(/'/g, "\\'")}')">
-                                        � ${s}
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // --- 多音字练习逻辑 ---
-    let polyExState = { current: null, score: 0 };
-    function startPolyExercise() {
-        document.getElementById('poly-container').style.display = 'none';
-        document.getElementById('poly-exercise').style.display = 'block';
-        nextPolyQuestion();
-    }
-    function stopPolyExercise() {
-        document.getElementById('poly-container').style.display = 'flex';
-        document.getElementById('poly-exercise').style.display = 'none';
-    }
-    function nextPolyQuestion() {
-        const item = polyData[Math.floor(Math.random() * polyData.length)];
-        const pron = item.pronunciations[Math.floor(Math.random() * item.pronunciations.length)];
-        const example = pron.examples[Math.floor(Math.random() * pron.examples.length)];
-        
-        polyExState.current = { char: item.char, pinyin: pron.pinyin, example };
-        
-        const sentence = example.replace(item.char, `<span class="exercise-blank">?</span>`);
-        document.getElementById('poly-ex-sentence').innerHTML = `“${sentence}”中的“${item.char}”读什么？`;
-        
-        const optionsDiv = document.getElementById('poly-ex-options');
-        optionsDiv.innerHTML = '';
-        
-        const allPinyins = [...new Set(item.pronunciations.map(p => p.pinyin))];
-        allPinyins.forEach(p => {
-            const btn = document.createElement('div');
-            btn.className = 'exercise-option animate__animated animate__fadeIn';
-            btn.innerText = p;
-            btn.onclick = () => checkPolyAnswer(p, btn);
-            optionsDiv.appendChild(btn);
-        });
-        speak(`在词语“${example}”中，这个字读什么呢？`);
-    }
-    function checkPolyAnswer(selected, btn) {
-        if(selected === polyExState.current.pinyin) {
-            btn.classList.add('correct');
-            document.getElementById('poly-ex-sentence').querySelector('.exercise-blank').innerText = selected;
-            speak("答对啦！" + polyExState.current.char + "，读" + selected);
-            updateScore(5);
-            setTimeout(nextPolyQuestion, 1500);
-        } else {
-            btn.classList.add('wrong');
-            speak("不对哦，再听听它的读音");
-            setTimeout(() => btn.classList.remove('wrong'), 1000);
-        }
-    }
-
-    // --- 关联词挑战逻辑 ---
-    let conjExState = { current: null };
-    function startConjExercise() {
-        document.getElementById('conj-container').style.display = 'none';
-        document.getElementById('conj-exercise').style.display = 'block';
-        nextConjQuestion();
-    }
-    function stopConjExercise() {
-        document.getElementById('conj-container').style.display = 'block';
-        document.getElementById('conj-exercise').style.display = 'none';
-    }
-    function nextConjQuestion() {
-        const cat = conjData[Math.floor(Math.random() * conjData.length)];
-        const item = cat.items[Math.floor(Math.random() * cat.items.length)];
-        const sentence = item.sentences[Math.floor(Math.random() * item.sentences.length)];
-        
-        conjExState.current = { pair: item.pair, sentence };
-        
-        // 简单处理：将关联词替换为下划线
-        let displaySentence = sentence;
-        const parts = item.pair.split('……');
-        parts.forEach(p => {
-            if(p.trim()) displaySentence = displaySentence.replace(p.trim(), ' ______ ');
-        });
-        
-        document.getElementById('conj-ex-sentence').innerHTML = displaySentence;
-        const optionsDiv = document.getElementById('conj-ex-options');
-        optionsDiv.innerHTML = '';
-        
-        // 生成干扰项
-        let options = [item.pair];
-        while(options.length < 4) {
-            const randomCat = conjData[Math.floor(Math.random() * conjData.length)];
-            const randomItem = randomCat.items[Math.floor(Math.random() * randomCat.items.length)];
-            if(!options.includes(randomItem.pair)) options.push(randomItem.pair);
-        }
-        
-        options.sort(() => Math.random() - 0.5).forEach(opt => {
-            const btn = document.createElement('div');
-            btn.className = 'exercise-option animate__animated animate__fadeIn';
-            btn.innerText = opt;
-            btn.onclick = () => checkConjAnswer(opt, btn);
-            optionsDiv.appendChild(btn);
-        });
-        speak("请选出合适的关联词填空");
-    }
-    function checkConjAnswer(selected, btn) {
-        if(selected === conjExState.current.pair) {
-            btn.classList.add('correct');
-            document.getElementById('conj-ex-sentence').innerText = conjExState.current.sentence;
-            speak("真棒！关联词用得非常准确！");
-            updateScore(10);
-            setTimeout(nextConjQuestion, 2000);
-        } else {
-            btn.classList.add('wrong');
-            speak("逻辑关系不太对哦，再选选看");
-            setTimeout(() => btn.classList.remove('wrong'), 1000);
-        }
-    }
-
     // --- 近/反义词逻辑 ---
     function loadSyn() {
         const container = document.getElementById('syn-container');
@@ -1102,27 +317,22 @@
     function nextSynQuestion() {
         const item = synonymsData[Math.floor(Math.random() * synonymsData.length)];
         const isSyn = Math.random() > 0.5;
-        const targetList = isSyn ? item.synonyms : item.antonyms;
         const typeStr = isSyn ? "近义词" : "反义词";
+        const answer = isSyn ? item.synonyms : item.antonyms;
         
-        synExState.current = { word: item.word, answer: targetList, type: typeStr };
+        synExState.current = { word: item.word, type: typeStr, answer: answer };
         
-        document.getElementById('syn-ex-sentence').innerHTML = `请选出“<span class="text-primary">${item.word}</span>”的<span class="text-danger">${typeStr}</span>：`;
+        document.getElementById('syn-ex-sentence').innerHTML = `请找出的“<span class="text-danger fw-bold">${item.word}</span>”的<span class="badge bg-info">${typeStr}</span>：`;
         
         const optionsDiv = document.getElementById('syn-ex-options');
         optionsDiv.innerHTML = '';
         
-        // 正确答案中选一个
-        let options = [targetList[Math.floor(Math.random() * targetList.length)]];
-        
-        // 生成干扰项
+        let options = [answer[0]];
         while(options.length < 4) {
             const randomItem = synonymsData[Math.floor(Math.random() * synonymsData.length)];
-            const randomType = Math.random() > 0.5 ? randomItem.synonyms : randomItem.antonyms;
-            const randomWord = randomType[Math.floor(Math.random() * randomType.length)];
-            if(!options.includes(randomWord) && !targetList.includes(randomWord)) {
-                options.push(randomWord);
-            }
+            const wrongOptions = Math.random() > 0.5 ? randomItem.synonyms : randomItem.antonyms;
+            const wrongOpt = wrongOptions[0];
+            if(!options.includes(wrongOpt)) options.push(wrongOpt);
         }
         
         options.sort(() => Math.random() - 0.5).forEach(opt => {
@@ -1209,34 +419,8 @@
         }
     }
 
-    // --- 古诗逻辑 ---
-    function loadPoetry() {
-        const container = document.getElementById('poetry-list');
-        container.innerHTML = poems.map((p, idx) => `
-            <div class="col-md-4">
-                <div class="poetry-card" onclick="flipPoetry(this, ${idx})">
-                    <div class="poetry-front">
-                        <div class="poetry-title" style="font-weight: bold; color: #2E7D32; font-size: 1.3rem; margin-bottom: 10px;">${p.title}</div>
-                        <div class="text-muted small">${p.author}</div>
-                        <div class="mt-2 text-success"><i class="bi bi-arrow-repeat"></i> 点击翻转</div>
-                    </div>
-                    <div class="poetry-back">
-                        <div class="poetry-content-full">${p.content.split(/[，。？！]/).filter(s => s.trim()).join('。<br>')}。</div>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function flipPoetry(card, idx) {
-        card.classList.toggle('is-flipped');
-        if (card.classList.contains('is-flipped')) {
-            speak(poems[idx].title + "。" + poems[idx].author + "。" + poems[idx].content);
-        }
-    }
-
     function marukoTalk() {
-        const lines = ["宝贝，加油复习哦！", "小丸子陪着你，考 100 分！", "你是最棒的小才女！", "英语和语文都要加油！"];
+        const lines = ["宝贝，加油复习哦！", "小丸子陪着你，考 100 分！", "你是最棒的小才女！", "语文复习也要开开心心！"];
         const line = lines[Math.floor(Math.random()*lines.length)];
         speak(line);
         alert("小丸子说：" + line);
