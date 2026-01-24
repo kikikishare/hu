@@ -484,19 +484,26 @@
     };
 
     // --- 核心语音功能 (安卓/苹果适配) ---
+    let voiceInterval = null;
+
     function unlockAudio() {
-        speak("Welcome to the English Lab!");
-        document.getElementById('btn-unlock').classList.add('d-none');
+        // 预热语音引擎
+        const utter = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(utter);
+        
+        const btn = document.getElementById('btn-unlock');
+        btn.innerHTML = '✅ 语音已启用';
+        btn.classList.replace('btn-light', 'btn-success');
+        setTimeout(() => btn.style.display = 'none', 1000);
     }
 
-    let voiceInterval;
     function speak(text) {
         if (!window.speechSynthesis) {
             alert("您的浏览器不支持语音功能");
             return;
         }
-        
-        // 停止之前的计时器
+
+        // 清理旧的计时器
         if (voiceInterval) clearInterval(voiceInterval);
         
         // 强制取消正在播放的语音
@@ -505,23 +512,30 @@
         // 延迟一小会儿再播放，给浏览器喘息时间
         setTimeout(() => {
             const utter = new SpeechSynthesisUtterance(text);
+            
+            // --- 核心优化：美式发音与正常语速 ---
             utter.lang = 'en-US';
-            utter.rate = 0.85;
+            utter.rate = 1.0;  // 恢复正常语速
             utter.pitch = 1.0;
             
-            // 关键修复：iOS/Safari 必须在用户交互后触发，且容易因为长文本中断
+            // 尝试寻找更优质的美式男声/女声（如果系统支持）
+            const voices = window.speechSynthesis.getVoices();
+            const usVoice = voices.find(v => v.lang.includes('en-US') && (v.name.includes('Google') || v.name.includes('Apple') || v.name.includes('Samantha')));
+            if (usVoice) utter.voice = usVoice;
+            
+            // 关键修复：iOS/Safari 必须在用户交互后触发
             window.speechSynthesis.speak(utter);
             
-            // 解决移动端静默中断问题的终极方案：每2秒检查并维持播放状态
+            // 解决移动端静默中断问题的终极方案：密集检查
             voiceInterval = setInterval(() => {
                 if (!window.speechSynthesis.speaking) {
                     clearInterval(voiceInterval);
                 } else {
-                    // 仅在仍然播放时进行微小的暂停恢复，保持连接
+                    // 维持播放连接
                     window.speechSynthesis.pause();
                     window.speechSynthesis.resume();
                 }
-            }, 2000);
+            }, 1000); // 缩短到1秒，确保 iOS 锁屏或后台不被挂起
         }, 50);
     }
 
