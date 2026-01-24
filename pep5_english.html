@@ -304,7 +304,7 @@
                     </div>
                     <div class="d-flex justify-content-center gap-2 mb-4">
                         <input type="text" class="form-control rounded-pill shadow-sm" style="max-width: 400px;" id="vocabSearch" placeholder="🔍 搜索单词或中文..." onkeyup="searchVocab()">
-                        <button class="btn btn-secondary rounded-pill" onclick="toggleVocabMode(this)">🙈 隐藏英文 (检测模式)</button>
+                        <button id="vocab-mode-btn" class="btn btn-primary rounded-pill" onclick="toggleVocabMode(this)">👁️ 显示英文 (学习模式)</button>
                     </div>
                 </div>
             </div>
@@ -542,7 +542,7 @@
         puzzleOrder: [],
         oralIndex: 0,
         oralQueue: [],
-        vocabTestMode: false,
+        vocabTestMode: true, // 默认开启检测模式（显示中文）
         recognition: null,
         isRecording: false
     };
@@ -665,7 +665,7 @@
         setTimeout(() => btn.style.display = 'none', 1000);
     }
 
-    function speak(text) {
+    function speak(text, customRate = 1.0) {
         if (!window.speechSynthesis) {
             alert("您的浏览器不支持语音功能");
             return;
@@ -683,7 +683,7 @@
             
             // --- 核心优化：美式发音与正常语速 ---
             utter.lang = 'en-US';
-            utter.rate = 1.0;  // 恢复正常语速
+            utter.rate = customRate;  // 支持自定义语速
             utter.pitch = 1.0;
             
             // 尝试寻找更优质的美式男声/女声（如果系统支持）
@@ -819,7 +819,7 @@
             state.puzzleOrder.push(text);
             block.classList.add('correct', 'animate__pulse');
             document.getElementById('puzzle-answer').innerHTML += `<div class="p-2 mb-2 bg-white rounded shadow-sm text-success fw-bold animate__animated animate__fadeInLeft">✅ ${text}</div>`;
-            speak(text);
+            speak(text, 0.85); // 作文单句语速 0.85
             
             if (state.puzzleOrder.length === state.currentPuzzle.sentences.length) {
                 document.getElementById('puzzle-result').style.display = 'block';
@@ -834,7 +834,7 @@
 
     function readFullComposition() {
         const fullText = state.currentPuzzle.sentences.join(' ');
-        speak(fullText);
+        speak(fullText, 0.85); // 作文全文语速 0.85
         updateScore(5);
     }
 
