@@ -662,7 +662,7 @@
                         <div class="mt-2 text-success"><i class="bi bi-arrow-repeat"></i> 点击翻转</div>
                     </div>
                     <div class="poetry-back">
-                        <div class="poetry-content-full">${p.content.split('。').join('。<br>')}</div>
+                        <div class="poetry-content-full">${p.content.split(/[，。？！]/).filter(s => s.trim()).join('。<br>')}。</div>
                     </div>
                 </div>
             </div>
