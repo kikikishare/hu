@@ -282,6 +282,7 @@
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#poetry-zone">🏮 必背古诗</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#syn-zone">🌓 近/反义词</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#idiom-zone">🧠 成语挑战</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#grammar-zone">✍️ 修改病句</button></li>
     </ul>
 
     <div class="tab-content">
@@ -422,6 +423,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- 修改病句板块 -->
+        <div class="tab-pane fade" id="grammar-zone">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="module-card">
+                        <h3 class="mb-4 text-center">✍️ 语文修改病句特训</h3>
+                        <p class="text-muted text-center mb-4">找出句子中的小错误，让表达更准确！</p>
+                        <div class="text-center mb-4">
+                            <button class="btn btn-danger rounded-pill px-4 shadow-sm" onclick="startGrammarChallenge()">🎯 开启病句挑战</button>
+                        </div>
+                        <div id="grammar-exercise" class="exercise-container text-center">
+                            <div class="mb-3"><span class="badge bg-danger">挑战中...</span></div>
+                            <div class="exercise-sentence" id="grammar-ex-sentence"></div>
+                            <div id="grammar-ex-options" class="d-grid gap-3 justify-content-center"></div>
+                            <div class="mt-4">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="stopGrammarChallenge()">退出挑战</button>
+                            </div>
+                        </div>
+                        <div id="grammar-tips" class="row g-4">
+                            <div class="col-md-12">
+                                <div class="card border-0 shadow-sm bg-light rounded-4 p-4">
+                                    <h5 class="fw-bold text-danger"><i class="bi bi-lightbulb"></i> 三年级常见病句类型：</h5>
+                                    <ul class="mb-0 mt-2">
+                                        <li><strong>成分残缺</strong>：句子不完整（如：我们要从小讲卫生的好习惯。❌ -> 我们要养成从小讲卫生的好习惯。✅）</li>
+                                        <li><strong>用词不当</strong>：词语用错了（如：他经常改正错误。❌ -> 他经常发现错误。✅）</li>
+                                        <li><strong>词序颠倒</strong>：顺序乱了（如：我们要认真改正并检查作业。❌ -> 我们要认真检查并改正作业。✅）</li>
+                                        <li><strong>重复累赘</strong>：意思重复了（如：我大约大概有十岁。❌ -> 我大约有十岁。✅）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -501,6 +538,19 @@
         {"idiom": "八仙过海", "meaning": "比喻各自拿出本领或办法，互相竞赛。", "example": "在这次比赛中，大家八仙过海，各显神通。"},
         {"idiom": "九牛一毛", "meaning": "比喻极大数量中极微小的数量，微不足道。", "example": "这点钱对他来说只是九牛一毛。"},
         {"idiom": "十全十美", "meaning": "指各方面都非常完美，毫无缺陷。", "example": "世界上没有十全十美的人。"}
+    ];
+
+    const grammarData = [
+        { "wrong": "我们要从小讲卫生的好习惯。", "right": "我们要养成从小讲卫生的好习惯。", "type": "成分残缺" },
+        { "wrong": "他经常改正错误。", "right": "他经常发现错误。", "type": "用词不当" },
+        { "wrong": "我们要认真改正并检查作业。", "right": "我们要认真检查并改正作业。", "type": "词序颠倒" },
+        { "wrong": "我大约大概有十岁。", "right": "我大约有十岁。", "type": "重复累赘" },
+        { "wrong": "昨天傍晚下了一整天大雨。", "right": "昨天傍晚下了一场大雨。", "type": "矛盾不符" },
+        { "wrong": "全班同学和李明都参加了活动。", "right": "全班同学都参加了活动。", "type": "归类不当" },
+        { "wrong": "校园里飘扬着五颜六色的红旗。", "right": "校园里飘扬着红旗。", "type": "修饰不当" },
+        { "wrong": "小红穿着一件蓝色的上衣和一顶红色的帽子。", "right": "小红穿着一件蓝色的上衣，戴着一顶红色的帽子。", "type": "搭配不当" },
+        { "wrong": "读了这篇文章，使我深受教育。", "right": "读了这篇文章，我深受教育。", "type": "成分残缺" },
+        { "wrong": "我们要爱护时间。", "right": "我们要珍惜时间。", "type": "搭配不当" }
     ];
 
     const phonicsData = [
@@ -974,6 +1024,54 @@
         } else {
             btn.classList.add('wrong');
             speak("选错啦，再读读成语意思吧");
+            setTimeout(() => btn.classList.remove('wrong'), 1000);
+        }
+    }
+
+    // --- 修改病句逻辑 ---
+    let grammarExState = { current: null };
+    function startGrammarChallenge() {
+        document.getElementById('grammar-tips').style.display = 'none';
+        document.getElementById('grammar-exercise').style.display = 'block';
+        nextGrammarQuestion();
+    }
+    function stopGrammarChallenge() {
+        document.getElementById('grammar-tips').style.display = 'block';
+        document.getElementById('grammar-exercise').style.display = 'none';
+    }
+    function nextGrammarQuestion() {
+        const item = grammarData[Math.floor(Math.random() * grammarData.length)];
+        grammarExState.current = item;
+        
+        document.getElementById('grammar-ex-sentence').innerHTML = `<div class="text-muted small mb-2">请找出下面句子的正确修改方案：</div><div class="p-3 bg-white border-start border-danger border-4 rounded shadow-sm mb-3">“${item.wrong}”</div>`;
+        
+        const optionsDiv = document.getElementById('grammar-ex-options');
+        optionsDiv.innerHTML = '';
+        
+        let options = [item.right];
+        while(options.length < 3) {
+            const randomItem = grammarData[Math.floor(Math.random() * grammarData.length)];
+            if(!options.includes(randomItem.right)) options.push(randomItem.right);
+        }
+        
+        options.sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'exercise-option animate__animated animate__fadeIn text-start w-100 p-3';
+            btn.innerText = opt;
+            btn.onclick = () => checkGrammarAnswer(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+        speak("请选出正确的修改方案");
+    }
+    function checkGrammarAnswer(selected, btn) {
+        if(selected === grammarExState.current.right) {
+            btn.classList.add('correct');
+            speak(`太棒了！这是${grammarExState.current.type}类病句。`);
+            updateScore(20);
+            setTimeout(nextGrammarQuestion, 2000);
+        } else {
+            btn.classList.add('wrong');
+            speak("不对哦，再仔细读读句子");
             setTimeout(() => btn.classList.remove('wrong'), 1000);
         }
     }
