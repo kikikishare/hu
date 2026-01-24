@@ -692,52 +692,68 @@
         alert("语音功能已开启！");
     }
 
-    // 终极修复：使用最稳健的语音播放方案
-    let activeUtterance = null; // 保持全局引用，防止垃圾回收
+    // 终极修复：采用最兼容、最稳健的语音引擎方案
+    let utterQueue = []; // 维持引用防止垃圾回收
     function speak(text, rate = 1.0, callback) {
-        if (!window.speechSynthesis) return;
+        if (!window.speechSynthesis) {
+            console.error("浏览器不支持语音合成");
+            if (callback) callback();
+            return;
+        }
         
-        // 1. 立即停止之前的声音
+        // 1. 强制停止并清理队列
         window.speechSynthesis.cancel();
         
-        // 2. 如果是空文本，直接执行回调并返回
         if (!text) {
             if (callback) callback();
             return;
         }
 
-        // 3. 创建语音对象
-        const utter = new SpeechSynthesisUtterance(text);
-        activeUtterance = utter; // 关键：全局引用防止 GC
-        
-        // 4. 设置语言和语速
-        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
-        utter.rate = rate;
-        
-        // 5. 健壮的回调处理
-        let hasCalled = false;
-        const handleEnd = () => {
-            if (hasCalled) return;
-            hasCalled = true;
-            if (callback) callback();
-        };
+        // 2. 延迟执行以确保 cancel() 生效（针对 Chrome 的 bug）
+        setTimeout(() => {
+            try {
+                const utter = new SpeechSynthesisUtterance(text);
+                
+                // 3. 智能语言识别
+                const isChinese = /[\u4e00-\u9fa5]/.test(text);
+                utter.lang = isChinese ? 'zh-CN' : 'en-US';
+                utter.rate = rate || 1.0;
+                utter.volume = 1.0;
+                utter.pitch = 1.0;
 
-        utter.onend = handleEnd;
-        utter.onerror = handleEnd; // 出错也继续，防止卡死
+                // 4. 引用保持
+                utterQueue.push(utter);
+                if (utterQueue.length > 5) utterQueue.shift();
 
-        // 6. 兜底逻辑：防止某些浏览器不触发 onend
-        if (callback) {
-            const timeoutMs = Math.max(3000, text.length * 1000); // 给足够时间读完
-            setTimeout(handleEnd, timeoutMs);
-        }
+                // 5. 回调处理
+                let isFinished = false;
+                const finish = () => {
+                    if (isFinished) return;
+                    isFinished = true;
+                    if (callback) callback();
+                };
 
-        // 7. 某些浏览器需要 resume 才能播放
-        if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-        }
+                utter.onend = finish;
+                utter.onerror = (e) => {
+                    console.error("语音合成错误:", e);
+                    finish();
+                };
 
-        // 8. 真正的播放指令
-        window.speechSynthesis.speak(utter);
+                // 6. 兜底：如果 10 秒还没读完，强制结束
+                setTimeout(finish, 10000);
+
+                // 7. 播放
+                window.speechSynthesis.speak(utter);
+                
+                // 8. 针对部分移动端浏览器的补丁
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            } catch (e) {
+                console.error("语音执行异常:", e);
+                if (callback) callback();
+            }
+        }, 100); // 稍微长一点的延迟，更稳健
     }
 
     // --- 英语逻辑 ---
