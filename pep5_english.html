@@ -565,7 +565,7 @@
         setTimeout(() => btn.style.display = 'none', 1000);
     }
 
-    function speak(text, customRate = 1.0) {
+    function speak(text, customRate = 1.0, callback) {
         if (!window.speechSynthesis) {
             alert("您的浏览器不支持语音功能");
             return;
@@ -589,6 +589,19 @@
             const voices = window.speechSynthesis.getVoices();
             const usVoice = voices.find(v => v.lang.includes('en-US') && (v.name.includes('Google') || v.name.includes('Apple') || v.name.includes('Samantha')));
             if (usVoice) utter.voice = usVoice;
+
+            // 语音结束后的回调
+            if (callback) {
+                utter.onend = () => {
+                    callback();
+                };
+                // 某些浏览器可能不触发 onend，增加一个保险延迟
+                setTimeout(() => {
+                    if (window.speechSynthesis.speaking === false && typeof callback === 'function') {
+                        // callback(); // 不在这里调用，防止双重触发
+                    }
+                }, text.length * 200 / customRate); 
+            }
             
             window.speechSynthesis.speak(utter);
             
@@ -716,11 +729,14 @@
             state.puzzleOrder.push(text);
             block.classList.add('correct', 'animate__pulse');
             document.getElementById('puzzle-answer').innerHTML += `<div class="p-2 mb-2 bg-white rounded shadow-sm text-success fw-bold animate__animated animate__fadeInLeft">✅ ${text}</div>`;
-            speak(text, 0.85); // 作文单句语速 0.85
             
             if (state.puzzleOrder.length === state.currentPuzzle.sentences.length) {
-                document.getElementById('puzzle-result').style.display = 'block';
-                updateScore(10);
+                speak(text, 0.85, () => {
+                    document.getElementById('puzzle-result').style.display = 'block';
+                    updateScore(10);
+                });
+            } else {
+                speak(text, 0.85); // 作文单句语速 0.85
             }
         } else {
             block.classList.add('animate__shakeX', 'bg-danger', 'text-white');
@@ -731,8 +747,9 @@
 
     function readFullComposition() {
         const fullText = state.currentPuzzle.sentences.join(' ');
-        speak(fullText, 0.85); // 作文全文语速 0.85
-        updateScore(5);
+        speak(fullText, 0.85, () => {
+            updateScore(5);
+        });
     }
 
     // --- 口语挑战逻辑 (问答拼图) ---
@@ -810,8 +827,9 @@
         setTimeout(() => {
             answerText.classList.remove('text-muted');
             answerText.classList.add('text-primary', 'bg-info-subtle', 'animate__pulse');
-            speak(q.a, 0.85); // 语速调至 0.85，与作文模块一致，更适合跟读
-            updateScore(5);
+            speak(q.a, 0.85, () => {
+                updateScore(5); // 语音读完后再加分并播放鼓励提示音
+            });
         }, 800); 
     }
 
