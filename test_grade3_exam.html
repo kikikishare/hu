@@ -689,28 +689,47 @@
         document.getElementById('sfx-correct').play();
     }
 
+    function showStatus(msg, isError = false) {
+        const statusDiv = document.getElementById('voice-status') || (() => {
+            const div = document.createElement('div');
+            div.id = 'voice-status';
+            div.style.cssText = 'position:fixed; top:20px; right:20px; z-index:9999; padding:10px 20px; border-radius:50px; background:rgba(0,0,0,0.7); color:white; font-size:14px; pointer-events:none; transition: opacity 0.5s;';
+            document.body.appendChild(div);
+            return div;
+        })();
+        statusDiv.innerText = msg;
+        statusDiv.style.backgroundColor = isError ? 'rgba(220,53,69,0.8)' : 'rgba(40,167,69,0.8)';
+        statusDiv.style.opacity = '1';
+        setTimeout(() => { statusDiv.style.opacity = '0'; }, 3000);
+    }
+
     function unlockAudio() {
         state.unlocked = true;
-        // 尝试激活 AudioContext
+        
+        // 1. 尝试激活 AudioContext
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             if (ctx.state === 'suspended') ctx.resume();
         } catch(e) {}
         
-        // 强制重置语音引擎
+        // 2. 强制重置语音引擎
         window.speechSynthesis.cancel();
         window.speechSynthesis.resume();
         
-        speak("语音功能已开启，宝贝加油！", 1.0);
-        alert("语音功能已开启！\n\n如果还是没声音：\n1. 请检查电脑是否静音\n2. 请使用 Chrome 或 Safari 浏览器\n3. 刷新页面再点一次此按钮");
+        // 3. 立即触发一次朗读，不经过 setTimeout，确保在用户点击事件流中
+        const utter = new SpeechSynthesisUtterance("语音功能已开启");
+        utter.lang = 'zh-CN';
+        window.speechSynthesis.speak(utter);
+        
+        showStatus("✅ 语音功能已开启");
     }
 
     function testVoice() {
-        speak("测试声音，一二三，听到请回答", 1.1);
+        speak("测试声音，一二三，听到请回答");
     }
 
-    // 终极稳定版语音函数
-    window._voiceRef = null; // 保持单例引用防止被 GC
+    // 极简稳定版语音函数
+    window._voiceRef = null;
 
     function speak(text, rate = 1.0, callback) {
         if (!window.speechSynthesis) {
@@ -718,42 +737,40 @@
             return;
         }
 
-        // 核心：先 resume 再 cancel 是解决很多浏览器卡死的关键
-        window.speechSynthesis.resume();
+        // 停止之前的
         window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
 
         if (!text) {
             if (callback) callback();
             return;
         }
 
-        // 稍微延迟一下 speak，给 cancel 留出反应时间
-        setTimeout(() => {
-            const utter = new SpeechSynthesisUtterance(text.toString());
-            utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
-            utter.rate = rate;
-            utter.volume = 1.0;
+        const utter = new SpeechSynthesisUtterance(text.toString());
+        utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
+        utter.rate = rate;
+        utter.volume = 1.0;
 
-            let isFinished = false;
-            const finish = () => {
-                if (!isFinished) {
-                    isFinished = true;
-                    if (callback) callback();
-                }
-            };
+        let finished = false;
+        const finish = () => {
+            if (!finished) {
+                finished = true;
+                if (callback) callback();
+            }
+        };
 
-            utter.onend = finish;
-            utter.onerror = finish;
-            
-            // 解决 Chrome 超过 15 秒自动停止的 Bug
-            window._voiceRef = utter; 
+        utter.onend = finish;
+        utter.onerror = finish;
+        
+        // 防止被垃圾回收
+        window._voiceRef = utter; 
 
-            window.speechSynthesis.speak(utter);
+        // 直接调用，不再使用 setTimeout，除非是为了解决特定浏览器的 cancel 延迟
+        window.speechSynthesis.speak(utter);
 
-            // 兜底时间：字数 * 0.5秒 + 2秒
-            const timeout = Math.max(3000, (text.length * 500) + 2000);
-            setTimeout(finish, timeout);
-        }, 100);
+        // 兜底：字数 * 200ms + 3秒
+        const timeout = Math.max(3000, (text.length * 200) + 3000);
+        setTimeout(finish, timeout);
     }
 
     // --- 英语逻辑 ---
