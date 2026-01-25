@@ -59,6 +59,88 @@
             margin-bottom: 30px;
         }
 
+        .question-text {
+            font-size: 1.8rem;
+            color: #D84315;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .word-block {
+            background: #FFF3E0;
+            padding: 10px 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            user-select: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .word-block:hover {
+            border-color: var(--primary-color);
+            background: #FFE0B2;
+        }
+
+        .composition-card {
+            border-left: 8px solid #FF7043;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .poetry-card {
+            background: #E8F5E9;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poetry-card.is-flipped {
+            transform: rotateY(180deg);
+            background: #F1F8E9;
+        }
+
+        .poetry-front, .poetry-back {
+            backface-visibility: hidden;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poetry-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+        }
+
+        .poetry-content-full {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #1B5E20;
+            word-break: break-all;
+        }
+
         .score-badge {
             background: #FFD54F;
             color: #F57C00;
@@ -79,7 +161,62 @@
 
         .maruko-mascot:hover { transform: scale(1.1) rotate(-5deg); }
 
-        /* 练习容器 */
+        .translation-option {
+            border: 2px solid #FFE0B2;
+            border-radius: 15px;
+            padding: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .translation-option:hover {
+            background-color: #FFF3E0;
+            border-color: var(--primary-color);
+        }
+
+        .phonics-card {
+            background: #F3E5F5;
+            border-radius: 20px;
+            padding: 15px;
+            border: 2px solid #E1BEE7;
+            transition: all 0.3s;
+        }
+
+        .phonics-letter {
+            font-size: 2rem;
+            color: #7B1FA2;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .phonics-sound {
+            color: #9C27B0;
+            font-style: italic;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .phonics-word-item {
+            background: white;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin: 4px;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .phonics-word-item:hover {
+            transform: scale(1.1);
+            background: #EDE7F6;
+        }
+
+        .min-vh-10 { min-height: 80px; }
+
+        /* 练习容器 (新增自 grade3_exam.html) */
         .exercise-container {
             display: none;
             margin-top: 20px;
@@ -123,11 +260,14 @@
 
 <div class="header">
     <div class="container">
-        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🎒 三年级语文备考特训</h1>
-        <p class="lead">语文核心素养提升，助你拿高分！✨</p>
+        <h1 class="display-4 fw-bold animate__animated animate__bounceIn">🎒 三年级备考大特训</h1>
+        <p class="lead">全科通关：英语、语音、古诗、语文专项！✨</p>
         <div class="mt-3">
             <button class="btn btn-light rounded-pill px-4 shadow-sm" onclick="unlockAudio()">
                 🔊 开启学习配音
+            </button>
+            <button class="btn btn-outline-light btn-sm rounded-pill px-3 ms-2" onclick="testVoice()">
+                测试声音
             </button>
         </div>
     </div>
@@ -140,13 +280,107 @@
     </div>
 
     <ul class="nav nav-pills mb-4 justify-content-center sticky-top bg-transparent p-2" id="mainTabs">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#syn-zone">🌓 近/反义词</button></li>
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#english-zone">🔤 英语口语</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#phonics-zone">🗣️ 语音达人</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#poetry-zone">🏮 必背古诗</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#syn-zone">🌓 近/反义词</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#idiom-zone">🧠 成语挑战</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#grammar-zone">✍️ 修改病句</button></li>
     </ul>
 
     <div class="tab-content">
+        <!-- 英语板块 -->
+        <div class="tab-pane fade show active" id="english-zone">
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <div class="module-card text-center animate__animated animate__fadeIn">
+                        <div id="english-game-start">
+                            <h3 class="mb-4">🎤 三上期末口语 Q&A 练习 (28题)</h3>
+                            <p class="text-muted mb-4">全面覆盖期末必考对话，拼图挑战，加深记忆！</p>
+                            <button class="btn btn-primary btn-lg rounded-pill px-5" onclick="startEnglishChallenge()">开启闯关</button>
+                        </div>
+                        <div id="english-game-play" style="display:none;">
+                            <div class="progress mb-4" style="height: 10px; border-radius: 10px;">
+                                <div id="english-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="question-text" id="current-question">Question?</div>
+                            
+                            <div id="translation-phase" class="mb-4">
+                                <p class="fw-bold text-muted small mb-3">这句话的意思是：</p>
+                                <div id="translation-options" class="d-grid gap-2"></div>
+                            </div>
+
+                            <div id="puzzle-phase" style="display:none;">
+                                <div id="answer-display" class="p-3 border rounded-4 bg-light min-vh-10 mb-3 text-start d-flex flex-wrap gap-2 align-items-center">
+                                    <p class="text-muted small m-0">请按顺序点击单词拼出答案...</p>
+                                </div>
+                                <div id="word-pool" class="d-flex flex-wrap justify-content-center gap-2"></div>
+                            </div>
+
+                            <div class="mt-4" id="english-controls">
+                                <button class="btn btn-info rounded-pill text-white px-4" onclick="hearQuestion()">🔊 听问题</button>
+                                <button class="btn btn-warning rounded-pill text-white px-4" onclick="showHint()">💡 提示</button>
+                            </div>
+
+                            <div id="english-result" class="mt-4 animate__animated" style="display:none;">
+                                <h4 class="text-success fw-bold">太棒了！拼对啦！🎉</h4>
+                                <p class="text-muted">跟我读一遍：</p>
+                                <h3 id="correct-answer" class="text-primary p-3 bg-light rounded-4 border">Answer</h3>
+                                <button class="btn btn-success rounded-pill px-5 mt-3" onclick="nextEnglishQuestion()">下一题 ✅</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 语音达人板块 -->
+        <div class="tab-pane fade" id="phonics-zone">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="module-card">
+                        <h3 class="mb-4 text-center">🗣️ 三上 Phonics 语音闯关</h3>
+                        <p class="text-muted text-center mb-4">观察单词结构，练习自然拼读，掌握字母发音规律！</p>
+                        <div class="text-center mb-4">
+                            <button class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="startPhonicsTest()">
+                                🎧 听音选词大检测
+                            </button>
+                        </div>
+                        <div id="phonics-test-container" class="exercise-container text-center mb-4">
+                            <div class="mb-3"><span class="badge bg-primary">听力检测中...</span></div>
+                            <div class="exercise-sentence">
+                                <button class="btn btn-lg btn-info text-white rounded-circle shadow-sm" onclick="replayPhonicsSentence()">
+                                    <i class="bi bi-volume-up-fill"></i>
+                                </button>
+                                <div class="mt-3 fw-bold text-muted" id="phonics-test-prompt">请听句子，选出你听到的单词</div>
+                                <div id="phonics-subtitle" class="mt-2 text-primary fw-bold animate__animated animate__fadeIn" style="display:none; font-size: 1.2rem;"></div>
+                            </div>
+                            <div id="phonics-test-options" class="d-flex flex-wrap justify-content-center mt-3"></div>
+                            <div class="mt-4">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="stopPhonicsTest()">返回学习</button>
+                            </div>
+                        </div>
+                        <div id="phonics-container" class="row g-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 古诗板块 -->
+        <div class="tab-pane fade" id="poetry-zone">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="module-card">
+                        <h3 class="mb-4 text-center">🏮 小学生课标必背古诗词 (精选)</h3>
+                        <p class="text-muted text-center mb-4">点击卡片查看全文并听朗读，挑战背诵吧！</p>
+                        <div class="row g-3" id="poetry-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 近/反义词板块 -->
-        <div class="tab-pane fade show active" id="syn-zone">
+        <div class="tab-pane fade" id="syn-zone">
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     <div class="module-card">
@@ -192,6 +426,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- 修改病句板块 -->
+        <div class="tab-pane fade" id="grammar-zone">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="module-card">
+                        <h3 class="mb-4 text-center">✍️ 语文修改病句特训</h3>
+                        <p class="text-muted text-center mb-4">找出句子中的小错误，让表达更准确！</p>
+                        <div class="text-center mb-4">
+                            <button class="btn btn-danger rounded-pill px-4 shadow-sm" onclick="startGrammarChallenge()">🎯 开启病句挑战</button>
+                        </div>
+                        <div id="grammar-exercise" class="exercise-container text-center">
+                            <div class="mb-3"><span class="badge bg-danger">挑战中...</span></div>
+                            <div class="exercise-sentence" id="grammar-ex-sentence"></div>
+                            <div id="grammar-ex-options" class="d-grid gap-3 justify-content-center"></div>
+                            <div class="mt-4">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="stopGrammarChallenge()">退出挑战</button>
+                            </div>
+                        </div>
+                        <div id="grammar-tips" class="row g-4">
+                            <div class="col-md-12">
+                                <div class="card border-0 shadow-sm bg-light rounded-4 p-4">
+                                    <h5 class="fw-bold text-danger"><i class="bi bi-lightbulb"></i> 三年级常见病句类型：</h5>
+                                    <ul class="mb-0 mt-2">
+                                        <li><strong>成分残缺</strong>：句子不完整（如：我们要从小讲卫生的好习惯。❌ -> 我们要养成从小讲卫生的好习惯。✅）</li>
+                                        <li><strong>用词不当</strong>：词语用错了（如：他经常改正错误。❌ -> 他经常发现错误。✅）</li>
+                                        <li><strong>词序颠倒</strong>：顺序乱了（如：我们要认真改正并检查作业。❌ -> 我们要认真检查并改正作业。✅）</li>
+                                        <li><strong>重复累赘</strong>：意思重复了（如：我大约大概有十岁。❌ -> 我大约有十岁。✅）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -203,7 +473,50 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // --- 近/反义词数据 ---
+    // --- 完整英语 Q&A 数据 (28题) ---
+    const englishQuestions = [
+        {q: "Good morning.", a: "Good morning.", cn: "早上好。"},
+        {q: "What's your name?", a: "My name is Lily.", cn: "你叫什么名字？"},
+        {q: "How old are you?", a: "I'm nine years old.", cn: "你几岁了？"},
+        {q: "Nice to meet you.", a: "Nice to meet you too.", cn: "很高兴认识你。"},
+        {q: "Do you have a pet?", a: "Yes, I do.", cn: "你有宠物吗？"},
+        {q: "What color is it?", a: "It is red.", cn: "它是什么颜色的？"},
+        {q: "Let's go to the zoo.", a: "Great idea.", cn: "我们去动物园吧。"},
+        {q: "How many apples do you have?", a: "I have five apples.", cn: "你有多少个苹果？"},
+        {q: "Happy birthday!", a: "Thank you!", cn: "生日快乐！"},
+        {q: "What do plants need?", a: "Plants need water and sun.", cn: "植物需要什么？"},
+        {q: "What color is your dog?", a: "It is black and white.", cn: "你的狗是什么颜色的？"},
+        {q: "Is this your photo?", a: "Yes, it is.", cn: "这是你的照片吗？"},
+        {q: "What colours make green?", a: "Blue and yellow make green.", cn: "什么颜色混合能变成绿色？"},
+        {q: "What colours do you like?", a: "I like red and pink.", cn: "你喜欢什么颜色？"},
+        {q: "Do you have a big family?", a: "Yes, I do.", cn: "你有一个大家庭吗？"},
+        {q: "What can plants give us?", a: "Plants can give us fresh air.", cn: "植物能给我们带来什么？"},
+        {q: "Are you a good friend?", a: "Yes, I am. I help others.", cn: "你是一个好朋友吗？"},
+        {q: "What's that?", a: "It's a tiger.", cn: "那是什么？"},
+        {q: "How many tigers do you see?", a: "I see three tigers.", cn: "你看到了几只老虎？"},
+        {q: "What colours make purple?", a: "Red and blue make purple.", cn: "什么颜色混合能变成紫色？"},
+        {q: "What colours make orange?", a: "Red and yellow make orange.", cn: "什么颜色混合能变成橙色？"},
+        {q: "What colours make pink?", a: "Red and white make pink.", cn: "什么颜色混合能变成粉色？"},
+        {q: "What colours make gray?", a: "Black and white make gray.", cn: "什么颜色混合能变成灰色？"},
+        {q: "Your dog is very cute!", a: "Thank you!", cn: "你的狗真可爱！"},
+        {q: "We can share.", a: "Thank you.", cn: "我们可以分享。"},
+        {q: "Is that your brother?", a: "No, it isn't.", cn: "那是你弟弟吗？"},
+        {q: "What do friends do?", a: "Friends help and share.", cn: "朋友之间会做什么？"},
+        {q: "What colour is the grass?", a: "It is green.", cn: "草是什么颜色的？"}
+    ];
+
+    const poems = [
+        {title: "所见", author: "袁枚", content: "牧童骑黄牛，歌声振林樾。意欲捕鸣蝉，忽然闭口立。"},
+        {title: "山行", author: "杜牧", content: "远上寒山石径斜，白云生处有人家。停车坐爱枫林晚，霜叶红于二月花。"},
+        {title: "赠刘景文", author: "苏轼", content: "荷尽已无擎雨盖，菊残犹有傲霜枝。一年好景君须记，最是橙黄橘绿时。"},
+        {title: "夜书所见", author: "叶绍翁", content: "萧萧梧叶送寒声，江上秋风动客情。知有儿童挑促织，夜深篱落一灯明。"},
+        {title: "望天门山", author: "李白", content: "天门中断楚江开，碧水东流至此回。两岸青山相对出，孤帆一片日边来。"},
+        {title: "饮湖上初晴后雨", author: "苏轼", content: "水光潋滟晴方好，山色空蒙雨亦奇。欲把西湖比西子，淡妆浓抹总相宜。"},
+        {title: "望洞庭", author: "刘禹锡", content: "湖光秋月两相和，潭面无风镜未磨。遥望洞庭山水翠，白银盘里一青螺。"},
+        {title: "早发白帝城", author: "李白", content: "朝辞白帝彩云间，千里江陵一日还。两岸猿声啼不住，轻舟已过万重山。"},
+        {title: "采莲曲", author: "王昌龄", content: "荷叶罗裙一色裁，芙蓉向脸两边开。乱入池中看不见，闻歌始觉有人来。"}
+    ];
+
     const synonymsData = [
         {"word": "漂亮", "synonyms": ["美丽", "好看"], "antonyms": ["丑陋", "难看"]},
         {"word": "快乐", "synonyms": ["高兴", "幸福", "喜悦"], "antonyms": ["忧愁", "悲伤", "痛苦"]},
@@ -217,7 +530,6 @@
         {"word": "勇敢", "synonyms": ["胆大", "英勇"], "antonyms": ["胆怯", "懦弱"]}
     ];
 
-    // --- 成语数据 ---
     const idiomsData = [
         {"idiom": "一马当先", "meaning": "形容领先，也比喻工作走在群众前面，积极带头。", "example": "在比赛中，他一马当先，冲到了最前面。"},
         {"idiom": "两袖清风", "meaning": "形容做官廉洁，除两只袖子里的清风外，别无所有。", "example": "他当了多年清官，离职时真是两袖清风。"},
@@ -231,14 +543,123 @@
         {"idiom": "十全十美", "meaning": "指各方面都非常完美，毫无缺陷。", "example": "世界上没有十全十美的人。"}
     ];
 
+    const grammarData = [
+        { 
+            "wrong": "我们要从小讲卫生的好习惯。", 
+            "right": "我们要养成从小讲卫生的好习惯。", 
+            "options": ["我们要养成从小讲卫生的好习惯。", "我们要从小讲卫生。", "我们要从小讲卫生的习惯。"],
+            "type": "成分残缺" 
+        },
+        { 
+            "wrong": "老师的教导语重心长，我深深地被激动了。", 
+            "right": "老师的教导语重心长，我深深地被感动了。", 
+            "options": ["老师的教导语重心长，我深深地被感动了。", "老师的教导语重心长，我深深地被震动了。", "老师的教导语重心长，我深深地被激动过。"],
+            "type": "用词不当" 
+        },
+        { 
+            "wrong": "我们要认真改正并检查作业。", 
+            "right": "我们要认真检查并改正作业。", 
+            "options": ["我们要认真检查并改正作业。", "我们要认真改正并检查作业。", "我们要认真改正和检查作业。"],
+            "type": "词序颠倒" 
+        },
+        { 
+            "wrong": "我大约大概有十岁。", 
+            "right": "我大约有十岁。", 
+            "options": ["我大约有十岁。", "我大概大约有十岁。", "我大约有十岁左右。"],
+            "type": "重复累赘" 
+        },
+        { 
+            "wrong": "昨天傍晚下了一整天大雨。", 
+            "right": "昨天傍晚下了一场大雨。", 
+            "options": ["昨天傍晚下了一场大雨。", "昨天下午下了一整天大雨。", "昨天傍晚下了一整天雨。"],
+            "type": "矛盾不符" 
+        },
+        { 
+            "wrong": "全班同学和李明都参加了活动。", 
+            "right": "全班同学都参加了活动。", 
+            "options": ["全班同学都参加了活动。", "全班同学和李明参加了活动。", "所有的全班同学都参加了活动。"],
+            "type": "归类不当" 
+        },
+        { 
+            "wrong": "校园里飘扬着五颜六色的红旗。", 
+            "right": "校园里飘扬着彩旗。", 
+            "options": ["校园里飘扬着彩旗。", "校园里飘扬着红旗。", "校园里飘扬着五颜六色的旗帜。"],
+            "type": "搭配不当" 
+        },
+        { 
+            "wrong": "小红穿着一件蓝色的上衣和一顶红色的帽子。", 
+            "right": "小红穿着一件蓝色的上衣，戴着一顶红色的帽子。", 
+            "options": ["小红穿着一件蓝色的上衣，戴着一顶红色的帽子。", "小红穿着一件蓝色的上衣和一顶红色的帽子。", "小红穿着蓝色的上衣和红色的帽子。"],
+            "type": "搭配不当" 
+        },
+        { 
+            "wrong": "读了这篇文章，使我深受教育。", 
+            "right": "读了这篇文章，我深受教育。", 
+            "options": ["读了这篇文章，我深受教育。", "读了这篇文章，使我深深教育。", "这篇文章，使我深受教育。"],
+            "type": "成分残缺" 
+        },
+        { 
+            "wrong": "我们要连续努力，争取考出好成绩。", 
+            "right": "我们要继续努力，争取考出好成绩。", 
+            "options": ["我们要继续努力，争取考出好成绩。", "我们要陆续努力，争取考出好成绩。", "我们要陆陆续续努力。"],
+            "type": "用词不当" 
+        }
+    ];
+
+    const phonicsData = [
+        { letter: "Aa", sound: "/ æ /", words: ["bag", "can", "and", "cat", "bad", "dad", "cab", "mad", "apple", "sad", "ant", "rat", "hat", "bat", "cap", "rabbit", "have", "hand", "van", "jam", "map", "nap", "fan", "ham"] },
+        { letter: "Bb", sound: "/ b /", words: ["bed", "bag", "Bob", "cab", "big", "boy", "buy", "banana", "baby", "bear", "black", "blue", "back", "bread", "brown", "but"] },
+        { letter: "Cc", sound: "/ k /", words: ["cat", "cut", "can", "cab", "cup", "cake", "cute", "colour", "close", "clean", "class", "computer", "cap", "car", "card", "come"] },
+        { letter: "Dd", sound: "/ d /", words: ["dog", "bad", "dad", "sad", "dark", "day", "desk", "doll", "duck", "deer", "deep", "mud", "door", "down", "dance", "dinner"] },
+        { letter: "Ee", sound: "/ e /", words: ["egg", "pet", "leg", "web", "set", "elephant", "desk", "yellow", "member", "bed", "nest", "pen", "red", "seven", "ten", "men", "bell", "end", "vet", "wet", "fed", "hen", "help", "jet"] },
+        { letter: "Ff", sound: "/ f /", words: ["fish", "for", "from", "fire", "floor", "fruit", "five", "beef", "four", "fast", "fly", "fox", "friend", "family", "far", "food", "frog", "foot", "flower", "find", "farm", "funny", "fat", "fear"] },
+        { letter: "Gg", sound: "/ g /", words: ["go", "gift", "bug", "grass", "glad", "pig", "girl", "flag", "tag", "frog", "glass", "grape", "green", "grow", "give", "game", "tiger", "guess", "get", "leg"] },
+        { letter: "Hh", sound: "/ h /", words: ["hot", "help", "hit", "hear", "her", "his", "hat", "head", "hand", "have", "how", "home", "hope", "happy", "house", "hair"] },
+        { letter: "Ii", sound: "/ ɪ /", words: ["ill", "kid", "big", "dig", "sit", "six", "fix", "pig", "pin", "lip", "sip", "hit", "fit", "win", "fin", "bin", "pick", "little", "city", "window"] },
+        { letter: "Jj", sound: "/ dʒ /", words: ["job", "Jim", "joy", "jet", "jam", "juice", "June", "July", "jog", "jump", "jungle", "jacket"] },
+        { letter: "Kk", sound: "/ k /", words: ["Kim", "kite", "kid", "key", "kind", "keep", "kick", "kitchen", "cook", "milk", "drink", "look", "book", "dark", "park", "talk", "work", "mask", "risk", "bank"] },
+        { letter: "Ll", sound: "/ l /", words: ["leg", "lion", "lab", "link", "like", "love", "listen", "light", "little", "plant", "late", "long", "lamp", "lamb", "yellow", "let"] },
+        { letter: "Mm", sound: "/ m /", words: ["map", "mother", "mouse", "money", "mud", "men", "my", "maths", "mouth", "mum", "make", "monkey", "meet", "summer", "member", "Monday", "March", "me", "Miss", "Mr"] },
+        { letter: "Nn", sound: "/ n /", words: ["new", "pan", "need", "nose", "noodles", "not", "nap", "nine", "nice", "nurse", "fan", "no", "name", "night", "near", "now", "never", "net", "noon"] },
+        { letter: "Oo", sound: "/ ɒ /", words: ["box", "dot", "body", "lock", "orange", "job", "log", "shop", "sock", "hop", "cop", "top", "pot", "hot", "frog", "fog", "drop", "fox", "mop", "on"] },
+        { letter: "Pp", sound: "/ p /", words: ["cup", "pen", "pink", "pet", "plant", "sleep", "help", "party", "people", "parent", "pretty", "paint", "pig", "pan", "purple", "panda", "plane", "park", "hope", "piano", "happy", "peel", "polite", "put"] },
+        { letter: "Qq", sound: "/ kw /", words: ["quit", "quiet", "queen", "quick", "question", "quilt", "quiz", "quarter"] },
+        { letter: "Rr", sound: "/ r /", words: ["red", "ride", "from", "friend", "fresh", "fruit", "ruler", "race", "rock", "rat", "rest", "rude", "robot", "run", "read", "rabbit"] },
+        { letter: "Ss", sound: "/ s /", words: ["see", "say", "small", "some", "sister", "so", "set", "sea", "sun", "six", "school", "grass", "bus", "seven", "study", "goose"] },
+        { letter: "Tt", sound: "/ t /", words: ["Ted", "sit", "tall", "talk", "vet", "tea", "mat", "hat", "taste", "table", "tap", "tiger", "hit", "nut", "cut", "tub", "cat", "hot", "shirt", "eat"] },
+        { letter: "Uu", sound: "/ ʌ /", words: ["run", "up", "cut", "nut", "fun", "mud", "mug", "cup", "jump", "lucky", "sun", "bus", "uncle", "gum", "duck", "tub", "bug", "us", "plus", "hug"] },
+        { letter: "Vv", sound: "/ v /", words: ["van", "vet", "vat", "vest", "very", "visit", "vacation", "five", "give", "live", "drive", "over", "wave", "love", "river", "vegetable"] },
+        { letter: "Ww", sound: "/ w /", words: ["we", "win", "won", "with", "swim", "well", "wig", "will", "want", "week", "west", "wall", "wave", "wait", "walk", "warm", "water", "wind", "wood", "window"] },
+        { letter: "Xx", sound: "/ ks /", words: ["box", "six", "fix", "tax", "taxi", "fox", "mix", "sex"] },
+        { letter: "Yy", sound: "/ j /", words: ["yum", "yo-yo", "yellow", "yes", "year", "yell", "you", "yard", "young", "yeah", "your"] },
+        { letter: "Zz", sound: "/ z /", words: ["Zip", "zero", "zig", "zebra", "zoo", "size", "lazy", "zone"] }
+    ];
+
+    const phonicsTestData = [
+        { s: "The cat is on the mat.", a: "cat", options: ["cat", "cap", "can", "cab"] },
+        { s: "I have a big red bag.", a: "bag", options: ["bag", "bad", "big", "bug"] },
+        { s: "The dog is in the mud.", a: "dog", options: ["dog", "dot", "dad", "dig"] },
+        { s: "I like to eat a red apple.", a: "apple", options: ["apple", "ant", "and", "am"] },
+        { s: "The ten men are in the tent.", a: "ten", options: ["ten", "tan", "tin", "ton"] },
+        { s: "Six pigs are under the tree.", a: "pigs", options: ["pigs", "pins", "pics", "pits"] },
+        { s: "The fox is in the box.", a: "fox", options: ["fox", "box", "fog", "fix"] },
+        { s: "The duck is very lucky.", a: "duck", options: ["duck", "dock", "dick", "deck"] },
+        { s: "He has a blue pen and a red pencil.", a: "pen", options: ["pen", "pan", "pin", "pun"] },
+        { s: "I see a big fish in the river.", a: "fish", options: ["fish", "dish", "wish", "finish"] }
+    ];
+
     let state = {
         score: parseInt(localStorage.getItem('grade3_exam_score')) || 0,
+        englishIndex: 0,
+        puzzleOrder: [],
         unlocked: false
     };
 
     // --- 页面初始化 ---
     window.onload = () => {
         updateScore(0);
+        loadPoetry();
+        loadPhonics();
         loadSyn();
         loadIdiom();
     };
@@ -268,20 +689,342 @@
         document.getElementById('sfx-correct').play();
     }
 
-    function unlockAudio() {
-        state.unlocked = true;
-        speak("加油加油！");
-        alert("语音功能已开启！");
+    function showStatus(msg, isError = false) {
+        const statusDiv = document.getElementById('voice-status') || (() => {
+            const div = document.createElement('div');
+            div.id = 'voice-status';
+            div.style.cssText = 'position:fixed; top:20px; right:20px; z-index:9999; padding:10px 20px; border-radius:50px; background:rgba(0,0,0,0.7); color:white; font-size:14px; pointer-events:none; transition: opacity 0.5s;';
+            document.body.appendChild(div);
+            return div;
+        })();
+        statusDiv.innerText = msg;
+        statusDiv.style.backgroundColor = isError ? 'rgba(220,53,69,0.8)' : 'rgba(40,167,69,0.8)';
+        statusDiv.style.opacity = '1';
+        setTimeout(() => { statusDiv.style.opacity = '0'; }, 3000);
     }
 
-    function speak(text, rate = 1.0, callback) {
-        if (!window.speechSynthesis) return;
+    function unlockAudio() {
+        state.unlocked = true;
+        
+        // 1. 尝试激活 AudioContext
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (ctx.state === 'suspended') ctx.resume();
+        } catch(e) {}
+        
+        // 2. 强制重置语音引擎
         window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-CN' : 'en-US';
-        utter.rate = rate;
-        if(callback) utter.onend = callback;
+        window.speechSynthesis.resume();
+        
+        // 3. 立即触发一次朗读，不经过 setTimeout，确保在用户点击事件流中
+        const utter = new SpeechSynthesisUtterance("语音功能已开启");
+        utter.lang = 'zh-CN';
         window.speechSynthesis.speak(utter);
+        
+        showStatus("✅ 语音功能已开启");
+    }
+
+    function testVoice() {
+        speak("测试声音，一二三，听到请回答");
+    }
+
+    // 极简稳定版语音函数
+    window._voiceRef = null;
+
+    function speak(text, rate = 1.0, callback) {
+        if (!window.speechSynthesis) {
+            if (callback) callback();
+            return;
+        }
+
+        // 停止之前的朗读，确保清理干净
+        window.speechSynthesis.cancel();
+        
+        if (!text) {
+            if (callback) callback();
+            return;
+        }
+
+        // 给浏览器一点喘息时间，防止 cancel 和 speak 冲突
+        setTimeout(() => {
+            window.speechSynthesis.resume(); // 某些浏览器需要显式 resume
+
+            const utter = new SpeechSynthesisUtterance(text.toString());
+            utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
+            utter.rate = rate;
+            utter.volume = 1.0;
+
+            let finished = false;
+            const finish = () => {
+                if (!finished) {
+                    finished = true;
+                    if (callback) callback();
+                }
+            };
+
+            utter.onend = finish;
+            utter.onerror = (e) => {
+                console.error("Speech error:", e);
+                finish();
+            };
+            
+            // 防止被垃圾回收
+            window._voiceRef = utter; 
+
+            window.speechSynthesis.speak(utter);
+
+            // 兜底：防止 onend 不触发导致回调丢失
+            const timeout = Math.max(3000, (text.toString().length * 300) + 2000);
+            setTimeout(finish, timeout);
+        }, 50);
+    }
+
+    // --- 英语逻辑 ---
+    function startEnglishChallenge() {
+        state.englishIndex = 0;
+        document.getElementById('english-game-start').style.display = 'none';
+        document.getElementById('english-game-play').style.display = 'block';
+        loadEnglishQuestion();
+    }
+
+    function loadEnglishQuestion() {
+        const q = englishQuestions[state.englishIndex];
+        document.getElementById('current-question').innerText = q.q;
+        document.getElementById('english-progress').style.width = `${(state.englishIndex / englishQuestions.length) * 100}%`;
+        
+        const optionsDiv = document.getElementById('translation-options');
+        optionsDiv.innerHTML = '';
+        const options = [q.cn];
+        while(options.length < 4) {
+            const randomCn = englishQuestions[Math.floor(Math.random()*englishQuestions.length)].cn;
+            if(!options.includes(randomCn)) options.push(randomCn);
+        }
+        options.sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'translation-option animate__animated animate__fadeIn';
+            btn.innerText = opt;
+            btn.onclick = () => checkTranslation(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+
+        document.getElementById('translation-phase').style.display = 'block';
+        document.getElementById('puzzle-phase').style.display = 'none';
+        document.getElementById('english-result').style.display = 'none';
+        
+        // 自动朗读问题
+        speak(q.q);
+    }
+
+    function checkTranslation(selected, btn) {
+        const q = englishQuestions[state.englishIndex];
+        if(selected === q.cn) {
+            btn.classList.add('bg-success', 'text-white');
+            speak("Right!", 1.0, () => {
+                setTimeout(() => {
+                    document.getElementById('translation-phase').style.display = 'none';
+                    loadPuzzle();
+                }, 400);
+            });
+        } else {
+            btn.classList.add('bg-danger', 'text-white', 'animate__shakeX');
+            speak("No, try again.");
+            setTimeout(() => {
+                btn.className = 'translation-option';
+            }, 1000);
+        }
+    }
+
+    function loadPuzzle() {
+        const q = englishQuestions[state.englishIndex];
+        document.getElementById('puzzle-phase').style.display = 'block';
+        document.getElementById('answer-display').innerHTML = '<p class="text-muted small m-0">拼出英文回答...</p>';
+        state.puzzleOrder = [];
+        
+        const words = q.a.split(' ');
+        const pool = document.getElementById('word-pool');
+        pool.innerHTML = '';
+        [...words].sort(() => Math.random() - 0.5).forEach(w => {
+            const div = document.createElement('div');
+            div.className = 'word-block shadow-sm animate__animated animate__fadeIn';
+            div.innerText = w;
+            div.onclick = () => selectWord(w, div);
+            pool.appendChild(div);
+        });
+    }
+
+    function selectWord(word, el) {
+        if(el.style.visibility === 'hidden') return;
+        const q = englishQuestions[state.englishIndex];
+        const words = q.a.split(' ');
+        if(word === words[state.puzzleOrder.length]) {
+            state.puzzleOrder.push(word);
+            el.style.visibility = 'hidden';
+            const display = document.getElementById('answer-display');
+            if(state.puzzleOrder.length === 1) display.innerHTML = '';
+            display.innerHTML += `<span class="badge bg-primary p-2 animate__animated animate__bounceIn m-1">${word}</span> `;
+            speak(word);
+            if(state.puzzleOrder.length === words.length) {
+                showSuccess();
+            }
+        } else {
+            el.classList.add('bg-danger', 'text-white', 'animate__shakeX');
+            speak("No");
+            setTimeout(() => el.classList.remove('bg-danger', 'text-white', 'animate__shakeX'), 500);
+        }
+    }
+
+    function showSuccess() {
+        const q = englishQuestions[state.englishIndex];
+        document.getElementById('english-result').style.display = 'block';
+        document.getElementById('correct-answer').innerText = q.a;
+        speak("Excellent! " + q.a, 0.9, () => updateScore(10));
+    }
+
+    function nextEnglishQuestion() {
+        state.englishIndex++;
+        if(state.englishIndex < englishQuestions.length) {
+            loadEnglishQuestion();
+        } else {
+            showStatus("🎉 太棒了！你完成了所有英语挑战！");
+            state.englishIndex = 0;
+            startEnglishChallenge();
+        }
+    }
+
+    function hearQuestion() {
+        speak(englishQuestions[state.englishIndex].q);
+    }
+
+    function showHint() {
+        showStatus("答案是: " + englishQuestions[state.englishIndex].a);
+    }
+
+    // --- 语音逻辑 (Phonics) ---
+    function loadPhonics() {
+        const container = document.getElementById('phonics-container');
+        phonicsData.forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4';
+            card.innerHTML = `
+                <div class="phonics-card animate__animated animate__fadeInUp" style="animation-delay: ${i*0.1}s">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="phonics-letter">${item.letter}</span>
+                            <span class="phonics-sound">${item.sound}</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill" onclick="playPhonicsSound('${item.letter}', '${item.sound}')">🔊 发音</button>
+                    </div>
+                    <div class="phonics-words">
+                        ${item.words.map(word => `<span class="phonics-word-item" onclick="speak('${word}')">${word}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function playPhonicsSound(letter, sound) {
+        speak(letter[0], 0.8, () => {
+            setTimeout(() => {
+                speak(letter[0], 0.6); 
+            }, 500);
+        });
+    }
+
+    let phonicsTestState = { current: null };
+    function startPhonicsTest() {
+        document.getElementById('phonics-container').style.display = 'none';
+        document.getElementById('phonics-test-container').style.display = 'block';
+        document.getElementById('phonics-subtitle').style.display = 'none';
+        nextPhonicsTestQuestion();
+    }
+
+    function stopPhonicsTest() {
+        document.getElementById('phonics-container').style.display = 'flex';
+        document.getElementById('phonics-test-container').style.display = 'none';
+        document.getElementById('phonics-subtitle').style.display = 'none';
+    }
+
+    function nextPhonicsTestQuestion() {
+        const item = phonicsTestData[Math.floor(Math.random() * phonicsTestData.length)];
+        phonicsTestState.current = item;
+        
+        // 隐藏上一题的字幕
+        document.getElementById('phonics-subtitle').style.display = 'none';
+        
+        const optionsDiv = document.getElementById('phonics-test-options');
+        optionsDiv.innerHTML = '';
+        
+        const options = [...item.options].sort(() => Math.random() - 0.5);
+        options.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'exercise-option animate__animated animate__fadeIn';
+            btn.innerText = opt;
+            btn.onclick = () => checkPhonicsTestAnswer(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+        
+        replayPhonicsSentence();
+    }
+
+    function replayPhonicsSentence() {
+        if(phonicsTestState.current) {
+            speak(phonicsTestState.current.s, 0.85);
+        }
+    }
+
+    function checkPhonicsTestAnswer(selected, btn) {
+        if(selected === phonicsTestState.current.a) {
+            btn.classList.add('correct');
+            // 显示字幕
+            const subtitle = document.getElementById('phonics-subtitle');
+            subtitle.innerText = phonicsTestState.current.s;
+            subtitle.style.display = 'block';
+            
+            // 先说太棒了，结束之后再说单词，避免重叠
+            speak("太棒了！", 1.0, () => {
+                setTimeout(() => {
+                    speak(`单词是 ${selected}`, 0.9, () => {
+                        updateScore(5);
+                        setTimeout(nextPhonicsTestQuestion, 2000);
+                    });
+                }, 300);
+            });
+        } else {
+            btn.classList.add('wrong');
+            speak("不对哦，再听一遍吧", 1.0, () => {
+                setTimeout(() => {
+                    btn.classList.remove('wrong');
+                    replayPhonicsSentence();
+                }, 500);
+            });
+        }
+    }
+
+    // --- 古诗逻辑 ---
+    function loadPoetry() {
+        const container = document.getElementById('poetry-list');
+        container.innerHTML = poems.map((p, idx) => `
+            <div class="col-md-4">
+                <div class="poetry-card" onclick="flipPoetry(this, ${idx})">
+                    <div class="poetry-front">
+                        <div class="poetry-title" style="font-weight: bold; color: #2E7D32; font-size: 1.3rem; margin-bottom: 10px;">${p.title}</div>
+                        <div class="text-muted small">${p.author}</div>
+                        <div class="mt-2 text-success"><i class="bi bi-arrow-repeat"></i> 点击翻转</div>
+                    </div>
+                    <div class="poetry-back">
+                        <div class="poetry-content-full">${p.content.split(/[，。？！]/).filter(s => s.trim()).join('。<br>')}。</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function flipPoetry(card, idx) {
+        card.classList.toggle('is-flipped');
+        if (card.classList.contains('is-flipped')) {
+            speak(poems[idx].title + "。" + poems[idx].author + "。" + poems[idx].content);
+        }
     }
 
     // --- 近/反义词逻辑 ---
@@ -347,9 +1090,10 @@
     function checkSynAnswer(selected, btn) {
         if(synExState.current.answer.includes(selected)) {
             btn.classList.add('correct');
-            speak(`答对啦！${synExState.current.word}的${synExState.current.type}是${selected}`);
-            updateScore(5);
-            setTimeout(nextSynQuestion, 1500);
+            speak(`答对啦！${synExState.current.word}的${synExState.current.type}是${selected}`, 1.0, () => {
+                updateScore(5);
+                setTimeout(nextSynQuestion, 1000);
+            });
         } else {
             btn.classList.add('wrong');
             speak("不对哦，再仔细想想");
@@ -409,9 +1153,10 @@
     function checkIdiomAnswer(selected, btn) {
         if(selected === idiomExState.current.idiom) {
             btn.classList.add('correct');
-            speak(`太棒了！这就是成语${selected}的意思`);
-            updateScore(15);
-            setTimeout(nextIdiomQuestion, 2000);
+            speak(`太棒了！这就是成语${selected}的意思`, 1.0, () => {
+                updateScore(15);
+                setTimeout(nextIdiomQuestion, 1000);
+            });
         } else {
             btn.classList.add('wrong');
             speak("选错啦，再读读成语意思吧");
@@ -419,11 +1164,56 @@
         }
     }
 
+    // --- 修改病句逻辑 ---
+    let grammarExState = { current: null };
+    function startGrammarChallenge() {
+        document.getElementById('grammar-tips').style.display = 'none';
+        document.getElementById('grammar-exercise').style.display = 'block';
+        nextGrammarQuestion();
+    }
+    function stopGrammarChallenge() {
+        document.getElementById('grammar-tips').style.display = 'block';
+        document.getElementById('grammar-exercise').style.display = 'none';
+    }
+    function nextGrammarQuestion() {
+        const item = grammarData[Math.floor(Math.random() * grammarData.length)];
+        grammarExState.current = item;
+        
+        document.getElementById('grammar-ex-sentence').innerHTML = `<div class="text-muted small mb-2">请找出下面句子的正确修改方案：</div><div class="p-3 bg-white border-start border-danger border-4 rounded shadow-sm mb-3">“${item.wrong}”</div>`;
+        
+        const optionsDiv = document.getElementById('grammar-ex-options');
+        optionsDiv.innerHTML = '';
+        
+        let options = [...item.options];
+        
+        options.sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'exercise-option animate__animated animate__fadeIn text-start w-100 p-3';
+            btn.innerText = opt;
+            btn.onclick = () => checkGrammarAnswer(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+        speak("请选出正确的修改方案");
+    }
+    function checkGrammarAnswer(selected, btn) {
+        if(selected === grammarExState.current.right) {
+            btn.classList.add('correct');
+            speak(`太棒了！这是${grammarExState.current.type}类病句。`, 1.0, () => {
+                updateScore(20);
+                setTimeout(nextGrammarQuestion, 1000);
+            });
+        } else {
+            btn.classList.add('wrong');
+            speak("不对哦，再仔细读读句子");
+            setTimeout(() => btn.classList.remove('wrong'), 1000);
+        }
+    }
+
     function marukoTalk() {
-        const lines = ["宝贝，加油复习哦！", "小丸子陪着你，考 100 分！", "你是最棒的小才女！", "语文复习也要开开心心！"];
+        const lines = ["宝贝，加油复习哦！", "小丸子陪着你，考 100 分！", "你是最棒的小才女！", "英语和语文都要加油！"];
         const line = lines[Math.floor(Math.random()*lines.length)];
         speak(line);
-        alert("小丸子说：" + line);
+        showStatus("小丸子说：" + line);
     }
 </script>
 </body>
