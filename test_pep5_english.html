@@ -1,0 +1,2937 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT English Lab - PEP英语五年级上册复习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        
+        :root {
+            --primary-color: #64B5F6;
+            --secondary-color: #FFB74D;
+            --success-color: #81C784;
+            --danger-color: #E57373;
+            --bg-color: #E3F2FD;
+            --card-shadow: 0 8px 15px rgba(33, 150, 243, 0.1);
+        }
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#BBDEFB 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 50px;
+            color: #455A64;
+        }
+        .header {
+            background: linear-gradient(135deg, #4FC3F7, #64B5F6);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .core-description {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 800px;
+        }
+        .flashcard {
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .sentence-card {
+            height: 180px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: var(--card-shadow);
+            border-radius: 20px;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 20px;
+            background: white;
+            border: 2px solid #E3F2FD;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: none;
+        }
+        .flashcard-front {
+            background-color: #fff;
+            color: #1976D2;
+        }
+        .sentence-card .flashcard-back {
+            font-size: 1.2rem;
+        }
+        .phonics-badge {
+            background-color: #E1F5FE;
+            color: #0277BD;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-bottom: 10px;
+            border: 1px solid #B3E5FC;
+        }
+        .nav-pills .nav-link {
+            border-radius: 25px;
+            color: #1976D2;
+            margin: 0 5px;
+            border: 2px solid transparent;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+        }
+        .btn-speak {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #E3F2FD;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn-speak:hover { background: var(--primary-color); color: white; transform: scale(1.1) rotate(10deg); }
+        
+        .quiz-section {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid #E3F2FD;
+        }
+        .quiz-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 5px solid #BBDEFB;
+            background: #F9FCFF;
+            border-radius: 0 15px 15px 0;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 12px;
+            padding: 12px 20px;
+            border: 2px solid #E3F2FD;
+            border-radius: 12px;
+            background: #fff;
+            transition: all 0.2s;
+            color: #1976D2;
+        }
+        .option-btn:not(:disabled):hover {
+            background: #E3F2FD;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        .option-btn.correct {
+            background-color: var(--success-color) !important;
+            color: white !important;
+            border-color: var(--success-color) !important;
+        }
+        .option-btn.wrong {
+            background-color: var(--danger-color) !important;
+            color: white !important;
+            border-color: var(--danger-color) !important;
+        }
+        .feedback-pop {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            font-size: 4rem;
+            pointer-events: none;
+            display: none;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .card {
+            border-radius: 25px !important;
+            border: 2px solid #E3F2FD !important;
+        }
+        .writing-card {
+            background: #FFF9C4;
+            padding: 25px;
+            border-radius: 25px;
+            border: none;
+            border-left: 10px solid var(--secondary-color);
+        }
+        .writing-tips span {
+            background: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            color: #F57C00;
+            border: 1px solid #FFE082;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .grammar-spotlight {
+            background: #F3E5F5;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 8px solid var(--accent-color);
+        }
+        .grammar-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .big-idea-banner {
+            background: linear-gradient(90deg, #FFF9C4, #FFF176);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px dashed #FBC02D;
+            display: flex;
+            align-items: center;
+        }
+        .big-idea-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        .puzzle-box {
+            background: rgba(255,255,255,0.5);
+            padding: 15px;
+            border-radius: 15px;
+            min-height: 100px;
+        }
+        .puzzle-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px dashed var(--secondary-color);
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .puzzle-item:hover { background: #FFF3E0; transform: scale(1.02); }
+        .puzzle-item.used { opacity: 0.5; cursor: not-allowed; text-decoration: line-through; }
+        .spell-input {
+            border: 2px solid #E3F2FD;
+            border-radius: 10px;
+            padding: 5px 10px;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .spell-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+        .spell-feedback {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            height: 20px;
+        }
+        .phonics-game {
+            background: #F1F8E9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #C5E1A5;
+        }
+        .phonics-btn {
+            background: white;
+            border: 1px solid #AED581;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            transition: all 0.2s;
+        }
+        .phonics-btn:hover {
+            background: #DCEDC8;
+            transform: translateY(-2px);
+        }
+        .maruko-mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        /* 语音可点击项 */
+        .flashcard-back, .sentence-card .flashcard-front, .model-text, .sentence-item {
+            cursor: pointer;
+        }
+        .maruko-mascot:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .maruko-bubble {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+            width: 150px;
+            display: none;
+            border: 2px solid var(--primary-color);
+        }
+        .maruko-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent transparent;
+        }
+
+        /* 高效复习区样式 */
+        .revision-zone {
+            background: #E8F5E9;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #C8E6C9;
+        }
+        .revision-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #2E7D32;
+        }
+        .revision-header i { font-size: 1.5rem; margin-right: 10px; }
+
+        /* 挑战竞技场样式 */
+        .arena-card {
+            background: #FFF3E0;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #FFE0B2;
+        }
+        .arena-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #E65100;
+        }
+        .arena-header i { font-size: 1.5rem; margin-right: 10px; }
+
+        /* 作文天地样式 */
+        .composition-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid #E3F2FD;
+            transition: transform 0.3s;
+        }
+        .composition-card:hover {
+            transform: translateY(-5px);
+        }
+        .composition-title {
+            color: #1976D2;
+            font-weight: bold;
+            border-bottom: 2px solid #BBDEFB;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .composition-text {
+            line-height: 2;
+            font-size: 1.1rem;
+            color: #455A64;
+        }
+        .sentence-item {
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 5px;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .sentence-item:hover {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        .full-read-btn {
+            background: #E3F2FD;
+            color: #1976D2;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .full-read-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+        }
+
+        .score-badge {
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        #student-name-display {
+            font-weight: bold;
+            color: #1976D2;
+            cursor: pointer;
+            text-decoration: underline dotted;
+        }
+        .floating-score {
+            position: fixed;
+            color: #FF9800;
+            font-weight: bold;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 9999;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast-container" id="toast-container"></div>
+
+<div id="feedback-pop" class="feedback-pop animate__animated">🎉</div>
+
+<div class="header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1 class="animate__animated animate__bounceIn display-4 fw-bold">🌟 CAT English Lab</h1>
+                <h2 class="animate__animated animate__fadeInDown h3 mt-3">Learn Smart. Speak Strong.</h2>
+            </div>
+            <button id="btn-unlock-audio" class="btn btn-light btn-sm rounded-pill shadow-sm mt-2" onclick="unlockVoice()">
+                🔊 <span class="d-none d-sm-inline">启用语音发音</span><span class="d-inline d-sm-none">语音</span>
+            </button>
+        </div>
+        <p class="lead mt-4 mb-4">
+            An English lab where listening leads to confident speaking.<br>
+            <span class="small opacity-75">一个用方法训练听力、用练习打造表达力的英语学习空间</span>
+        </p>
+        <div class="core-description mt-4 animate__animated animate__fadeInUp animate__delay-1s">
+            <p class="mb-1">Designed by Ms Hu (Catherine) for Grade 5 learners.</p>
+            <p class="mb-0">Built to help students listen carefully, think clearly, and speak confidently.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <ul class="nav nav-pills mb-4 justify-content-center bg-white p-2 rounded-pill shadow-sm sticky-top" style="top: 20px; z-index: 1000;" id="unitTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" id="tab-1" data-bs-toggle="pill" data-bs-target="#unit-1" type="button">Unit 1</button></li><li class="nav-item"><button class="nav-link " id="tab-2" data-bs-toggle="pill" data-bs-target="#unit-2" type="button">Unit 2</button></li><li class="nav-item"><button class="nav-link " id="tab-3" data-bs-toggle="pill" data-bs-target="#unit-3" type="button">Unit 3</button></li><li class="nav-item"><button class="nav-link " id="tab-4" data-bs-toggle="pill" data-bs-target="#unit-4" type="button">Unit 4</button></li><li class="nav-item"><button class="nav-link " id="tab-5" data-bs-toggle="pill" data-bs-target="#unit-5" type="button">Unit 5</button></li><li class="nav-item"><button class="nav-link " id="tab-6" data-bs-toggle="pill" data-bs-target="#unit-6" type="button">Unit 6</button></li>
+    </ul>
+
+    <div class="tab-content" id="unitTabContent">
+        
+        <div class="tab-pane fade show active" id="unit-1" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                老的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('old')">🔊</button>
+                            old
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                年轻的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('young')">🔊</button>
+                            young
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                滑稽的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('funny')">🔊</button>
+                            funny
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                和蔼的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('kind')">🔊</button>
+                            kind
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                严厉的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('strict')">🔊</button>
+                            strict
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                有礼貌的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('polite')">🔊</button>
+                            polite
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                努力工作的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('hard-working')">🔊</button>
+                            hard-working
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                有帮助的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('helpful')">🔊</button>
+                            helpful
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                聪明的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('clever')">🔊</button>
+                            clever
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                害羞的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('shy')">🔊</button>
+                            shy
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">知道;了解</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('know')">🔊</button>
+                            know
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">机器人</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('robot')">🔊</button>
+                            robot
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front"><div class="w-100">有时;间或</div></div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sometimes')">🔊</button>
+                            sometimes
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What\'s he like?')">🔊</button>
+                            他什么样？
+                        </div>
+                        <div class="flashcard-back">What's he like?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('He\'s kind.')">🔊</button>
+                            他很和蔼。
+                        </div>
+                        <div class="flashcard-back">He's kind.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Is she strict?')">🔊</button>
+                            她严厉吗？
+                        </div>
+                        <div class="flashcard-back">Is she strict?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Yes, she is.')">🔊</button>
+                            是的，她是。
+                        </div>
+                        <div class="flashcard-back">Yes, she is.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('No, she isn\'t.')">🔊</button>
+                            不，她不是。
+                        </div>
+                        <div class="flashcard-back">No, she isn't.</div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：Introducing Myself (交友)</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>I'm... (tall/thin)</span><span>I'm... (hard-working)</span><span>I can...</span><span>My favourite food/drink is...</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-1">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm eleven years old. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am eleven years old.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">How about you? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('How about you?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm tall and thin. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am tall and thin.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite drink is tea. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite drink is tea.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I want to be your friend. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I want to be your friend.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm Jim. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am Jim.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">I'm hard-working. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am hard-working.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 1)">My favourite food is dumplings. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite food is dumplings.')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-1"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(1)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(1)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-1" style="display:none; line-height: 1.8;">
+                                    I want to be your friend. I'm Jim. I'm eleven years old. I'm tall and thin. I'm hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I want to be your friend. I am Jim. I am eleven years old. I am tall and thin. I am hard-working. My favourite food is dumplings. My favourite drink is tea. How about you?')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade " id="unit-2" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期一</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Monday')">🔊</button>
+                                        Monday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期二</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Tuesday')">🔊</button>
+                                        Tuesday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期三</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Wednesday')">🔊</button>
+                                        Wednesday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期四</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Thursday')">🔊</button>
+                                        Thursday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期五</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Friday')">🔊</button>
+                                        Friday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期六</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Saturday')">🔊</button>
+                                        Saturday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">星期日</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Sunday')">🔊</button>
+                                        Sunday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">周末</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('weekend')">🔊</button>
+                                        weekend
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">洗衣服</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('wash my clothes')">🔊</button>
+                                        wash my clothes
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">看电视</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('watch TV')">🔊</button>
+                                        watch TV
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">做作业</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('do homework')">🔊</button>
+                                        do homework
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">看书</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('read books')">🔊</button>
+                                        read books
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front"><div class="w-100">踢足球</div></div>
+                                    <div class="flashcard-back">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('play football')">🔊</button>
+                                        play football
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('What do you have on Thursdays?')">🔊</button>
+                                        你星期四有什么课？
+                                    </div>
+                                    <div class="flashcard-back">What do you have on Thursdays?</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('I have maths, English and music.')">🔊</button>
+                                        我有数学、英语和音乐课。
+                                    </div>
+                                    <div class="flashcard-back">I have maths, English and music.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <button class="btn-speak" onclick="event.stopPropagation(); speak('Do you often read books in this park?')">🔊</button>
+                                        你经常在这个公园看书吗？
+                                    </div>
+                                    <div class="flashcard-back">Do you often read books in this park?</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My weekend (周末活动)</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>On Saturdays...</span><span>On Sundays...</span><span>I often...</span><span>I usually...</span><span>busy/happy</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-2">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I'm always busy on the weekend. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am always busy on the weekend.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Saturdays, I often do my homework in the morning. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('On Saturdays, I often do my homework in the morning.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">In the afternoon, I often play football with my friends. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('In the afternoon, I often play football with my friends.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">On Sundays, I usually visit my grandparents. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('On Sundays, I usually visit my grandparents.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I often watch TV with my parents in the afternoon. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I often watch TV with my parents in the afternoon.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 2)">I like my weekends. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like my weekends.')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-2"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(2)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(2)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-2" style="display:none; line-height: 1.8;">
+                                    I'm always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I am always busy on the weekend. On Saturdays, I often do my homework in the morning. In the afternoon, I often play football with my friends in the park. On Sundays, I usually visit my grandparents in the morning and watch TV with my parents in the afternoon. I like my weekends.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade " id="unit-3" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                三明治
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sandwich')">🔊</button>
+                            sandwich
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                沙拉
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('salad')">🔊</button>
+                            salad
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                汉堡包
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('hamburger')">🔊</button>
+                            hamburger
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                冰淇淋
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('ice cream')">🔊</button>
+                            ice cream
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                新鲜的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('fresh')">🔊</button>
+                            fresh
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                健康的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('healthy')">🔊</button>
+                            healthy
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                美味的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('delicious')">🔊</button>
+                            delicious
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                甜的
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sweet')">🔊</button>
+                            sweet
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What would you like to eat?')">🔊</button>
+                            你想吃什么？
+                        </div>
+                        <div class="flashcard-back">What would you like to eat?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('A sandwich, please.')">🔊</button>
+                            请给我一个三明治。
+                        </div>
+                        <div class="flashcard-back">A sandwich, please.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What would you like to drink?')">🔊</button>
+                            你想喝什么？
+                        </div>
+                        <div class="flashcard-back">What would you like to drink?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('I\'d like some water.')">🔊</button>
+                            我想要点水。
+                        </div>
+                        <div class="flashcard-back">I'd like some water.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What\'s your favourite food?')">🔊</button>
+                            你最喜欢的食物是什么？
+                        </div>
+                        <div class="flashcard-back">What's your favourite food?</div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Favourite Food</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>What's your favourite...?</span><span>I like...</span><span>It's/They are...</span><span>healthy/delicious</span><span>sweet/fresh</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-3">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like salad, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like salad, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I don't like beef but chicken is OK. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I do not like beef but chicken is OK.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">I like grapes best. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like grapes best.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">My favourite food is sandwich. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My favourite food is sandwich.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">It is very fresh. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is very fresh.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">What's your favourite food and drink? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('What is your favourite food and drink?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">It's healthy and delicious. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is healthy and delicious.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 3)">They are sweet and purple. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('They are sweet and purple.')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-3"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(3)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(3)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-3" style="display:none; line-height: 1.8;">
+                                    My favourite food is sandwich. It's healthy and delicious. I like salad, too. It is very fresh. I don't like beef but chicken is OK. I like grapes best. They are sweet and purple. What's your favourite food and drink?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('My favourite food is sandwich. It\'s healthy and delicious. I like salad, too. It is very fresh. I don\'t like beef but chicken is OK. I like grapes best. They are sweet and purple. What\'s your favourite food and drink?')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade " id="unit-4" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                跳舞
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('dance')">🔊</button>
+                            dance
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                唱歌
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('sing')">🔊</button>
+                            sing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                练武术
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('do kung fu')">🔊</button>
+                            do kung fu
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                画漫画
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('draw cartoons')">🔊</button>
+                            draw cartoons
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                游泳
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('swim')">🔊</button>
+                            swim
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                说英语
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('speak English')">🔊</button>
+                            speak English
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                打篮球
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('play basketball')">🔊</button>
+                            play basketball
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                打乒乓球
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('play ping-pong')">🔊</button>
+                            play ping-pong
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('What can you do?')">🔊</button>
+                            你会做什么？
+                        </div>
+                        <div class="flashcard-back">What can you do?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('I can draw cartoons.')">🔊</button>
+                            我会画漫画。
+                        </div>
+                        <div class="flashcard-back">I can draw cartoons.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Can you do any kung fu?')">🔊</button>
+                            你会练武术吗？
+                        </div>
+                        <div class="flashcard-back">Can you do any kung fu?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Yes, I can.')">🔊</button>
+                            是的，我会。
+                        </div>
+                        <div class="flashcard-back">Yes, I can.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('No, I can\'t.')">🔊</button>
+                            不，我不会。
+                        </div>
+                        <div class="flashcard-back">No, I can't.</div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：What I Can Do</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>I can...</span><span>Can you...?</span><span>Yes, I can.</span><span>helpful/great</span><span>play the pipa/do kung fu</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-4">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can do some kung fu, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can do some kung fu, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can clean the room and wash my clothes. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can clean the room and wash my clothes.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I am helpful at home. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I am helpful at home.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can speak English and Chinese. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can speak English and Chinese.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I can cook delicious food for my parents. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I can cook delicious food for my parents.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">But I can't swim. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('But I cannot swim.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">I want to be great. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I want to be great.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 4)">Can you help me? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Can you help me?')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-4"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(4)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(4)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-4" style="display:none; line-height: 1.8;">
+                                    I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can't swim. Can you help me? I want to be great.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('I am helpful at home. I can clean the room and wash my clothes. I can cook delicious food for my parents. I can speak English and Chinese. I can do some kung fu, too. But I can\'t swim. Can you help me? I want to be great.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade " id="unit-5" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                时钟
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('clock')">🔊</button>
+                            clock
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                植物
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('plant')">🔊</button>
+                            plant
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                水瓶
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('water bottle')">🔊</button>
+                            water bottle
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                照片
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('photo')">🔊</button>
+                            photo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                在...前面
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('in front of')">🔊</button>
+                            in front of
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                在...中间
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('between')">🔊</button>
+                            between
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                在...上面
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('above')">🔊</button>
+                            above
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                在...旁边
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('beside')">🔊</button>
+                            beside
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                在...后面
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('behind')">🔊</button>
+                            behind
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('There is a big bed.')">🔊</button>
+                            有一张大床。
+                        </div>
+                        <div class="flashcard-back">There is a big bed.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('There are so many pictures here.')">🔊</button>
+                            这里有好多照片。
+                        </div>
+                        <div class="flashcard-back">There are so many pictures here.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Where is the ball?')">🔊</button>
+                            球在哪里？
+                        </div>
+                        <div class="flashcard-back">Where is the ball?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('It\'s in front of the dog.')">🔊</button>
+                            它在狗的前面。
+                        </div>
+                        <div class="flashcard-back">It's in front of the dog.</div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：My Room</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>There is/are...</span><span>in front of/beside/between</span><span>clock/plant/photo</span><span>tidy/nice</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-5">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There are two plants on the desk. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are two plants on the desk.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">I like my room very much. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('I like my room very much.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a big bed. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a big bed.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">This is my room. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('This is my room.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">My computer is on the desk, too. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('My computer is on the desk, too.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">There is a clock above the bed. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a clock above the bed.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">It is small but very nice. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is small but very nice.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 5)">Beside the bed, there is a desk. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Beside the bed, there is a desk.')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-5"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(5)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(5)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-5" style="display:none; line-height: 1.8;">
+                                    This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('This is my room. It is small but very nice. There is a big bed. There is a clock above the bed. Beside the bed, there is a desk. There are two plants on the desk. My computer is on the desk, too. I like my room very much.')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade " id="unit-6" role="tabpanel">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🔤 核心词汇 <small class="text-muted" style="font-size: 0.8rem">(看中文说英文，点击卡片验证)</small></h4>
+                    <div class="row">
+                        
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                森林
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('forest')">🔊</button>
+                            forest
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                河流
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('river')">🔊</button>
+                            river
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                湖泊
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('lake')">🔊</button>
+                            lake
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                高山
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('mountain')">🔊</button>
+                            mountain
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                小山
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('hill')">🔊</button>
+                            hill
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                桥
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('bridge')">🔊</button>
+                            bridge
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                建筑物
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('building')">🔊</button>
+                            building
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-6 col-md-3">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="w-100">
+                                村庄
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('village')">🔊</button>
+                            village
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12 mb-5">
+                    <h4 class="mb-3 text-secondary">🗣️ 重点句型卡片</h4>
+                    <div class="row">
+                        
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Is there a river in the forest?')">🔊</button>
+                            森林里有河吗？
+                        </div>
+                        <div class="flashcard-back">Is there a river in the forest?</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Yes, there is.')">🔊</button>
+                            是的，有。
+                        </div>
+                        <div class="flashcard-back">Yes, there is.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('No, there isn\'t.')">🔊</button>
+                            不，没有。
+                        </div>
+                        <div class="flashcard-back">No, there isn't.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <div class="flashcard sentence-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <button class="btn-speak" onclick="event.stopPropagation(); speak('Are there any tall buildings in the nature park?')">🔊</button>
+                            自然公园里有高楼吗？
+                        </div>
+                        <div class="flashcard-back">Are there any tall buildings in the nature park?</div>
+                    </div>
+                </div>
+            </div>
+            
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h4 class="mb-3 text-warning">📝 主题小作文：In a Nature Park</h4>
+                    <div class="card writing-card shadow-sm">
+                        <div class="writing-tips mb-3">
+                            <strong>💡 写作锦囊：</strong>
+                            <span>There is/are...</span><span>Where is...</span><span>Is there...</span><span>Are there any...</span><span>beautiful/clean</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>🧩 句子拼图练习 <small class="text-muted">(点击句子按顺序组成作文)</small></h6>
+                                <div class="puzzle-pool" id="pool-6">
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a high mountain near the lake. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a high mountain near the lake.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There is a lake in the park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There is a lake in the park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many trees in the park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are many trees in the park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">The water is clean. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('The water is clean.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">There are many ducks on the lake. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('There are many ducks on the lake.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">Do you like my nature park? <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('Do you like my nature park?')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">This is my nature park. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('This is my nature park.')">🔊</button></div>
+                                    <div class="puzzle-item" onclick="addToPuzzle(this, 6)">It is so big and beautiful. <button class="btn-speak btn-sm" onclick="event.stopPropagation(); speak('It is so big and beautiful.')">🔊</button></div>
+                                </div>
+                                <div class="puzzle-box mt-3" id="box-6"></div>
+                                <button class="btn btn-sm btn-outline-warning mt-2" onclick="resetPuzzle(6)">🔄 重置拼图</button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>📖 参考范文 <button class="btn btn-sm btn-link" onclick="toggleModel(6)">👁️ 显示/隐藏</button></h6>
+                                <div class="model-text p-3 bg-white rounded shadow-sm" id="model-6" style="display:none; line-height: 1.8;">
+                                    Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?
+                                    <button class="btn-speak btn-sm" style="position:relative; top:0; right:0; display:inline-flex; margin-left:10px;" onclick="event.stopPropagation(); speak('Look! This is my nature park. It is so big and beautiful. There is a lake in the park. The water is clean. There are many ducks on the lake. There is a high mountain near the lake. There are many trees in the park. Do you like my nature park?')">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center mt-5 mb-4 text-muted">
+    <p>© 2026 Catherine的英语课堂</p>
+    <p class="small opacity-75">Powered by Catherine Hu & SanMei Assistant</p>
+</footer>
+
+<!-- 音效资源 -->
+<audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+<audio id="audio-clapping" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
+<!-- 词汇测试模态框 -->
+<div class="modal fade" id="vocabModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success">🏆 词汇达人挑战</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4" id="vocabTestBody">
+                <!-- 测试内容将由 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 姓名设置模态框 -->
+<div class="modal fade" id="nameModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary">👋 欢迎加入英语挑战！</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p class="text-muted mb-4">给自己起一个响亮的英文名或中文名吧，你的成绩将记录在荣誉榜上！</p>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="studentNameInput" placeholder="例如: Super Tom">
+                    <label for="studentNameInput">输入你的名字</label>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold" onclick="saveStudentName()">开始挑战！🚀</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    const unitProgress = {};
+    const encouragingWords = ["太棒了！", "真聪明！", "你太牛了！", "继续加油！", "完美！", "英语小达人！"];
+    
+    // 排行榜相关逻辑
+    let currentUser = localStorage.getItem('pep5_current_user') || '未命名学生';
+    let currentScore = 0;
+    
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        updateUserDisplay();
+        loadLeaderboard();
+        
+        // 监听标签切换
+        const rankTab = document.getElementById('tab-rank');
+        if (rankTab) {
+            rankTab.addEventListener('shown.bs.tab', () => {
+                loadLeaderboard();
+            });
+        }
+        
+        // 检查是否有存储的当次分数（可选，目前每次刷新归零或从localStorage读取）
+        // 这里设计为单次会话累积，刷新页面重置当次分数，但排行榜记录历史最高
+    });
+
+    function updateUserDisplay() {
+        const display = document.getElementById('student-name-display');
+        if (display) display.innerText = currentUser;
+    }
+
+    function changeStudentName() {
+        const modal = new bootstrap.Modal(document.getElementById('nameModal'));
+        document.getElementById('studentNameInput').value = currentUser === '未命名学生' ? '' : currentUser;
+        modal.show();
+    }
+
+    function saveStudentName() {
+        const input = document.getElementById('studentNameInput');
+        const newName = input.value.trim();
+        if (newName) {
+            currentUser = newName;
+            localStorage.setItem('pep5_current_user', currentUser);
+            updateUserDisplay();
+            // 切换用户后重置当前临时得分
+            currentScore = 0;
+            updateScoreDisplay();
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('nameModal'));
+            modal.hide();
+            
+            showToast(`欢迎你，${currentUser}！开始挑战吧！🚀`, "success");
+        } else {
+            showToast("请输入你的名字哦！", "warning");
+        }
+    }
+    
+    function addScore(points, event) {
+        if (currentUser === '未命名学生') {
+            changeStudentName();
+            return;
+        }
+        
+        currentScore += points;
+        updateScoreDisplay();
+        
+        // 增加得分动画效果
+        const scoreBadge = document.querySelector('.score-badge');
+        if (scoreBadge) {
+            scoreBadge.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => scoreBadge.classList.remove('animate__animated', 'animate__pulse'), 1000);
+        }
+
+        // 浮动得分动画
+        const evt = event || window.event;
+        if (evt && evt.clientX && evt.clientY) {
+            createFloatingScore(points, evt.clientX, evt.clientY);
+        } else if (scoreBadge) {
+            const badgeRect = scoreBadge.getBoundingClientRect();
+            createFloatingScore(points, badgeRect.left, badgeRect.top);
+        }
+        
+        // 更新排行榜数据 (累加模式)
+        updateLeaderboard(currentUser, points);
+    }
+
+    function createFloatingScore(points, x, y) {
+        const el = document.createElement('div');
+        el.className = 'floating-score animate__animated animate__fadeOutUp';
+        el.innerText = '+' + points;
+        el.style.left = x + 'px';
+        el.style.top = (y - 20) + 'px';
+        document.body.appendChild(el);
+        
+        setTimeout(() => {
+            el.remove();
+        }, 1000);
+    }
+    
+    function updateScoreDisplay() {
+        const scoreEl = document.getElementById('current-session-score');
+        if (scoreEl) scoreEl.innerText = currentScore;
+    }
+
+    // --- 词汇测试功能 ---
+    let vocabTestState = {
+        currentUnit: 0,
+        questions: [],
+        currentIndex: 0,
+        score: 0
+    };
+
+    function startVocabTest(unitId, vocabList) {
+        vocabTestState.currentUnit = unitId;
+        const targetCount = 10;
+        
+        // 如果词汇量不足 10，则循环补充直到达到 10 个
+        let testList = [...vocabList];
+        while (testList.length < targetCount) {
+            testList = testList.concat(vocabList);
+        }
+        
+        // 从补充后的词汇表中随机选取 10 个单词进行测试
+        const shuffled = shuffleArray(testList).slice(0, targetCount);
+        
+        vocabTestState.questions = shuffled.map(wordObj => {
+            // 生成干扰项 (从原始词汇表中选取，避免选项重复)
+            const distractors = vocabList
+                .filter(w => w.en !== wordObj.en)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 2);
+            
+            const options = shuffleArray([wordObj.en, ...distractors.map(d => d.en)]);
+            return {
+                cn: wordObj.cn,
+                en: wordObj.en,
+                options: options
+            };
+        });
+        vocabTestState.currentIndex = 0;
+        vocabTestState.score = 0;
+
+        const modal = new bootstrap.Modal(document.getElementById('vocabModal'));
+        modal.show();
+        showVocabQuestion();
+    }
+
+    function showVocabQuestion() {
+        const q = vocabTestState.questions[vocabTestState.currentIndex];
+        const body = document.getElementById('vocabTestBody');
+        const total = vocabTestState.questions.length;
+        
+        let optionsHtml = q.options.map(opt => `
+            <button class="btn btn-outline-success w-100 mb-2 py-2 rounded-pill vocab-option" 
+                    onclick="checkVocabAnswer(this, '${opt}', '${q.en}')">${opt}</button>
+        `).join('');
+
+        body.innerHTML = `
+            <div class="text-center mb-4">
+                <span class="badge bg-success-soft text-success mb-2">Question ${vocabTestState.currentIndex + 1}/${total}</span>
+                <h3 class="fw-bold mb-0">${q.cn}</h3>
+                <p class="text-muted small mt-2">请选择对应的英文单词</p>
+            </div>
+            <div class="vocab-options-container">
+                ${optionsHtml}
+            </div>
+            <div id="vocabFeedback" class="text-center mt-3" style="min-height: 24px;"></div>
+        `;
+    }
+
+    function checkVocabAnswer(btn, selected, correct) {
+        const feedback = document.getElementById('vocabFeedback');
+        const options = document.querySelectorAll('.vocab-option');
+        const total = vocabTestState.questions.length;
+        const pointsPerQuestion = Math.floor(100 / total);
+        
+        // 禁用所有按钮
+        options.forEach(opt => opt.disabled = true);
+
+        if (selected === correct) {
+            btn.classList.replace('btn-outline-success', 'btn-success');
+            feedback.innerHTML = '<span class="text-success fw-bold">✨ 太棒了！正确！</span>';
+            vocabTestState.score += pointsPerQuestion;
+            addScore(pointsPerQuestion, event); // 给总分加分
+        } else {
+            btn.classList.replace('btn-outline-success', 'btn-danger');
+            feedback.innerHTML = `<span class="text-danger fw-bold">❌ 记错了哦，正确答案是: ${correct}</span>`;
+            // 高亮正确答案
+            options.forEach(opt => {
+                if (opt.innerText === correct) opt.classList.replace('btn-outline-success', 'btn-success');
+            });
+        }
+
+        setTimeout(() => {
+            vocabTestState.currentIndex++;
+            if (vocabTestState.currentIndex < total) {
+                showVocabQuestion();
+            } else {
+                showVocabResult();
+            }
+        }, 1500);
+    }
+
+    function showVocabResult() {
+        const body = document.getElementById('vocabTestBody');
+        let title = "继续加油哦！";
+        let icon = "📝";
+        if (vocabTestState.score === 100) { title = "词汇小达人！"; icon = "🏆"; }
+        else if (vocabTestState.score >= 60) { title = "表现不错！"; icon = "⭐"; }
+
+        body.innerHTML = `
+            <div class="text-center py-3">
+                <div class="display-1 mb-3">${icon}</div>
+                <h2 class="fw-bold text-success">${vocabTestState.score} 分</h2>
+                <h4 class="mb-4">${title}</h4>
+                <button class="btn btn-success rounded-pill px-5" data-bs-dismiss="modal">完成测试</button>
+            </div>
+        `;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    
+    function updateLeaderboard(name, points) {
+        let leaderboard = JSON.parse(localStorage.getItem('pep5_leaderboard') || '[]');
+        const today = new Date().toLocaleDateString();
+        
+        // 查找该用户今天的记录
+        const existingIndex = leaderboard.findIndex(item => item.name === name && item.date === today);
+        
+        if (existingIndex !== -1) {
+            // 累加积分
+            leaderboard[existingIndex].score += points;
+        } else {
+            // 新用户或新一天的记录
+            leaderboard.push({
+                name: name,
+                score: points,
+                date: today
+            });
+        }
+        
+        // 排序：分数降序
+        leaderboard.sort((a, b) => b.score - a.score);
+        
+        // 只保留前15名 (稍微多留一点)
+        leaderboard = leaderboard.slice(0, 15);
+        
+        localStorage.setItem('pep5_leaderboard', JSON.stringify(leaderboard));
+        loadLeaderboard();
+    }
+    
+    function loadLeaderboard() {
+        const tbody = document.getElementById('leaderboard-body');
+        if (!tbody) return;
+        
+        const leaderboard = JSON.parse(localStorage.getItem('pep5_leaderboard') || '[]');
+        
+        if (leaderboard.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center py-5 text-muted">暂无记录，快去开始挑战吧！</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        leaderboard.forEach((item, index) => {
+            let rankClass = '';
+            let rankIcon = '';
+            
+            if (index === 0) { rankClass = 'rank-1'; rankIcon = '🥇 '; }
+            else if (index === 1) { rankClass = 'rank-2'; rankIcon = '🥈 '; }
+            else if (index === 2) { rankClass = 'rank-3'; rankIcon = '🥉 '; }
+            else { rankIcon = `${index + 1}. `; }
+            
+            html += `
+                <tr class="${rankClass}">
+                    <td>${rankIcon}</td>
+                    <td>
+                        <div class="fw-bold">${item.name}</div>
+                        <small class="text-muted">${item.date}</small>
+                    </td>
+                    <td>${item.score} 分</td>
+                </tr>
+            `;
+        });
+        
+        tbody.innerHTML = html;
+    }
+    
+    function clearLeaderboard() {
+        if (confirm("确定要清空排行榜吗？此操作不可撤销。")) {
+            localStorage.removeItem('pep5_leaderboard');
+            loadLeaderboard();
+            showToast("排行榜已重置", "warning");
+        }
+    }
+
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type} animate__animated animate__fadeInRight`;
+        toast.style.marginBottom = '10px';
+        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}-fill me-2"></i> ${message}`;
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.replace('animate__fadeInRight', 'animate__fadeOutRight');
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+
+    const arenaData = {
+        1: [
+            { q: "Sarah is very ____. She always says 'hello' to teachers.", a: ["A. polite", "B. shy", "C. strict"], c: "A" },
+            { q: "Our English teacher is ____. He makes us laugh.", a: ["A. old", "B. funny", "C. kind"], c: "B" },
+            { q: "Is your robot ____? Yes, he is.", a: ["A. clever", "B. helpful", "C. both A and B"], c: "C" }
+        ],
+        2: [
+            { q: "What do you have ____ Tuesdays?", a: ["A. in", "B. on", "C. at"], c: "B" },
+            { q: "I often ____ my clothes on Saturdays.", a: ["A. wash", "B. watch", "C. do"], c: "A" },
+            { q: "You should ____ every day.", a: ["A. play sports", "B. watch TV", "C. play football"], c: "A" }
+        ],
+        3: [
+            { q: "What would you like ____ eat?", a: ["A. to", "B. for", "C. with"], c: "A" },
+            { q: "My favourite ____ is sandwich. It's delicious.", a: ["A. drink", "B. food", "C. fruit"], c: "B" },
+            { q: "I'd like some ____. I am thirsty.", a: ["A. salad", "B. water", "C. beef"], c: "B" }
+        ],
+        4: [
+            { q: "Can you ____ some kung fu?", a: ["A. play", "B. do", "C. make"], c: "B" },
+            { q: "I can play ____ pipa for the party.", a: ["A. /", "B. a", "C. the"], c: "C" },
+            { q: "What ____ you do? I can dance.", a: ["A. are", "B. do", "C. can"], c: "C" }
+        ],
+        5: [
+            { q: "There ____ a clock and two plants in my room.", a: ["A. is", "B. are", "C. be"], c: "A" },
+            { q: "The ball is ____ the dog. The dog is behind it.", a: ["A. in front of", "B. behind", "C. beside"], c: "A" },
+            { q: "My computer is ____ the desk.", a: ["A. in", "B. on", "C. under"], c: "B" }
+        ],
+        6: [
+            { q: "Is there a ____ in the nature park?", a: ["A. lake", "B. trees", "C. mountains"], c: "A" },
+            { q: "Are there ____ buildings in the city?", a: ["A. some", "B. any", "C. a"], c: "B" },
+            { q: "There ____ many trees in the forest.", a: ["A. is", "B. are", "C. be"], c: "B" }
+        ]
+    };
+
+    function startArenaQuiz(unitId) {
+        const container = document.getElementById(`arena-quiz-${unitId}`);
+        const questions = arenaData[unitId];
+        if (!questions) return;
+
+        let html = '<div class="mt-3">';
+        questions.forEach((q, idx) => {
+            html += `
+                <div class="mb-4 p-3 bg-white rounded shadow-sm border-start border-warning border-4">
+                    <p class="fw-bold mb-2">${idx + 1}. ${q.q}</p>
+                    <div class="d-grid gap-2">
+                        ${q.a.map(opt => `
+                            <button class="btn btn-outline-warning text-start" onclick="checkArenaAnswer(this, '${opt[0]}', '${q.c}', ${unitId}, event)">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        showToast("挑战开始！加油！🚀");
+    }
+
+    function checkArenaAnswer(btn, selected, correct, unitId, event) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('button');
+        buttons.forEach(b => b.disabled = true);
+
+        if (selected === correct) {
+            btn.className = 'btn btn-success text-start text-white';
+            showToast("回答正确！🎉", "success");
+            document.getElementById('audio-correct').play();
+            addScore(10, event); // 竞技场正确加10分
+        } else {
+            btn.className = 'btn btn-danger text-start text-white';
+            buttons.forEach(b => {
+                if (b.innerText.startsWith(correct)) {
+                    b.className = 'btn btn-success text-start text-white';
+                }
+            });
+            showToast("再接再厉哦！💪", "warning");
+        }
+    }
+
+    // 语音引擎优化
+    let preferredVoice = null;
+    let voiceUnlocked = localStorage.getItem('pep5_voice_unlocked') === 'true';
+    let fallbackAudio = null;
+    let currentUtterance = null; // 保持引用，防止安卓垃圾回收导致发音中断
+    let speakTimeout = null; // 用于管理延时朗读，防止重复
+    let checkSpeakingInterval = null; // 用于安卓假死检查
+    let lastSpeakId = 0; // 用于追踪最新的发音请求，防止并发冲突
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    // 全局点击发音监听
+    document.addEventListener('click', (e) => {
+        // 任何点击都尝试恢复语音引擎
+        if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+
+        // 查找最近的可发音容器
+        const clickable = e.target.closest('.puzzle-item, .flashcard-back, .sentence-card .flashcard-front, .model-text, .sentence-item');
+        if (clickable && !e.target.closest('.btn-speak, .full-read-btn')) {
+            const btn = clickable.querySelector('.btn-speak') || clickable;
+            const onclickAttr = btn.getAttribute('onclick');
+            
+            if (onclickAttr) {
+                // 提取 speak('...') 中的内容
+                const match = onclickAttr.match(/speak\(['"](.*)['"]\)/);
+                if (match && match[1]) {
+                    // 处理转义字符并去重
+                    const text = match[1].replace(/\\'/g, "'").replace(/\\"/g, '"');
+                    speak(text);
+                }
+            } else if (clickable.classList.contains('sentence-item')) {
+                // 如果是直接在文本上且没有 onclick (虽然目前都有)，则取文本
+                speak(clickable.innerText);
+            }
+        }
+    });
+
+    // 页面加载时自动检查状态
+    window.addEventListener('DOMContentLoaded', () => {
+        if (voiceUnlocked) {
+            const btn = document.getElementById('btn-unlock-audio');
+            if (btn) btn.style.display = 'none';
+            // 尝试静默恢复引擎（仅对支持的浏览器有效）
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.resume();
+                initVoices();
+            }
+        }
+    });
+
+    function unlockVoice() {
+        const hasWebSpeech = ('speechSynthesis' in window);
+        
+        // 1. 如果支持 Web Speech，尝试解锁
+        if (hasWebSpeech) {
+            window.speechSynthesis.resume();
+            const msg = new SpeechSynthesisUtterance('Start');
+            msg.volume = 0.1;
+            msg.rate = 1.0;
+            window.speechSynthesis.speak(msg);
+        }
+        
+        // 2. 解锁 HTML5 Audio 元素 (对 Fallback 模式至关重要)
+        ['audio-correct', 'audio-clapping'].forEach(id => {
+            const audio = document.getElementById(id);
+            if (audio) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e => console.log("Audio unlock failed", e));
+            }
+        });
+        
+        voiceUnlocked = true;
+        localStorage.setItem('pep5_voice_unlocked', 'true');
+        
+        if (hasWebSpeech) initVoices();
+        
+        // 更新按钮状态
+        const btn = document.getElementById('btn-unlock-audio');
+        if (btn) {
+            btn.innerHTML = hasWebSpeech ? '✨ 语音初始化中...' : '✨ 兼容模式开启中...';
+            btn.classList.replace('btn-light', 'btn-warning');
+            
+            setTimeout(() => {
+                btn.innerHTML = '✅ 语音已开启';
+                btn.classList.replace('btn-warning', 'btn-success');
+                speak('Ready!');
+                setTimeout(() => btn.style.display = 'none', 1500);
+            }, 800);
+        }
+    }
+
+    function initVoices() {
+        if (!('speechSynthesis' in window)) return;
+        
+        let voices = window.speechSynthesis.getVoices();
+        
+        const trySelectVoice = () => {
+            if (voices.length > 0) {
+                preferredVoice = voices.find(v => (v.name === 'Google US English' || v.name === 'English (United States)') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.name.includes('Samantha') && v.lang.startsWith('en')) ||
+                                 voices.find(v => v.lang.startsWith('en-US')) ||
+                                 voices.find(v => v.lang.startsWith('en'));
+            }
+        };
+
+        if (voices.length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                voices = window.speechSynthesis.getVoices();
+                trySelectVoice();
+            };
+            setTimeout(() => {
+                if (!preferredVoice) {
+                    voices = window.speechSynthesis.getVoices();
+                    trySelectVoice();
+                }
+            }, 500);
+        } else {
+            trySelectVoice();
+        }
+    }
+
+    if ('speechSynthesis' in window) {
+        initVoices();
+    }
+
+    function speak(text) {
+        if (!text) return;
+        console.log("TTS Request:", text);
+        
+        // 1. 尝试自动恢复语音引擎 (解决部分浏览器静默状态下无法发音的问题)
+        if ('speechSynthesis' in window) {
+            if (window.speechSynthesis.paused) {
+                console.log("Resuming stalled speechSynthesis");
+                window.speechSynthesis.resume();
+            }
+        }
+
+        // 如果未解锁，尝试自动解锁（由用户点击触发）
+        if (!voiceUnlocked) {
+            unlockVoice();
+        }
+        
+        // 2. 彻底清理之前的待执行任务
+        if (speakTimeout) {
+            clearTimeout(speakTimeout);
+            speakTimeout = null;
+        }
+        
+        if (checkSpeakingInterval) {
+            clearInterval(checkSpeakingInterval);
+            checkSpeakingInterval = null;
+        }
+
+        // 停止之前的 Fallback 音频
+        if (fallbackAudio) {
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
+            fallbackAudio = null;
+        }
+
+        // 3. 生成新的请求 ID
+        const currentId = ++lastSpeakId;
+
+        // 清理文本
+        const cleanText = text.replace(/\s+/g, ' ').trim();
+
+        if ('speechSynthesis' in window) {
+            // 4. 立即停止当前发音
+            try {
+                window.speechSynthesis.cancel();
+            } catch (e) {}
+
+            // 针对不同平台设置不同的执行策略
+            // iOS 和 Desktop 必须立即执行以保留用户手势上下文
+            if (!isAndroid) {
+                executeSpeak(cleanText, currentId);
+            } else {
+                // 安卓通常需要一点延迟来确保 cancel() 完成
+                speakTimeout = setTimeout(() => {
+                    if (currentId === lastSpeakId) {
+                        executeSpeak(cleanText, currentId);
+                    }
+                    speakTimeout = null;
+                }, 250);
+            }
+        } else {
+            speakFallback(cleanText, currentId);
+        }
+    }
+
+    function showUnlockButton() {
+        const btn = document.getElementById('btn-unlock-audio');
+        if (btn) {
+            btn.style.display = 'block';
+            btn.classList.add('animate__shakeX');
+            setTimeout(() => btn.classList.remove('animate__shakeX'), 1000);
+        }
+    }
+
+    function executeSpeak(text, requestId) {
+        console.log("Executing WebSpeech:", text, "RequestID:", requestId);
+        try {
+            // 1. 创建新的 Utterance
+            const utterance = new SpeechSynthesisUtterance();
+            currentUtterance = utterance;
+            utterance.text = text;
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            // 2. 选择语音
+            if (!preferredVoice) initVoices();
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            // 3. 核心事件监听
+            utterance.onstart = () => {
+                console.log("WebSpeech started:", requestId);
+                if (requestId !== lastSpeakId) return;
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            };
+
+            utterance.onend = () => {
+                console.log("WebSpeech ended:", requestId);
+                if (requestId !== lastSpeakId) return;
+                currentUtterance = null;
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
+                }
+            };
+
+            utterance.onerror = (e) => {
+                console.error("WebSpeech Error:", e, "RequestID:", requestId);
+                if (requestId !== lastSpeakId) return;
+                currentUtterance = null;
+                if (checkSpeakingInterval) {
+                    clearInterval(checkSpeakingInterval);
+                    checkSpeakingInterval = null;
+                }
+                
+                // 核心修复：只有非人为中断的错误才触发 Fallback
+                if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                    // 如果是其他错误（如网络问题、引擎故障），尝试 Fallback
+                    speakFallback(text, requestId);
+                }
+            };
+            
+            // 4. 执行朗读
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+            window.speechSynthesis.speak(currentUtterance);
+            
+            // 监控：如果 2 秒后还没开始，强制 resume 一次
+            setTimeout(() => {
+                if (requestId === lastSpeakId && currentUtterance && !window.speechSynthesis.speaking) {
+                    console.log("Stuck detected, forcing resume...");
+                    window.speechSynthesis.resume();
+                }
+            }, 2000);
+
+            // 5. 安卓 Hack: 定时检查是否处于“假死”状态
+            if (isAndroid) {
+                checkSpeakingInterval = setInterval(() => {
+                    // 如果请求 ID 已变，说明有新任务，立即退出
+                    if (requestId !== lastSpeakId) {
+                        clearInterval(checkSpeakingInterval);
+                        return;
+                    }
+                    if (window.speechSynthesis.speaking) {
+                        if (window.speechSynthesis.paused) {
+                            window.speechSynthesis.resume();
+                        }
+                    } else {
+                        clearInterval(checkSpeakingInterval);
+                        checkSpeakingInterval = null;
+                    }
+                }, 2000);
+            }
+
+        } catch (e) {
+            console.error("Execute speak failed:", e);
+            currentUtterance = null;
+            speakFallback(text, requestId);
+        }
+    }
+
+    function speakFallback(text, requestId) {
+        if (!text) return;
+        console.log("Using Fallback TTS:", text, "RequestID:", requestId);
+        
+        // 如果请求 ID 不是最新的，放弃播放
+        if (requestId !== undefined && requestId !== lastSpeakId) return;
+
+        if (fallbackAudio) {
+            try {
+                fallbackAudio.pause();
+                fallbackAudio.currentTime = 0;
+            } catch (e) {}
+            fallbackAudio = null;
+        }
+        
+        const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
+        
+        try {
+            fallbackAudio = new Audio(url);
+            const playPromise = fallbackAudio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.error("Fallback TTS failed:", e);
+                    // 如果自动解锁失败，才显示按钮
+                    if (!voiceUnlocked) showUnlockButton();
+                });
+            }
+        } catch (e) {
+            console.error("Fallback creation failed:", e);
+        }
+    }
+
+    const phonicsQuizState = {};
+
+    function startPhonicsQuiz(unitId, words) {
+        phonicsQuizState[unitId] = {
+            words: words,
+            currentStep: 0,
+            correctCount: 0,
+            targetWords: []
+        };
+        
+        // 随机选3个不重复的词
+        const shuffled = [...words].sort(() => 0.5 - Math.random());
+        phonicsQuizState[unitId].targetWords = shuffled.slice(0, 3);
+        
+        showPhonicsStep(unitId);
+    }
+
+    function showPhonicsStep(unitId) {
+        const state = phonicsQuizState[unitId];
+        const container = document.getElementById('phonics-options-' + unitId);
+        const quizContainer = document.getElementById('phonics-quiz-container-' + unitId);
+        
+        if (state.currentStep >= 3) {
+            quizContainer.innerHTML = `<div class="alert alert-success py-2 mb-0 animate__animated animate__fadeIn">完成挑战！正确率: ${state.correctCount}/3 🌟</div>`;
+            container.style.display = 'none';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            return;
+        }
+
+        const targetWord = state.targetWords[state.currentStep];
+        quizContainer.innerHTML = `<span class="badge bg-info text-dark me-2">第 ${state.currentStep + 1} 题</span> 正在播放，请仔细听...`;
+        container.innerHTML = '';
+        container.style.display = 'block';
+
+        setTimeout(() => {
+            speak(targetWord);
+            
+            // 生成选项（包含正确选项和干扰项）
+            const options = [...state.words].sort(() => 0.5 - Math.random()).slice(0, 4);
+            if (!options.includes(targetWord)) {
+                options[0] = targetWord;
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            options.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'phonics-btn animate__animated animate__bounceIn';
+                btn.innerText = word;
+                btn.onclick = (event) => {
+                    const buttons = container.querySelectorAll('.phonics-btn');
+                    buttons.forEach(b => b.disabled = true);
+                    
+                    if (word === targetWord) {
+                        btn.style.background = '#C8E6C9';
+                        btn.innerText = '✅ ' + word;
+                        state.correctCount++;
+                        document.getElementById('audio-correct').play();
+                        addScore(5, event); // 语音挑战每题5分
+                    } else {
+                        btn.style.background = '#FFCDD2';
+                        btn.innerText = '❌ ' + word;
+                        // 高亮正确答案
+                        buttons.forEach(b => {
+                            if (b.innerText === targetWord) b.style.background = '#C8E6C9';
+                        });
+                    }
+                    
+                    setTimeout(() => {
+                        state.currentStep++;
+                        showPhonicsStep(unitId);
+                    }, 1500);
+                };
+                container.appendChild(btn);
+            });
+        }, 500);
+    }
+
+    function checkAnswer(btn, selected, correct, unitId, totalQuiz, event) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('.option-btn');
+        
+        buttons.forEach(b => {
+            b.disabled = true;
+            if (b.innerText.startsWith(correct)) {
+                b.classList.add('correct');
+            }
+        });
+
+        if (!unitProgress[unitId]) unitProgress[unitId] = 0;
+
+        if (selected === correct) {
+            btn.classList.add('correct');
+            unitProgress[unitId]++;
+            addScore(5, event); // 普通练习每题5分
+            
+            // 播放音效
+            document.getElementById('audio-correct').play();
+            
+            // 鼓励弹窗
+            const pop = document.getElementById('feedback-pop');
+            const word = encouragingWords[Math.floor(Math.random() * encouragingWords.length)];
+            pop.innerText = word;
+            pop.style.display = 'block';
+            pop.className = 'feedback-pop animate__animated animate__zoomInUp text-success';
+            
+            setTimeout(() => {
+                pop.style.display = 'none';
+            }, 1000);
+
+            showFeedback(parent, "✅ " + word, "text-success");
+
+            // 检查单元是否完成
+            if (unitProgress[unitId] === totalQuiz) {
+                setTimeout(() => {
+                    triggerFireworks();
+                    document.getElementById('audio-clapping').play();
+                    showToast("恭喜你完成了全部练习！太棒了！👏", "success");
+                }, 500);
+            }
+        } else {
+            btn.classList.add('wrong');
+            showFeedback(parent, "❌ 别灰心，再记一下考点哦！正确答案是 " + correct, "text-danger");
+        }
+    }
+
+    function showFeedback(parent, msg, colorClass) {
+        const feedback = parent.nextElementSibling;
+        feedback.innerText = msg;
+        feedback.className = "feedback mt-2 fw-bold " + colorClass;
+        feedback.style.display = "block";
+    }
+
+    function toggleModel(unitId) {
+        const model = document.getElementById('model-' + unitId);
+        model.style.display = model.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addToPuzzle(item, unitId) {
+        const box = document.getElementById('box-' + unitId);
+        if (!item.classList.contains('used')) {
+            const newItem = document.createElement('div');
+            newItem.className = 'puzzle-item animate__animated animate__fadeIn';
+            newItem.innerText = item.innerText;
+            box.appendChild(newItem);
+            item.classList.add('used');
+            
+            // 简单的完成反馈
+            const total = document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item').length;
+            const used = document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item.used').length;
+            if (total === used) {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+    }
+
+    function resetPuzzle(unitId) {
+        document.getElementById('box-' + unitId).innerHTML = '';
+        document.getElementById('pool-' + unitId).querySelectorAll('.puzzle-item').forEach(i => i.classList.remove('used'));
+    }
+
+    function triggerFireworks() {
+        var duration = 3 * 1000;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 3000 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            var particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+</script>
+
+</body>
+</html>
