@@ -737,40 +737,46 @@
             return;
         }
 
-        // 停止之前的
+        // 停止之前的朗读，确保清理干净
         window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
-
+        
         if (!text) {
             if (callback) callback();
             return;
         }
 
-        const utter = new SpeechSynthesisUtterance(text.toString());
-        utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
-        utter.rate = rate;
-        utter.volume = 1.0;
+        // 给浏览器一点喘息时间，防止 cancel 和 speak 冲突
+        setTimeout(() => {
+            window.speechSynthesis.resume(); // 某些浏览器需要显式 resume
 
-        let finished = false;
-        const finish = () => {
-            if (!finished) {
-                finished = true;
-                if (callback) callback();
-            }
-        };
+            const utter = new SpeechSynthesisUtterance(text.toString());
+            utter.lang = /[\u4e00-\u9fa5]/.test(text) ? 'zh-CN' : 'en-US';
+            utter.rate = rate;
+            utter.volume = 1.0;
 
-        utter.onend = finish;
-        utter.onerror = finish;
-        
-        // 防止被垃圾回收
-        window._voiceRef = utter; 
+            let finished = false;
+            const finish = () => {
+                if (!finished) {
+                    finished = true;
+                    if (callback) callback();
+                }
+            };
 
-        // 直接调用，不再使用 setTimeout，除非是为了解决特定浏览器的 cancel 延迟
-        window.speechSynthesis.speak(utter);
+            utter.onend = finish;
+            utter.onerror = (e) => {
+                console.error("Speech error:", e);
+                finish();
+            };
+            
+            // 防止被垃圾回收
+            window._voiceRef = utter; 
 
-        // 兜底：字数 * 200ms + 3秒
-        const timeout = Math.max(3000, (text.length * 200) + 3000);
-        setTimeout(finish, timeout);
+            window.speechSynthesis.speak(utter);
+
+            // 兜底：防止 onend 不触发导致回调丢失
+            const timeout = Math.max(3000, (text.toString().length * 300) + 2000);
+            setTimeout(finish, timeout);
+        }, 50);
     }
 
     // --- 英语逻辑 ---
@@ -804,6 +810,8 @@
         document.getElementById('translation-phase').style.display = 'block';
         document.getElementById('puzzle-phase').style.display = 'none';
         document.getElementById('english-result').style.display = 'none';
+        
+        // 自动朗读问题
         speak(q.q);
     }
 
@@ -811,14 +819,18 @@
         const q = englishQuestions[state.englishIndex];
         if(selected === q.cn) {
             btn.classList.add('bg-success', 'text-white');
-            setTimeout(() => {
-                document.getElementById('translation-phase').style.display = 'none';
-                loadPuzzle();
-            }, 600);
+            speak("Right!", 1.0, () => {
+                setTimeout(() => {
+                    document.getElementById('translation-phase').style.display = 'none';
+                    loadPuzzle();
+                }, 400);
+            });
         } else {
             btn.classList.add('bg-danger', 'text-white', 'animate__shakeX');
-            speak("不对哦，再想想");
-            setTimeout(() => btn.className = 'translation-option', 1000);
+            speak("No, try again.");
+            setTimeout(() => {
+                btn.className = 'translation-option';
+            }, 1000);
         }
     }
 
@@ -856,8 +868,8 @@
             }
         } else {
             el.classList.add('bg-danger', 'text-white', 'animate__shakeX');
+            speak("No");
             setTimeout(() => el.classList.remove('bg-danger', 'text-white', 'animate__shakeX'), 500);
-            speak("不对哦");
         }
     }
 
@@ -865,7 +877,7 @@
         const q = englishQuestions[state.englishIndex];
         document.getElementById('english-result').style.display = 'block';
         document.getElementById('correct-answer').innerText = q.a;
-        speak(q.a, 0.9, () => updateScore(10));
+        speak("Excellent! " + q.a, 0.9, () => updateScore(10));
     }
 
     function nextEnglishQuestion() {
@@ -873,7 +885,8 @@
         if(state.englishIndex < englishQuestions.length) {
             loadEnglishQuestion();
         } else {
-            alert("通关啦！宝贝你是最棒的！👏");
+            showStatus("🎉 太棒了！你完成了所有英语挑战！");
+            state.englishIndex = 0;
             startEnglishChallenge();
         }
     }
@@ -883,7 +896,7 @@
     }
 
     function showHint() {
-        alert("悄悄告诉你，答案是: " + englishQuestions[state.englishIndex].a);
+        showStatus("答案是: " + englishQuestions[state.englishIndex].a);
     }
 
     // --- 语音逻辑 (Phonics) ---
@@ -1200,7 +1213,7 @@
         const lines = ["宝贝，加油复习哦！", "小丸子陪着你，考 100 分！", "你是最棒的小才女！", "英语和语文都要加油！"];
         const line = lines[Math.floor(Math.random()*lines.length)];
         speak(line);
-        alert("小丸子说：" + line);
+        showStatus("小丸子说：" + line);
     }
 </script>
 </body>
